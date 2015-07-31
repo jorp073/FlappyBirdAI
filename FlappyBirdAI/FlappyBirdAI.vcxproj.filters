@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\fsm">
+      <UniqueIdentifier>{cf7fac01-96e3-4f71-bd4a-ee745198ad07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\controller">
+      <UniqueIdentifier>{ee483230-eafd-4b0c-9e35-7eccc0a5ff1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\model">
+      <UniqueIdentifier>{0c8055a4-7b76-4e91-8b9d-9fbc677f3d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\util">
+      <UniqueIdentifier>{2264b3ff-251f-416a-ac16-827c20e197fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,6 +36,21 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="fsm\base.h">
+      <Filter>源文件\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="model\define.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="util\CScreenCapturer.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="controller\CCanvasObserver.h">
+      <Filter>源文件\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="fsm\CCanvasObserverState.h">
+      <Filter>源文件\fsm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -31,6 +58,15 @@
     </ClCompile>
     <ClCompile Include="FlappyBirdAI.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="util\CScreenCapturer.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="controller\CCanvasObserver.cpp">
+      <Filter>源文件\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="fsm\CCanvasObserverState.cpp">
+      <Filter>源文件\fsm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

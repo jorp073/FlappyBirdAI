@@ -1,6 +1,8 @@
 ##FlappyBirdAI
 AI play FlappyBird via Machine Learning and OpenCV
 
+**in developing... not finished yet**
+
 ##Trying it out
 1. run xxxx(todo)
 2. visit: [FlappyBird webpage version](http://ben7th.github.io/flappy-html5-bird/)
@@ -20,4 +22,5 @@ AI play FlappyBird via Machine Learning and OpenCV
 Windows XP, 7+
 
 ##Build Requirements
+Windows 7+
 VS 2012+
