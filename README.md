@@ -4,9 +4,9 @@ AI play FlappyBird via Machine Learning and OpenCV
 **in developing... not finished yet**
 
 ##Trying it out
-1. run xxxx(todo)
-2. visit: [FlappyBird webpage version](http://ben7th.github.io/flappy-html5-bird/)
-3. Move mouse pointer onto FlappyBird to start AI auto-controlling
+1. run FlappyBirdAI.exe
+2. visit: FlappyBird webpage version [online-link](http://ben7th.github.io/flappy-html5-bird/) or [offline(gamebin/index.htm)](gamebin/index.htm)
+3. Move mouse pointer onto FlappyBird to make AI auto-control start
 
 ##How it works
 1. Take snapshots of the game graphics via Windows API

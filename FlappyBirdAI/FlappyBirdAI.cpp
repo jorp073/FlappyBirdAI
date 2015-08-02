@@ -10,10 +10,20 @@ int _tmain(int argc, _TCHAR* argv[])
 {
     auto pCanvasObserver = new CCanvasObserver();
 
+    cv::namedWindow("canvas");
+
     while (true)
     {
-        if (!pCanvasObserver->Update())
-            break;
+        while (!pCanvasObserver->Update())
+        {
+            cv::waitKey(100);
+        }
+
+        printf("Observer found\n");
+
+        cv::imshow("canvas", pCanvasObserver->GetCanvasMat());
+
+        cv::waitKey(10);
     };
 
 

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "base.h"
-#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
+#include <Windows.h>
 
 class CCanvasObserver;
 
@@ -14,15 +15,26 @@ namespace CanvasObserverState
 
         virtual bool Update(CCanvasObserver* observer);
 
-        bool SearchCanvas(cv::Mat mat);
+    private:
+        cv::Mat _FilterCanvasBorder(cv::Mat mat);
+
+        bool _GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect);
     };
 
 
     class CFound : public TState<CCanvasObserver>
     {
     public:
-        CFound() : TState("Found") {};
+        CFound(cv::Rect rect)
+            : TState("Found")
+            , m_CanvasRect(rect)
+        {};
 
         virtual bool Update(CCanvasObserver* observer);
+
+    private:
+        bool isCanvasPosMoved();
+
+        cv::Rect m_CanvasRect;
     };
 };

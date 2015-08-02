@@ -2,7 +2,7 @@
 
 #include <windows.h>
 #include <wingdi.h>
-#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
 
 class CScreenCapturer
 {
@@ -29,9 +29,9 @@ public:
 
     RECT getScreenRect();
 
-    cv::Mat& getMat() { return m_Mat; };
+    cv::Mat& GetMat() { return m_Mat; };
 
-    cv::Mat& getGreyMat() { return m_Grey; };
+    cv::Mat& GetGrayMat() { return m_GrayMat; };
 
 protected:
     CScreenCapturer();
@@ -42,6 +42,7 @@ private:
     HBITMAP m_hBitmap , m_hOldBitmap;
     BYTE *m_pBuffer;
     int m_image_nchannels;
+    int m_iLastWidth, m_iLastHeight;
 
-    cv::Mat m_Grey, m_Mat;
+    cv::Mat m_GrayMat, m_Mat;
 };

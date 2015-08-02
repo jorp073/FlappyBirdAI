@@ -37,14 +37,17 @@ public :
         m_pCurrentState ( NULL)
     {}
 
+
     void InitState( TState< entity_type >* s )
     {
         m_pCurrentState = s ;
         s->Enter ( m_pOwner);
     }
 
+
     //use these methods to initialize the FSM
     void SetCurrentState( TState< entity_type >* s ) {m_pCurrentState = s;}
+
 
     //call this to update the FSM
     bool Update()
@@ -56,11 +59,13 @@ public :
             return false;
     }
 
+
     //change to a new state
     void ChangeState( TState< entity_type >* pNewState )
     {
         assert (pNewState &&
             "<StateMachine::ChangeState>: trying to change to a null state" );
+        printf("ChangeState from: %s to %s\n", m_pCurrentState->GetName().c_str(), pNewState->GetName().c_str());
 
         //call the exit method of the existing state
         m_pCurrentState -> Exit( m_pOwner );
@@ -72,14 +77,10 @@ public :
         m_pCurrentState -> Enter( m_pOwner );
     }
 
-    //change state back to the previous state
-    void RevertToPreviousState ()
-    {
-        ChangeState(m_pPreviousState );
-    }
 
     //accessors
-    TState <entity_type >* CurrentState()   const { return m_pCurrentState ;}
+    TState <entity_type >* CurrentState() const { return m_pCurrentState ;}
+
 
     //returns true if the current state¡¯s type is equal to the type of the
     //class passed as a parameter.
@@ -87,6 +88,7 @@ public :
     {
         return m_pCurrentState->GetName() == name;
     }
+
 
 private :
     //a pointer to the agent that owns this instance

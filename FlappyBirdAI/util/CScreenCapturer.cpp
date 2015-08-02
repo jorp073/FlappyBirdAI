@@ -1,13 +1,16 @@
 #include "stdafx.h"
 #include "CScreenCapturer.h"
-#include "opencv2/imgproc/imgproc.hpp"
 
 
 CScreenCapturer* CScreenCapturer::m_pInstance = NULL;
 
 
 CScreenCapturer::CScreenCapturer()
-    :m_hOldBitmap(NULL), m_image_nchannels(0), m_pBuffer(NULL)
+    :m_hOldBitmap(NULL)
+    , m_image_nchannels(0)
+    , m_pBuffer(NULL)
+    , m_iLastWidth(0)
+    , m_iLastHeight(0)
 {
 }
 
@@ -40,6 +43,7 @@ bool CScreenCapturer::Capture(RECT rect)
 
     auto width = rect.right - rect.left;
 	auto height = rect.bottom - rect.top;
+
     m_hBitmap = ::CreateCompatibleBitmap(m_hSrcDC, width, height);
     if (!m_hBitmap) return false;
 
@@ -51,20 +55,38 @@ bool CScreenCapturer::Capture(RECT rect)
 	::GetObject(m_hBitmap, sizeof(BITMAP), &bmp);
 
     if (!m_Mat.data) {
-		if (1 == bmp.bmBitsPixel)
+        if (1 == bmp.bmBitsPixel)
 		{
 			//("目标窗体最小化，请切换到前面!\n");
 			return false;
 		}
+	}
+
+    // if change width or height, then realloc buff memory
+    if (m_iLastWidth != width || m_iLastHeight != height)
+    {
+        printf("CScreenCapturer::Capture changesize w:%d, h:%d\n", width, height);
+        m_iLastWidth = width;
+        m_iLastHeight = height;
+        if (m_pBuffer)
+        {
+            delete[] m_pBuffer;
+            m_pBuffer = NULL;
+        }
+
 		m_image_nchannels = bmp.bmBitsPixel == 1 ? 1 : bmp.bmBitsPixel / 8;
 		m_Mat = cv::Mat(cv::Size(width, height), CV_8UC(m_image_nchannels));
-		if (!(m_pBuffer = new BYTE[width * height * m_image_nchannels]))
+        m_pBuffer = new BYTE[width * height * m_image_nchannels];
+		if (!m_pBuffer)
+        {
 			return false;
-	}
+        }
+    }
+
 	::GetBitmapBits(m_hBitmap, width * height * m_image_nchannels, m_pBuffer);
 	::memcpy(m_Mat.data, m_pBuffer, width * height * m_image_nchannels);
 
-	cv::cvtColor(m_Mat, m_Grey, CV_BGR2GRAY);
+	cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
 
 	::SelectObject(m_hMemDC, m_hOldBitmap);
 	::DeleteObject(m_hOldBitmap);
