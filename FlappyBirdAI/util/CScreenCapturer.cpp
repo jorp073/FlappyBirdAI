@@ -7,10 +7,12 @@ CScreenCapturer* CScreenCapturer::m_pInstance = NULL;
 
 CScreenCapturer::CScreenCapturer()
     :m_hOldBitmap(NULL)
+    , m_hBitmap(NULL)
     , m_image_nchannels(0)
     , m_pBuffer(NULL)
     , m_iLastWidth(0)
     , m_iLastHeight(0)
+    , m_hSrcDC(NULL)
 {
 }
 
@@ -19,78 +21,82 @@ CScreenCapturer::~CScreenCapturer()
 {
     if(NULL != m_pInstance)
     {
-	    if (m_pBuffer)
-		    delete[] m_pBuffer;
-	    if (m_hMemDC)
-		    DeleteDC(m_hMemDC);
-	    if (m_hSrcDC && m_hBitmap)
-		    SelectObject(m_hSrcDC, m_hBitmap);
-	    if (m_hSrcDC)
-		    DeleteDC(m_hSrcDC);
-	    if (m_hBitmap)
-		    DeleteObject(m_hBitmap);
+        ::SelectObject(m_hMemDC, m_hOldBitmap);
+
+        if (m_pBuffer)
+            delete[] m_pBuffer;
+        if (m_hMemDC)
+            DeleteDC(m_hMemDC);
+        if (m_hSrcDC && m_hBitmap)
+            SelectObject(m_hSrcDC, m_hBitmap);
+        if (m_hSrcDC)
+            DeleteDC(m_hSrcDC);
+        if (m_hBitmap)
+            DeleteObject(m_hBitmap);
     }
+}
+
+
+bool CScreenCapturer::_ChangeSize(int width, int height)
+{
+    if (m_hSrcDC) ::DeleteDC(m_hSrcDC);
+    m_hSrcDC = ::GetDC(0);
+    if (!m_hSrcDC) return false;
+
+    if (m_hMemDC) ::DeleteDC(m_hMemDC);
+
+    m_hMemDC = ::CreateCompatibleDC(m_hSrcDC);
+    if (!m_hMemDC) return false;
+
+    if (m_hBitmap) ::DeleteObject(m_hBitmap);
+    m_hBitmap = CreateCompatibleBitmap(m_hSrcDC, width, height);
+    if (!m_hBitmap) return false;
+
+    m_iLastWidth = width;
+    m_iLastHeight = height;
 }
 
 
 bool CScreenCapturer::Capture(RECT rect)
 {
-    m_hSrcDC = ::GetDC(0);
-    if (!m_hSrcDC) return false;
-
-    m_hMemDC = ::CreateCompatibleDC(m_hSrcDC);
-    if (!m_hMemDC) return false;
-
+    printf("CScreenCapturer::Capture()\n");
     auto width = rect.right - rect.left;
-	auto height = rect.bottom - rect.top;
+    auto height = rect.bottom - rect.top;
 
-    m_hBitmap = ::CreateCompatibleBitmap(m_hSrcDC, width, height);
-    if (!m_hBitmap) return false;
-
-    m_hOldBitmap = (HBITMAP)::SelectObject(m_hMemDC, m_hBitmap);
-    if (!::BitBlt(m_hMemDC, 0, 0, width, height, m_hSrcDC, rect.left, rect.top, SRCCOPY)) return false;
-
-    m_hBitmap = (HBITMAP)::SelectObject(m_hMemDC, m_hOldBitmap);
-    BITMAP bmp;
-	::GetObject(m_hBitmap, sizeof(BITMAP), &bmp);
-
-    if (!m_Mat.data) {
-        if (1 == bmp.bmBitsPixel)
-		{
-			//("目标窗体最小化，请切换到前面!\n");
-			return false;
-		}
-	}
-
+    bool bChangedSize = false;
     // if change width or height, then realloc buff memory
     if (m_iLastWidth != width || m_iLastHeight != height)
     {
-        printf("CScreenCapturer::Capture changesize w:%d, h:%d\n", width, height);
-        m_iLastWidth = width;
-        m_iLastHeight = height;
-        if (m_pBuffer)
-        {
-            delete[] m_pBuffer;
-            m_pBuffer = NULL;
-        }
+        if (!_ChangeSize(width, height)) return false;
+        bChangedSize = true;
+    }
+    m_hOldBitmap = (HBITMAP)::SelectObject(m_hMemDC, m_hBitmap);
 
-		m_image_nchannels = bmp.bmBitsPixel == 1 ? 1 : bmp.bmBitsPixel / 8;
-		m_Mat = cv::Mat(cv::Size(width, height), CV_8UC(m_image_nchannels));
+    auto BitBltRet = ::BitBlt(m_hMemDC, 0, 0, width, height,
+        m_hSrcDC, rect.left, rect.top, SRCCOPY);
+    if (!BitBltRet) return false;
+
+    BITMAP bmp;
+    ::GetObject(m_hBitmap, sizeof(BITMAP), &bmp);
+
+    if (bChangedSize)
+    {
+        if (1 == bmp.bmBitsPixel) return false;
+        m_image_nchannels = bmp.bmBitsPixel == 1 ? 1 : bmp.bmBitsPixel / 8;
+        m_Mat = cv::Mat(cv::Size(width, height), CV_8UC(m_image_nchannels));
+        if (m_pBuffer) delete[] m_pBuffer;
         m_pBuffer = new BYTE[width * height * m_image_nchannels];
-		if (!m_pBuffer)
-        {
-			return false;
-        }
+        if (!m_pBuffer) return false;
     }
 
-	::GetBitmapBits(m_hBitmap, width * height * m_image_nchannels, m_pBuffer);
-	::memcpy(m_Mat.data, m_pBuffer, width * height * m_image_nchannels);
+    ::GetBitmapBits(m_hBitmap, width * height * m_image_nchannels, m_pBuffer);
+    ::memcpy(m_Mat.data, m_pBuffer, width * height * m_image_nchannels);
 
-	cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
+    cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
 
-	::SelectObject(m_hMemDC, m_hOldBitmap);
-	::DeleteObject(m_hOldBitmap);
-
+    ::SelectObject(m_hMemDC, m_hOldBitmap);
+    //::DeleteObject(m_hOldBitmap);
+    printf("CScreenCapturer::Capture() return true\n");
     return true;
 }
 

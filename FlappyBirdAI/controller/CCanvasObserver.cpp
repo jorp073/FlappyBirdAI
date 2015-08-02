@@ -12,7 +12,9 @@ CCanvasObserver::CCanvasObserver()
 
 bool CCanvasObserver::Update()
 {
+    printf("CCanvasObserver::Update()\n");
     return m_pStateMachine->Update();
+    printf("CCanvasObserver::Update() end\n");
 }
 
 

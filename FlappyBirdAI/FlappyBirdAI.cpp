@@ -22,6 +22,7 @@ int _tmain(int argc, _TCHAR* argv[])
         printf("Observer found\n");
 
         cv::imshow("canvas", pCanvasObserver->GetCanvasMat());
+        printf("imshow\n");
 
         cv::waitKey(10);
     };

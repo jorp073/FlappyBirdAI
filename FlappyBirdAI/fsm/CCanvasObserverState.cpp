@@ -94,6 +94,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
 bool CFound::Update(CCanvasObserver* observer)
 {
+    printf("CFound::Update()\n");
     RECT rect = {
         m_CanvasRect.tl().x,
         m_CanvasRect.tl().y,

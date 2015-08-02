@@ -38,6 +38,8 @@ protected:
     static CScreenCapturer * m_pInstance;
 
 private:
+    bool _ChangeSize(int width, int height);
+
     HDC m_hSrcDC, m_hMemDC;
     HBITMAP m_hBitmap , m_hOldBitmap;
     BYTE *m_pBuffer;
