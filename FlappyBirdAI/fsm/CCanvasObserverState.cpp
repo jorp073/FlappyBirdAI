@@ -10,6 +10,7 @@ using namespace CanvasObserverState;
 
 bool CSearch::Update(CCanvasObserver* observer)
 {
+    printf("CSearch::Update");
     auto rect = CScreenCapturer::GetInstance()->getScreenRect();
     if (!CScreenCapturer::GetInstance()->Capture(rect)) return false;
 
@@ -23,10 +24,12 @@ bool CSearch::Update(CCanvasObserver* observer)
     printf("left2: %d\n", rectCanvas.tl().x);
 
     auto CanvasMat = cv::Mat(CScreenCapturer::GetInstance()->GetMat(), rectCanvas);
-    observer->SetMat(CanvasMat);
+    auto GrayMat = cv::Mat(CScreenCapturer::GetInstance()->GetGrayMat(), rectCanvas);
+    observer->SetMat(CanvasMat, GrayMat);
     observer->StateMachine()->ChangeState(
         new CanvasObserverState::CFound(rectCanvas));
 
+    printf("CSearch::Update end");
     return true;
 }
 
@@ -81,9 +84,9 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
     auto boundRect = cv::boundingRect(cv::Mat(contours[iMaxAreaID]));
 
     /// 绘制包围的矩形框
-    cv::Mat drawing = cv::Mat::zeros(canny_output.size(), CV_8UC3);
-    auto color = cv::Scalar(255, 0, 0);
-    cv::rectangle(drawing, boundRect.tl(), boundRect.br(), color, 1, 8, 0);
+    //cv::Mat drawing = cv::Mat::zeros(canny_output.size(), CV_8UC3);
+    //auto color = cv::Scalar(255, 0, 0);
+    //cv::rectangle(drawing, boundRect.tl(), boundRect.br(), color, 1, 8, 0);
 
     rect = boundRect;
     return true;
@@ -94,7 +97,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
 bool CFound::Update(CCanvasObserver* observer)
 {
-    printf("CFound::Update()\n");
+    printf("CFound::Update");
     RECT rect = {
         m_CanvasRect.tl().x,
         m_CanvasRect.tl().y,
@@ -115,7 +118,9 @@ bool CFound::Update(CCanvasObserver* observer)
         return false;
     }
 
-    observer->SetMat(CScreenCapturer::GetInstance()->GetMat());
+    observer->SetMat(CScreenCapturer::GetInstance()->GetMat(),
+        CScreenCapturer::GetInstance()->GetGrayMat());
+    printf("CFound::Update end");
     return true;
 }
 

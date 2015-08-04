@@ -59,7 +59,6 @@ bool CScreenCapturer::_ChangeSize(int width, int height)
 
 bool CScreenCapturer::Capture(RECT rect)
 {
-    printf("CScreenCapturer::Capture()\n");
     auto width = rect.right - rect.left;
     auto height = rect.bottom - rect.top;
 
@@ -95,8 +94,6 @@ bool CScreenCapturer::Capture(RECT rect)
     cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
 
     ::SelectObject(m_hMemDC, m_hOldBitmap);
-    //::DeleteObject(m_hOldBitmap);
-    printf("CScreenCapturer::Capture() return true\n");
     return true;
 }
 
