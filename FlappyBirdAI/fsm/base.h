@@ -40,6 +40,7 @@ public :
 
     void InitState( TState< entity_type >* s )
     {
+        printf("InitState to %s\n", s->GetName().c_str());
         m_pCurrentState = s ;
         s->Enter ( m_pOwner);
     }

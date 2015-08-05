@@ -12,6 +12,7 @@ public:
     CGameStateObserver();
 
     bool Init();
+    bool _LoadTemplate(std::string filepath, std::string tname);
 
     bool Update();
 

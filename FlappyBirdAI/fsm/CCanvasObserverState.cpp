@@ -10,7 +10,7 @@ using namespace CanvasObserverState;
 
 bool CSearch::Update(CCanvasObserver* observer)
 {
-    printf("CSearch::Update");
+    // printf("CSearch::Update\n");
     auto rect = CScreenCapturer::GetInstance()->getScreenRect();
     if (!CScreenCapturer::GetInstance()->Capture(rect)) return false;
 
@@ -21,7 +21,7 @@ bool CSearch::Update(CCanvasObserver* observer)
 
     cv::Rect rectCanvas;
     if (!_GetCanvasBorderRect(matBorder, rectCanvas)) return false;
-    printf("left2: %d\n", rectCanvas.tl().x);
+    // printf("left2: %d\n", rectCanvas.tl().x);
 
     auto CanvasMat = cv::Mat(CScreenCapturer::GetInstance()->GetMat(), rectCanvas);
     auto GrayMat = cv::Mat(CScreenCapturer::GetInstance()->GetGrayMat(), rectCanvas);
@@ -29,7 +29,7 @@ bool CSearch::Update(CCanvasObserver* observer)
     observer->StateMachine()->ChangeState(
         new CanvasObserverState::CFound(rectCanvas));
 
-    printf("CSearch::Update end");
+    // printf("CSearch::Update end\n");
     return true;
 }
 
@@ -56,7 +56,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
     /// 寻找轮廓
     findContours(mat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-    printf("findContours count: %d\n", contours.size());
+    // printf("findContours count: %d\n", contours.size());
 
     /// 最大面积的矩形
     int iMaxAreaID = -1;
@@ -76,7 +76,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
     if (-1 == iMaxAreaID) // 没有找到面积足够的矩形
     {
-        printf("not found canvas border\n");
+        // printf("not found canvas border\n");
         return false;
     }
 
@@ -97,7 +97,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
 bool CFound::Update(CCanvasObserver* observer)
 {
-    printf("CFound::Update");
+    // printf("CFound::Update\n");
     RECT rect = {
         m_CanvasRect.tl().x,
         m_CanvasRect.tl().y,
@@ -120,7 +120,7 @@ bool CFound::Update(CCanvasObserver* observer)
 
     observer->SetMat(CScreenCapturer::GetInstance()->GetMat(),
         CScreenCapturer::GetInstance()->GetGrayMat());
-    printf("CFound::Update end");
+    // printf("CFound::Update end\n");
     return true;
 }
 

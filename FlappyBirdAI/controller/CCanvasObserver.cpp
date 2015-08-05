@@ -27,7 +27,9 @@ void CCanvasObserver::SetMat(cv::Mat mat, cv::Mat graymat)
     m_matCanvas = cv::Mat(CANVAS_SCALETO_HEIGHT, CANVAS_SCALETO_WIDTH, CV_8UC4);
     cv::resize(noborder, m_matCanvas, cv::Size(CANVAS_SCALETO_WIDTH, CANVAS_SCALETO_HEIGHT));
     
+    /// filter bird and pipes by threshold
     cv::cvtColor(m_matCanvas, m_matGrayCanvas, CV_BGR2GRAY);
+    cv::threshold(m_matGrayCanvas, m_matGrayCanvas, BIRD_AND_PIPE_FILTER_THRESHOLD, 255, 1);
 }
 
 

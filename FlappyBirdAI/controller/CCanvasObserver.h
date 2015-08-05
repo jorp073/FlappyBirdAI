@@ -43,6 +43,9 @@ protected:
 
 private:
     cv::Rect _GetRectWithoutBorder(cv::Mat graymat);
+
+    // TODO
+    void _FilterBackground(cv::Mat graymat);
     
     // an instance of the state machine class
     TStateMachine<CCanvasObserver>*  m_pStateMachine;

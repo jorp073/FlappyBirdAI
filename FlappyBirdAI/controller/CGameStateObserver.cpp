@@ -18,17 +18,30 @@ bool CGameStateObserver::Update()
 
 bool CGameStateObserver::Init()
 {
-    printf("CUnknown::init()\n");
-    cv::Mat mat1 = cv::imread("res/gamestate_title.png", CV_8UC1);
+    printf("CUnknown::init() end\n");
+    _LoadTemplate("res/gamestate_title.png",    "title");
+    _LoadTemplate("res/gamestate_getready.png", "getready");
+    _LoadTemplate("res/gamestate_gameover.png", "gameover");
+    _LoadTemplate("res/gamestate_play1.png",    "play1");
+    _LoadTemplate("res/gamestate_play2.png",    "play2");
+    _LoadTemplate("res/gamestate_play3.png",    "play3");
+    _LoadTemplate("res/gamestate_play4.png",    "play4");
+    _LoadTemplate("res/gamestate_play5.png",    "play5");
+    return true;
+}
+
+
+bool CGameStateObserver::_LoadTemplate(std::string filepath, std::string tname)
+{
+    cv::Mat mat1 = cv::imread(filepath, CV_8UC1);
     assert(mat1.cols > 0);
     if (CV_8UC1 != mat1.type())
     {
         cv::cvtColor(mat1, mat1, CV_RGB2GRAY);
     }
     assert(mat1.type() == CV_8UC1);
-    m_vecTemplate.insert(std::make_pair("title", mat1));
-    printf("CUnknown::init() end\n");
 
-    imshow("temp1", mat1);
+    m_vecTemplate.insert(std::make_pair(tname, mat1));
+    // imshow("temp1", mat1);
     return true;
 }
