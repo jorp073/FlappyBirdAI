@@ -26,18 +26,11 @@ int _tmain(int argc, _TCHAR* argv[])
         pGameStateObserver->Update();
         //if (!pGameStateObserver->StateMachine()->IsInState("Play")) continue;
 
+
         auto mat = CCanvasObserver::GetInstance()->GetCanvasMat();
         cv::imshow("GrayCanvas", CCanvasObserver::GetInstance()->GetGrayCanvasMat());
-        //cv::imshow("Canvas", mat);
-        //std::vector<cv::Mat> sbgr(mat.channels());
-        //cv::split(mat, sbgr);
-        //cv::imshow("b", sbgr[0]);
-        //cv::imshow("g", sbgr[1]);
-        //cv::imshow("r", sbgr[2]);
-
 
         cv::waitKey(1);
-        Sleep(1);
     };
 
 

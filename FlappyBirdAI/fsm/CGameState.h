@@ -71,6 +71,7 @@ namespace GameState
         virtual bool Update(CGameStateObserver* observer);
 
     private:
-        bool isCanvasPosMoved();
+        // return whether find bird or not
+        bool getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
     };
 };

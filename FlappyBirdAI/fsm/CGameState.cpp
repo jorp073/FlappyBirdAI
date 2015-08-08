@@ -167,22 +167,6 @@ bool CPlay::Update(CGameStateObserver* observer)
 {
     printf("CPlay::Update\n");
 
-    /// Check GetReady State
-    auto result = MatchGetReady(observer);
-    if (result < MIN_MATCH_VALUE)
-    {
-        observer->StateMachine()->ChangeState(new CGetReady());
-        return true;
-    }
-
-    /// Check GameOver State
-    result = MatchGameOver(observer);
-    if (result < MIN_MATCH_VALUE)
-    {
-        observer->StateMachine()->ChangeState(new CGameOver());
-        return true;
-    }
-
     /// Binary gray image
     auto canvasmat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     auto mat = cv::Mat();
@@ -197,25 +181,61 @@ bool CPlay::Update(CGameStateObserver* observer)
     cv::erode(mat, mat, element);
     //cv::imshow("bin", mat);
 
-    /// Find contours
+    /// Find all contours
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
     findContours(mat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
     printf("findContours count: %d\n", contours.size());
 
-    /// get bird rect
+    /// Find bird contour, and get rect
+    std::vector<cv::Rect> rectBirds;
     for (int i = 0; i < contours.size(); i++)
     {
-        auto area = fabs(contourArea(contours[i]));
-        // if (area < CANVAS_BORDER_MIN_AREA) continue;
-        printf("area: %.0f\n", area);
-        /// ¾ØÐÎ±ß½ç¿ò
-        auto boundRect = cv::boundingRect(cv::Mat(contours[i]));
-        auto color = cv::Scalar(255, 255, 255);
-        cv::rectangle(canvasmat, boundRect.tl(), boundRect.br(), color, 1, 8, 0);
+        cv::Rect rect;
+        if (!getBirdRect(contours[i], rect)) continue;
+        rectBirds.push_back(rect);
+    }
+
+    switch(rectBirds.size())
+    {
+    case 0:
+        // not found any find
+        observer->StateMachine()->ChangeState(new CUnknown());
+        return true;
+    case 1:
+        // find singleton bird
+        break;
+    default:
+        // find more than one bird
+        // TODO get nearest bird
+        observer->StateMachine()->ChangeState(new CUnknown());
+        break;
     }
 
     // try to find bird pos
+
+    return true;
+}
+
+bool CPlay::getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
+{
+    auto rectBound = cv::boundingRect(cv::Mat(contour));
+
+    // check rect center x ratio on canvas
+    float cx = (rectBound.tl().x + rectBound.br().x)/2.0f;
+    float cxratio = cx/CANVAS_SCALETO_WIDTH;
+    printf("cxratio = %f\n", cxratio);
+    if (fabsf(cxratio - BIRDX_RATIO) > BIRDX_RATIO_OFFSET) return false;
+
+    // check contour area
+    float area = fabs(contourArea(contour));
+    printf("area= %f\n", area);
+    if (fabsf(area - BIRD_CONTOUR_AREA) > BIRD_CONTROU_AREA_OFFSET) return false;
+
+    // draw find result
+    auto color = cv::Scalar(255, 255, 255);
+    cv::Mat draw = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
+    cv::rectangle(draw, rectBound.tl(), rectBound.br(), color, 1, 8, 0);
 
     return true;
 }

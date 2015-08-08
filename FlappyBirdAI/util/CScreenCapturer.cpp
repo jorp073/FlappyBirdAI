@@ -54,6 +54,7 @@ bool CScreenCapturer::_ChangeSize(int width, int height)
 
     m_iLastWidth = width;
     m_iLastHeight = height;
+    return true;
 }
 
 
