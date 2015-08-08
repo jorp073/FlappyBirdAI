@@ -235,6 +235,7 @@ bool CPlay::getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rec
     printf("area= %f\n", area);
     if (fabsf(area - BIRD_CONTOUR_AREA) > BIRD_CONTROU_AREA_OFFSET) return false;
 
+    rect = rectBound;
     return true;
 }
 

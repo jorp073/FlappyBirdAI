@@ -81,12 +81,6 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
     /// 矩形边界框
     auto boundRect = cv::boundingRect(cv::Mat(contours[iMaxAreaID]));
-
-    /// 绘制包围的矩形框
-    //cv::Mat drawing = cv::Mat::zeros(canny_output.size(), CV_8UC3);
-    //auto color = cv::Scalar(255, 0, 0);
-    //cv::rectangle(drawing, boundRect.tl(), boundRect.br(), color, 1, 8, 0);
-
     rect = boundRect;
     return true;
 }

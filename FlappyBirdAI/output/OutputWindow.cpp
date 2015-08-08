@@ -65,8 +65,7 @@ void COutputWindow::Update()
     for (auto rect : m_rectBirds)
     {
         auto color = cv::Scalar(255, 255, 255);
-        cv::Mat draw = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
-        cv::rectangle(draw, rect.tl(), rect.br(), color, 1, 8, 0);
+        cv::rectangle(mat, rect.tl(), rect.br(), color, 1, 8, 0);
     }
 
     cv::imshow("Main Output", mat);
