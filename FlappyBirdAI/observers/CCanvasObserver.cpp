@@ -4,15 +4,24 @@
 
 CCanvasObserver* CCanvasObserver::m_pInstance = NULL;
 
+
 CCanvasObserver::CCanvasObserver()
 {
-    m_pStateMachine = new TStateMachine<CCanvasObserver>(this);
-    m_pStateMachine->InitState(new CanvasObserverState::CSearch());
+}
+
+
+CCanvasObserver::~CCanvasObserver()
+{
+    if (m_pStateMachine)
+        delete m_pStateMachine;
 }
 
 
 bool CCanvasObserver::Init()
 {
+    m_pStateMachine = new TStateMachine<CCanvasObserver>(this);
+    m_pStateMachine->InitState(new CanvasObserverState::CSearch());
+
     m_matGrayBg = cv::imread("res/graybg.bmp", -1);
     cv::cvtColor(m_matGrayBg, m_matGrayBg, CV_RGBA2GRAY);
     assert(m_matGrayBg.cols == CANVAS_SCALETO_WIDTH);

@@ -2,11 +2,19 @@
 #include "CGameStateObserver.h"
 #include "../fsm/CGameState.h"
 
+CGameStateObserver* CGameStateObserver::m_pInstance = NULL;
+
 
 CGameStateObserver::CGameStateObserver()
 {
-    m_pStateMachine = new TStateMachine<CGameStateObserver>(this);
-    m_pStateMachine->InitState(new GameState::CUnknown());
+}
+
+
+CGameStateObserver::~CGameStateObserver()
+{
+    if (m_pStateMachine)
+        delete m_pStateMachine;
+
 }
 
 
@@ -18,7 +26,8 @@ bool CGameStateObserver::Update()
 
 bool CGameStateObserver::Init()
 {
-    printf("CUnknown::init() end\n");
+    m_pStateMachine = new TStateMachine<CGameStateObserver>(this);
+    m_pStateMachine->InitState(new GameState::CUnknown());
     _LoadTemplate("res/gamestate_title.png",    "title");
     _LoadTemplate("res/gamestate_getready.png", "getready");
     _LoadTemplate("res/gamestate_gameover.png", "gameover");

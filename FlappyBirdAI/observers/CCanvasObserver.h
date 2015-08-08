@@ -16,7 +16,6 @@ public:
         return static_cast<CCanvasObserver*>(m_pInstance);
     }
 
-
     ~CCanvasObserver();
 
     static void Release()

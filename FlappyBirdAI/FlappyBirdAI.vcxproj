@@ -85,22 +85,24 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="controller\CCanvasObserver.h" />
-    <ClInclude Include="controller\CGameStateObserver.h" />
+    <ClInclude Include="observers\CCanvasObserver.h" />
+    <ClInclude Include="observers\CGameStateObserver.h" />
     <ClInclude Include="fsm\base.h" />
     <ClInclude Include="fsm\CCanvasObserverState.h" />
     <ClInclude Include="fsm\CGameState.h" />
     <ClInclude Include="model\define.h" />
+    <ClInclude Include="output\OutputWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="util\CScreenCapturer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="controller\CCanvasObserver.cpp" />
-    <ClCompile Include="controller\CGameStateObserver.cpp" />
+    <ClCompile Include="observers\CCanvasObserver.cpp" />
+    <ClCompile Include="observers\CGameStateObserver.cpp" />
     <ClCompile Include="FlappyBirdAI.cpp" />
     <ClCompile Include="fsm\CCanvasObserverState.cpp" />
     <ClCompile Include="fsm\CGameState.cpp" />
+    <ClCompile Include="output\OutputWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

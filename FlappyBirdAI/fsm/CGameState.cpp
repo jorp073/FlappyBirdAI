@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "CGameState.h"
-#include "../controller/CGameStateObserver.h"
-#include "../controller/CCanvasObserver.h"
+#include "../observers/CGameStateObserver.h"
+#include "../observers/CCanvasObserver.h"
+#include "../output/OutputWindow.h"
 
 
 using namespace GameState;
@@ -196,6 +197,8 @@ bool CPlay::Update(CGameStateObserver* observer)
         rectBirds.push_back(rect);
     }
 
+    COutputWindow::GetInstance()->SetBirdRects(rectBirds);
+
     switch(rectBirds.size())
     {
     case 0:
@@ -231,11 +234,6 @@ bool CPlay::getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rec
     float area = fabs(contourArea(contour));
     printf("area= %f\n", area);
     if (fabsf(area - BIRD_CONTOUR_AREA) > BIRD_CONTROU_AREA_OFFSET) return false;
-
-    // draw find result
-    auto color = cv::Scalar(255, 255, 255);
-    cv::Mat draw = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
-    cv::rectangle(draw, rectBound.tl(), rectBound.br(), color, 1, 8, 0);
 
     return true;
 }

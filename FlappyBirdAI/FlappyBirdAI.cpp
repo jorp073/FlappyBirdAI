@@ -4,37 +4,36 @@
 #include "stdafx.h"
 #include "fsm/base.h"
 #include "util/CScreenCapturer.h"
-#include "controller/CCanvasObserver.h"
-#include "controller/CGameStateObserver.h"
+#include "observers/CCanvasObserver.h"
+#include "observers/CGameStateObserver.h"
+#include "output/OutputWindow.h"
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    auto pGameStateObserver = new CGameStateObserver();
-    pGameStateObserver->Init();
+    COutputWindow::GetInstance()->Init();
+    CGameStateObserver::GetInstance()->Init();
     CCanvasObserver::GetInstance()->Init();
 
-    cv::namedWindow("GrayCanvas");
     printf("start main loop\n");
-
     while (true)
     {
         cv::waitKey(1);
         CCanvasObserver::GetInstance()->Update();
+        COutputWindow::GetInstance()->SetCanvasStateText();
         if (!CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found")) continue;
 
-        // printf("Observer found\n");
-        pGameStateObserver->Update();
-        //if (!pGameStateObserver->StateMachine()->IsInState("Play")) continue;
-
-
-        auto mat = CCanvasObserver::GetInstance()->GetCanvasMat();
-        cv::imshow("GrayCanvas", CCanvasObserver::GetInstance()->GetGrayCanvasMat());
-
+        CGameStateObserver::GetInstance()->Update();
+        COutputWindow::GetInstance()->SetGameStateText();
+        COutputWindow::GetInstance()->Update();
+        if (!CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play")) continue;
         cv::waitKey(1);
     };
 
 
     CScreenCapturer::GetInstance()->Release();
+    CCanvasObserver::GetInstance()->Release();
+    COutputWindow::GetInstance()->Release();
     return 0;
 }
 

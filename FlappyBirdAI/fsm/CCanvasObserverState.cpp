@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CCanvasObserverState.h"
 #include "../util/CScreenCapturer.h"
-#include "../controller/CCanvasObserver.h"
+#include "../observers/CCanvasObserver.h"
 
 
 using namespace CanvasObserverState;

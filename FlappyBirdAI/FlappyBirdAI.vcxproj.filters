@@ -16,14 +16,17 @@
     <Filter Include="源文件\fsm">
       <UniqueIdentifier>{cf7fac01-96e3-4f71-bd4a-ee745198ad07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\controller">
-      <UniqueIdentifier>{ee483230-eafd-4b0c-9e35-7eccc0a5ff1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\model">
       <UniqueIdentifier>{0c8055a4-7b76-4e91-8b9d-9fbc677f3d2c}</UniqueIdentifier>
     </Filter>
     <Filter Include="源文件\util">
       <UniqueIdentifier>{2264b3ff-251f-416a-ac16-827c20e197fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\observers">
+      <UniqueIdentifier>{ee483230-eafd-4b0c-9e35-7eccc0a5ff1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\output">
+      <UniqueIdentifier>{e99dc077-c49a-4591-a921-0c1a80b4e4f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,17 +48,20 @@
     <ClInclude Include="util\CScreenCapturer.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
-    <ClInclude Include="controller\CCanvasObserver.h">
-      <Filter>源文件\controller</Filter>
-    </ClInclude>
     <ClInclude Include="fsm\CCanvasObserverState.h">
       <Filter>源文件\fsm</Filter>
     </ClInclude>
-    <ClInclude Include="controller\CGameStateObserver.h">
-      <Filter>源文件\controller</Filter>
-    </ClInclude>
     <ClInclude Include="fsm\CGameState.h">
       <Filter>源文件\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\CCanvasObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\CGameStateObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="output\OutputWindow.h">
+      <Filter>源文件\output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,17 +74,20 @@
     <ClCompile Include="util\CScreenCapturer.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="controller\CCanvasObserver.cpp">
-      <Filter>源文件\controller</Filter>
-    </ClCompile>
     <ClCompile Include="fsm\CCanvasObserverState.cpp">
       <Filter>源文件\fsm</Filter>
     </ClCompile>
-    <ClCompile Include="controller\CGameStateObserver.cpp">
-      <Filter>源文件\controller</Filter>
-    </ClCompile>
     <ClCompile Include="fsm\CGameState.cpp">
       <Filter>源文件\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\CCanvasObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\CGameStateObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="output\OutputWindow.cpp">
+      <Filter>源文件\output</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
