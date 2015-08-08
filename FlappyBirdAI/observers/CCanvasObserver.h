@@ -30,9 +30,8 @@ public:
     bool Init();
     bool Update();
 
-    void SetCanvasMat(cv::Mat mat, cv::Mat graymat);
+    void SetCanvasMat(cv::Mat graymat);
     const cv::Mat & GetCanvasMat() const { return m_matCanvas; };
-    const cv::Mat & GetGrayCanvasMat() const { return m_matGrayCanvas; };
 
     TStateMachine<CCanvasObserver>* StateMachine() { return m_pStateMachine; };
 
@@ -50,6 +49,6 @@ private:
     TStateMachine<CCanvasObserver>*  m_pStateMachine;
 
     // canvas Mat
-    cv::Mat m_matCanvas, m_matGrayCanvas, m_matGrayBg;
+    cv::Mat m_matCanvas, m_matGrayBg;
 };
 

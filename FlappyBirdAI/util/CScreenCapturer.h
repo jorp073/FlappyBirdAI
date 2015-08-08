@@ -29,8 +29,6 @@ public:
 
     RECT getScreenRect();
 
-    cv::Mat& GetMat() { return m_Mat; };
-
     cv::Mat& GetGrayMat() { return m_GrayMat; };
 
 protected:

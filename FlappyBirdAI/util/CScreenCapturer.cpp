@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "CScreenCapturer.h"
+#include "PerformanceCounter.h"
 
 
 CScreenCapturer* CScreenCapturer::m_pInstance = NULL;
 
+
+DEFINE_COUNTER(CScreenCapturer_Capture);
 
 CScreenCapturer::CScreenCapturer()
     :m_hOldBitmap(NULL)
@@ -60,6 +63,7 @@ bool CScreenCapturer::_ChangeSize(int width, int height)
 
 bool CScreenCapturer::Capture(RECT rect)
 {
+    COUNTER_HELPER(CScreenCapturer_Capture);
     auto width = rect.right - rect.left;
     auto height = rect.bottom - rect.top;
 

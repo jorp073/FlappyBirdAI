@@ -2,9 +2,11 @@
 #include "CCanvasObserverState.h"
 #include "../util/CScreenCapturer.h"
 #include "../observers/CCanvasObserver.h"
-
+#include "../util/PerformanceCounter.h"
 
 using namespace CanvasObserverState;
+
+DEFINE_COUNTER(CSearch_Update);
 
 /////////////////////// Search
 
@@ -13,6 +15,7 @@ bool CSearch::Update(CCanvasObserver* observer)
     auto rect = CScreenCapturer::GetInstance()->getScreenRect();
     if (!CScreenCapturer::GetInstance()->Capture(rect)) return false;
 
+    COUNTER_HELPER(CSearch_Update);
     auto matGray = CScreenCapturer::GetInstance()->GetGrayMat();
 
     // filter pix of canvas border
@@ -21,9 +24,8 @@ bool CSearch::Update(CCanvasObserver* observer)
     cv::Rect rectCanvas;
     if (!_GetCanvasBorderRect(matBorder, rectCanvas)) return false;
 
-    auto CanvasMat = cv::Mat(CScreenCapturer::GetInstance()->GetMat(), rectCanvas);
     auto GrayMat = cv::Mat(CScreenCapturer::GetInstance()->GetGrayMat(), rectCanvas);
-    observer->SetCanvasMat(CanvasMat, GrayMat);
+    observer->SetCanvasMat(GrayMat);
     observer->StateMachine()->ChangeState(
         new CanvasObserverState::CFound(rectCanvas));
 
@@ -55,12 +57,12 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
     /// 最大面积的矩形
     int iMaxAreaID = -1;
-    float fMaxArea = -1;
-    for (int i = 0; i < contours.size(); i++)
+    double fMaxArea = -1;
+    for (size_t i = 0; i < contours.size(); i++)
     {
         auto area = fabs(contourArea(contours[i]));
         if (area < CANVAS_BORDER_MIN_AREA) continue;
-        LOG(INFO) << "canvas area: " << area;
+        DLOG(INFO) << "canvas area: " << area;
 
         if (area > fMaxArea)
         {
@@ -105,8 +107,7 @@ bool CFound::Update(CCanvasObserver* observer)
         return false;
     }
 
-    observer->SetCanvasMat(CScreenCapturer::GetInstance()->GetMat(),
-        CScreenCapturer::GetInstance()->GetGrayMat());
+    observer->SetCanvasMat(CScreenCapturer::GetInstance()->GetGrayMat());
     return true;
 }
 

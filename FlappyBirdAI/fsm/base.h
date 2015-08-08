@@ -40,7 +40,7 @@ public :
 
     void InitState( TState< entity_type >* s )
     {
-        LOG(INFO) << "InitState to " << s->GetName();
+        DLOG(INFO) << "InitState to " << s->GetName();
         m_pCurrentState = s ;
         s->Enter ( m_pOwner);
     }
@@ -66,7 +66,7 @@ public :
     {
         assert (pNewState &&
             "<StateMachine::ChangeState>: trying to change to a null state" );
-        LOG(INFO) << "ChangeState from: " << m_pCurrentState->GetName() << " to " << pNewState->GetName();
+        DLOG(INFO) << "ChangeState from: " << m_pCurrentState->GetName() << " to " << pNewState->GetName();
 
         //call the exit method of the existing state
         m_pCurrentState -> Exit( m_pOwner );

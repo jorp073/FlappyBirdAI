@@ -50,7 +50,7 @@ void COutputWindow::SetBirdRects(const std::vector<cv::Rect> rects)
 
 void COutputWindow::Update()
 {
-    auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
+    auto mat = CCanvasObserver::GetInstance()->GetCanvasMat();
     if (NULL == mat.data) return;
     mat = mat.clone();
 

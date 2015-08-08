@@ -23,8 +23,10 @@ bool CCanvasObserver::Init()
     m_pStateMachine->InitState(new CanvasObserverState::CSearch());
 
     m_matGrayBg = cv::imread("res/graybg.bmp", -1);
-    cv::cvtColor(m_matGrayBg, m_matGrayBg, CV_RGBA2GRAY);
+    cv::cvtColor(m_matGrayBg, m_matGrayBg, CV_RGB2GRAY);
     assert(m_matGrayBg.cols == CANVAS_SCALETO_WIDTH);
+
+    m_matCanvas = cv::Mat(CANVAS_SCALETO_HEIGHT, CANVAS_SCALETO_WIDTH, CV_8UC1);
     return true;
 }
 
@@ -35,23 +37,20 @@ bool CCanvasObserver::Update()
 }
 
 
-void CCanvasObserver::SetCanvasMat(cv::Mat mat, cv::Mat graymat)
+void CCanvasObserver::SetCanvasMat(cv::Mat graymat)
 {
     /// remove border
     auto rect = _GetRectWithoutBorder(graymat);
-    auto noborder = cv::Mat(mat, rect);
+    auto noborder = cv::Mat(graymat, rect);
 
     /// scale to defined size
-    m_matCanvas = cv::Mat(CANVAS_SCALETO_HEIGHT, CANVAS_SCALETO_WIDTH, CV_8UC4);
     cv::resize(noborder, m_matCanvas, cv::Size(CANVAS_SCALETO_WIDTH, CANVAS_SCALETO_HEIGHT));
-    m_matCanvas = cv::Mat(m_matCanvas, cv::Rect(0, 0, CANVAS_SCALETO_WIDTH, m_matGrayBg.rows));
-    
+    auto noground = cv::Mat(m_matCanvas, cv::Rect(0, 0, CANVAS_SCALETO_WIDTH, m_matGrayBg.rows));
+
     /// remove background
-    cv::cvtColor(m_matCanvas, m_matGrayCanvas, CV_BGR2GRAY);
     cv::Mat bgmask;
-    cv::absdiff(m_matGrayCanvas, m_matGrayBg, bgmask);
-    m_matGrayCanvas.copyTo(bgmask, bgmask);
-    m_matGrayCanvas = bgmask;
+    cv::absdiff(noground, m_matGrayBg, bgmask);
+    noground.copyTo(m_matCanvas, bgmask);
 }
 
 
