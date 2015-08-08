@@ -52,6 +52,7 @@ void COutputWindow::Update()
 {
     auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     if (NULL == mat.data) return;
+    mat = mat.clone();
 
     /// count fps
     TickCountFPS();
@@ -78,12 +79,12 @@ void COutputWindow::Update()
 void COutputWindow::TopMostWindow(const std::string& strWindowName)
 {
     HWND hWnd = (HWND)cvGetWindowHandle(strWindowName.c_str());
-	if (hWnd) {
-		HWND hRawWnd = ::GetParent(hWnd);
-		if (hRawWnd != NULL) {
-			SetWindowPos(hRawWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE |SWP_NOMOVE);
-		}
-	}
+    if (hWnd) {
+        HWND hRawWnd = ::GetParent(hWnd);
+        if (hRawWnd != NULL) {
+            SetWindowPos(hRawWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE |SWP_NOMOVE);
+        }
+    }
 }
 
 
@@ -103,7 +104,7 @@ void COutputWindow::TickCountFPS()
         m_dwTickCount = tickcount;
         std::stringstream stmFPS;
         stmFPS << m_iFPS;
-		m_iFPS = 0;
+        m_iFPS = 0;
         m_strFPSText = "FPS: " + stmFPS.str();
     }
 }

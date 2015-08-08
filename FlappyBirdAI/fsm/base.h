@@ -40,7 +40,7 @@ public :
 
     void InitState( TState< entity_type >* s )
     {
-        printf("InitState to %s\n", s->GetName().c_str());
+        LOG(INFO) << "InitState to " << s->GetName();
         m_pCurrentState = s ;
         s->Enter ( m_pOwner);
     }
@@ -66,7 +66,7 @@ public :
     {
         assert (pNewState &&
             "<StateMachine::ChangeState>: trying to change to a null state" );
-        printf("ChangeState from: %s to %s\n", m_pCurrentState->GetName().c_str(), pNewState->GetName().c_str());
+        LOG(INFO) << "ChangeState from: " << m_pCurrentState->GetName() << " to " << pNewState->GetName();
 
         //call the exit method of the existing state
         m_pCurrentState -> Exit( m_pOwner );

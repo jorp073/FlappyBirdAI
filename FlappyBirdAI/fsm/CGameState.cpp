@@ -89,7 +89,6 @@ double CBase::MatchGameOver(CGameStateObserver* observer)
 
 bool CUnknown::Update(CGameStateObserver* observer)
 {
-    // printf("CUnknown::Update()\n");
     typedef double (CBase::*MATCH_FUNC)(CGameStateObserver*);
     MATCH_FUNC matchfunc[] = {
         &CBase::MatchTitle,
@@ -102,7 +101,7 @@ bool CUnknown::Update(CGameStateObserver* observer)
     for (int i=0; i<funccount; i++)
     {
         auto result = (this->*matchfunc[i])(observer);
-        printf("id: %d, result: %f\n", i, result);
+        LOG(INFO) << "match id: " << i << ", result: " << result;
         if (result < MIN_MATCH_VALUE)
         {
             /// change state
@@ -166,8 +165,6 @@ bool CGameOver::Update(CGameStateObserver* observer)
 
 bool CPlay::Update(CGameStateObserver* observer)
 {
-    printf("CPlay::Update\n");
-
     /// Binary gray image
     auto canvasmat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     auto mat = cv::Mat();
@@ -186,7 +183,7 @@ bool CPlay::Update(CGameStateObserver* observer)
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
     findContours(mat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-    printf("findContours count: %d\n", contours.size());
+    LOG(INFO) << "findContours count: " << contours.size();
 
     /// Find bird contour, and get rect
     std::vector<cv::Rect> rectBirds;
@@ -227,12 +224,12 @@ bool CPlay::getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rec
     // check rect center x ratio on canvas
     float cx = (rectBound.tl().x + rectBound.br().x)/2.0f;
     float cxratio = cx/CANVAS_SCALETO_WIDTH;
-    printf("cxratio = %f\n", cxratio);
+    LOG(INFO) << "cxratio = " << cxratio;
     if (fabsf(cxratio - BIRDX_RATIO) > BIRDX_RATIO_OFFSET) return false;
 
     // check contour area
     float area = fabs(contourArea(contour));
-    printf("area= %f\n", area);
+    LOG(INFO) << "area= " << area;
     if (fabsf(area - BIRD_CONTOUR_AREA) > BIRD_CONTROU_AREA_OFFSET) return false;
 
     rect = rectBound;

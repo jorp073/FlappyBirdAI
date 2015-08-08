@@ -11,11 +11,15 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+    FLAGS_log_dir = "../logs/";
+    google::InitGoogleLogging("FlappyBirdAI.exe");
+    LOG(INFO) << "ÎÒÔÚInitInstance()";
+
     COutputWindow::GetInstance()->Init();
     CGameStateObserver::GetInstance()->Init();
     CCanvasObserver::GetInstance()->Init();
 
-    printf("start main loop\n");
+    LOG(INFO) << "start main loop";
 
     while (true)
     {
@@ -37,6 +41,8 @@ int _tmain(int argc, _TCHAR* argv[])
     CScreenCapturer::GetInstance()->Release();
     CCanvasObserver::GetInstance()->Release();
     COutputWindow::GetInstance()->Release();
+
+    google::ShutdownGoogleLogging();
     return 0;
 }
 

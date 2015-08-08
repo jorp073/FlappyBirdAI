@@ -16,3 +16,9 @@
 #include <string>
 #include <Windows.h>
 #include "model/define.h"
+
+
+// #define GOOGLE_GLOG_DLL_DECL            // if use static glog lib
+#define GLOG_NO_ABBREVIATED_SEVERITIES
+#include "glog/logging.h"
+
