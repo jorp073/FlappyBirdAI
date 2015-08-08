@@ -25,7 +25,7 @@ bool CSearch::Update(CCanvasObserver* observer)
 
     auto CanvasMat = cv::Mat(CScreenCapturer::GetInstance()->GetMat(), rectCanvas);
     auto GrayMat = cv::Mat(CScreenCapturer::GetInstance()->GetGrayMat(), rectCanvas);
-    observer->SetMat(CanvasMat, GrayMat);
+    observer->SetCanvasMat(CanvasMat, GrayMat);
     observer->StateMachine()->ChangeState(
         new CanvasObserverState::CFound(rectCanvas));
 
@@ -50,7 +50,6 @@ cv::Mat CSearch::_FilterCanvasBorder(cv::Mat mat)
 
 bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 {
-    cv::Mat canny_output;
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
 
@@ -118,7 +117,7 @@ bool CFound::Update(CCanvasObserver* observer)
         return false;
     }
 
-    observer->SetMat(CScreenCapturer::GetInstance()->GetMat(),
+    observer->SetCanvasMat(CScreenCapturer::GetInstance()->GetMat(),
         CScreenCapturer::GetInstance()->GetGrayMat());
     // printf("CFound::Update end\n");
     return true;

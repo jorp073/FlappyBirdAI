@@ -6,6 +6,8 @@
 
 using namespace GameState;
 
+const double CBase::MIN_MATCH_VALUE = 0.001;
+
 /////////////////////// CBase
 
 double CBase::_GetMatchResult(cv::Mat mat, cv::Mat templ, OUT cv::Point& matchLoc)
@@ -39,100 +41,45 @@ double CBase::_GetMatchResult(cv::Mat mat, cv::Mat templ, OUT cv::Point& matchLo
 }
 
 
-bool CBase::IsInTitleState(CGameStateObserver* observer)
+bool CBase::isMatchResultIncrease(CGameStateObserver* observer, double result)
+{
+    if (result > m_fLastMatchResult)
+    {
+        observer->StateMachine()->ChangeState(new CUnknown);
+        return true;
+    }
+    else
+    {
+        m_fLastMatchResult = result;
+        return false;
+    }
+}
+
+
+double CBase::MatchTitle(CGameStateObserver* observer)
 {
     auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     auto templ = observer->GetTemplateMat("title");
     cv::Point pt;
-    auto value = _GetMatchResult(mat, templ, pt);
-
-    // title state:     0.0 - 0.57
-    // get ready state: 1.0
-    // play state:      1.0
-    // game over state: 1.0
-    // printf("IsInTitleState value= %f\n", value);
-    return value < 0.7;
+    return _GetMatchResult(mat, templ, pt);
 }
 
 
-bool CBase::IsInGetReadyState(CGameStateObserver* observer)
+double CBase::MatchGetReady(CGameStateObserver* observer)
 {
     auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     auto templ = observer->GetTemplateMat("getready");
     cv::Point pt;
-    auto value = _GetMatchResult(mat, templ, pt);
-
-    // title state:     1.0
-    // get ready state: 0.0 - 0.53
-    // play state:      1.0
-    // game over state: 1.0
-    // printf("IsInGetReadyState value= %f\n", value);
-    return value < 0.6;
+    return _GetMatchResult(mat, templ, pt);
 }
 
 
-bool CBase::IsInGameOverState(CGameStateObserver* observer)
+double CBase::MatchGameOver(CGameStateObserver* observer)
 {
     auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
     auto templ = observer->GetTemplateMat("gameover");
     cv::Point pt;
-    auto value = _GetMatchResult(mat, templ, pt);
-
-    // title state:     1.0
-    // get ready state: 1.0
-    // play state:      1.0
-    // game over state: 0.0 - 0.13
-    // printf("IsInGameOverState value= %f\n", value);
-    return value < 0.5;
-}
-
-
-bool CBase::IsInPlayState(CGameStateObserver* observer)
-{
-    auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
-
-
-    
-    auto templ1 = observer->GetTemplateMat("play1");
-    auto templ2 = observer->GetTemplateMat("play2");
-    auto templ3 = observer->GetTemplateMat("play3");
-    auto templ4 = observer->GetTemplateMat("play4");
-    auto templ5 = observer->GetTemplateMat("play5");
-    cv::Point p1, p2, p3, p4, p5;
-    auto value1 = _GetMatchResult(mat, templ1, p1);
-    auto value2 = _GetMatchResult(mat, templ2, p2);
-    auto value3 = _GetMatchResult(mat, templ3, p3);
-    auto value4 = _GetMatchResult(mat, templ4, p4);
-    auto value5 = _GetMatchResult(mat, templ5, p5);
-
-    auto fp = p1;
-    if (value2 < value1)
-    {
-        double t;
-        t=value1; value1=value2; value2=t;
-        fp = p2;
-    }
-    if (value3 < value1)
-    {
-        double t;
-        t=value1; value1=value3; value3=t;
-        fp = p3;
-    }
-    if (value4 < value1)
-    {
-        double t;
-        t=value1; value1=value4; value4=t;
-        fp = p4;
-    }
-    if (value5 < value1)
-    {
-        double t;
-        t=value1; value1=value5; value5=t;
-        fp = p5;
-    }
-    // play state:      0.11
-    printf("IsInPlayState value=%f, %d,%d\n", value1, fp.x, fp.y);
-    return 47 < fp.x && fp.x < 55;
+    return _GetMatchResult(mat, templ, pt);
 }
 
 
@@ -142,26 +89,44 @@ bool CBase::IsInPlayState(CGameStateObserver* observer)
 bool CUnknown::Update(CGameStateObserver* observer)
 {
     // printf("CUnknown::Update()\n");
-    if(IsInGetReadyState(observer))
+    typedef double (CBase::*MATCH_FUNC)(CGameStateObserver*);
+    MATCH_FUNC matchfunc[] = {
+        &CBase::MatchTitle,
+        &CBase::MatchGetReady,
+        &CBase::MatchGameOver,
+    };
+    int funccount = sizeof(matchfunc)/sizeof(MATCH_FUNC);
+
+    /// change to non-play state
+    for (int i=0; i<funccount; i++)
     {
-        observer->StateMachine()->ChangeState(new CGetReady());
+        auto result = (this->*matchfunc[i])(observer);
+        printf("id: %d, result: %f\n", i, result);
+        if (result < MIN_MATCH_VALUE)
+        {
+            /// change state
+            CBase* state;
+            switch(i)
+            {
+            case 0:
+                state = new CTitle();
+                break;
+            case 1:
+                state = new CGetReady();
+                break;
+            case 2:
+                state = new CGameOver();
+                break;
+            default:
+                assert(false);
+            }
+            observer->StateMachine()->ChangeState(state);
+            return true;
+        }
     }
 
-    else if(IsInGameOverState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CGameOver());
-    }
-
-    else if (IsInTitleState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CTitle());
-    }
-
-    else if(IsInPlayState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CPlay());
-    }
-
+    // change to play state
+    observer->StateMachine()->ChangeState(new CPlay());
     return true;
 }
 
@@ -170,10 +135,8 @@ bool CUnknown::Update(CGameStateObserver* observer)
 
 bool CTitle::Update(CGameStateObserver* observer)
 {
-    if (!IsInTitleState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CUnknown());
-    }
+    auto result = MatchTitle(observer);
+    isMatchResultIncrease(observer, result);
     return true;
 }
 
@@ -182,10 +145,8 @@ bool CTitle::Update(CGameStateObserver* observer)
 
 bool CGetReady::Update(CGameStateObserver* observer)
 {
-    if (!IsInGetReadyState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CUnknown());
-    }
+    auto result = MatchGetReady(observer);
+    isMatchResultIncrease(observer, result);
     return true;
 }
 
@@ -194,10 +155,8 @@ bool CGetReady::Update(CGameStateObserver* observer)
 
 bool CGameOver::Update(CGameStateObserver* observer)
 {
-    if (!IsInGameOverState(observer))
-    {
-        observer->StateMachine()->ChangeState(new CUnknown());
-    }
+    auto result = MatchGameOver(observer);
+    isMatchResultIncrease(observer, result);
     return true;
 }
 
@@ -206,11 +165,58 @@ bool CGameOver::Update(CGameStateObserver* observer)
 
 bool CPlay::Update(CGameStateObserver* observer)
 {
-    if (!IsInPlayState(observer))
+    printf("CPlay::Update\n");
+
+    /// Check GetReady State
+    auto result = MatchGetReady(observer);
+    if (result < MIN_MATCH_VALUE)
     {
-        observer->StateMachine()->ChangeState(new CUnknown());
-        imshow("exit play", CCanvasObserver::GetInstance()->GetGrayCanvasMat());
+        observer->StateMachine()->ChangeState(new CGetReady());
+        return true;
     }
+
+    /// Check GameOver State
+    result = MatchGameOver(observer);
+    if (result < MIN_MATCH_VALUE)
+    {
+        observer->StateMachine()->ChangeState(new CGameOver());
+        return true;
+    }
+
+    /// Binary gray image
+    auto canvasmat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
+    auto mat = cv::Mat();
+    cv::threshold(canvasmat, mat, 0, 255, 0);
+
+    /// Dilate and Erode, to get less contours
+    int dilation_size = 1;
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT,
+        cv::Size( 2*dilation_size + 1, 2*dilation_size+1 ),
+        cv::Point( dilation_size, dilation_size ) );
+    cv::dilate(mat, mat, element);
+    cv::erode(mat, mat, element);
+    //cv::imshow("bin", mat);
+
+    /// Find contours
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    findContours(mat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+    printf("findContours count: %d\n", contours.size());
+
+    /// get bird rect
+    for (int i = 0; i < contours.size(); i++)
+    {
+        auto area = fabs(contourArea(contours[i]));
+        // if (area < CANVAS_BORDER_MIN_AREA) continue;
+        printf("area: %.0f\n", area);
+        /// ¾ØÐÎ±ß½ç¿ò
+        auto boundRect = cv::boundingRect(cv::Mat(contours[i]));
+        auto color = cv::Scalar(255, 255, 255);
+        cv::rectangle(canvasmat, boundRect.tl(), boundRect.br(), color, 1, 8, 0);
+    }
+
+    // try to find bird pos
+
     return true;
 }
 

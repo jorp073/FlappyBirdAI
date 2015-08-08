@@ -11,8 +11,10 @@ int _tmain(int argc, _TCHAR* argv[])
 {
     auto pGameStateObserver = new CGameStateObserver();
     pGameStateObserver->Init();
+    CCanvasObserver::GetInstance()->Init();
 
     cv::namedWindow("GrayCanvas");
+    printf("start main loop\n");
 
     while (true)
     {

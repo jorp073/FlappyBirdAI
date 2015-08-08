@@ -11,13 +11,22 @@ CCanvasObserver::CCanvasObserver()
 }
 
 
+bool CCanvasObserver::Init()
+{
+    m_matGrayBg = cv::imread("res/graybg.bmp", -1);
+    cv::cvtColor(m_matGrayBg, m_matGrayBg, CV_RGBA2GRAY);
+    assert(m_matGrayBg.cols == CANVAS_SCALETO_WIDTH);
+    return true;
+}
+
+
 bool CCanvasObserver::Update()
 {
     return m_pStateMachine->Update();
 }
 
 
-void CCanvasObserver::SetMat(cv::Mat mat, cv::Mat graymat)
+void CCanvasObserver::SetCanvasMat(cv::Mat mat, cv::Mat graymat)
 {
     /// remove border
     auto rect = _GetRectWithoutBorder(graymat);
@@ -26,10 +35,14 @@ void CCanvasObserver::SetMat(cv::Mat mat, cv::Mat graymat)
     /// scale to defined size
     m_matCanvas = cv::Mat(CANVAS_SCALETO_HEIGHT, CANVAS_SCALETO_WIDTH, CV_8UC4);
     cv::resize(noborder, m_matCanvas, cv::Size(CANVAS_SCALETO_WIDTH, CANVAS_SCALETO_HEIGHT));
+    m_matCanvas = cv::Mat(m_matCanvas, cv::Rect(0, 0, CANVAS_SCALETO_WIDTH, m_matGrayBg.rows));
     
-    /// filter bird and pipes by threshold
+    /// remove background
     cv::cvtColor(m_matCanvas, m_matGrayCanvas, CV_BGR2GRAY);
-    cv::threshold(m_matGrayCanvas, m_matGrayCanvas, BIRD_AND_PIPE_FILTER_THRESHOLD, 255, 1);
+    cv::Mat bgmask;
+    cv::absdiff(m_matGrayCanvas, m_matGrayBg, bgmask);
+    m_matGrayCanvas.copyTo(bgmask, bgmask);
+    m_matGrayCanvas = bgmask;
 }
 
 

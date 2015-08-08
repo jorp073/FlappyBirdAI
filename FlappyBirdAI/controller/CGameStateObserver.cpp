@@ -22,11 +22,6 @@ bool CGameStateObserver::Init()
     _LoadTemplate("res/gamestate_title.png",    "title");
     _LoadTemplate("res/gamestate_getready.png", "getready");
     _LoadTemplate("res/gamestate_gameover.png", "gameover");
-    _LoadTemplate("res/gamestate_play1.png",    "play1");
-    _LoadTemplate("res/gamestate_play2.png",    "play2");
-    _LoadTemplate("res/gamestate_play3.png",    "play3");
-    _LoadTemplate("res/gamestate_play4.png",    "play4");
-    _LoadTemplate("res/gamestate_play5.png",    "play5");
     return true;
 }
 
