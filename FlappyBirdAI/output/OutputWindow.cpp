@@ -8,6 +8,7 @@ COutputWindow* COutputWindow::m_pInstance = NULL;
 
 
 COutputWindow::COutputWindow()
+    : m_iFPS(0)
 {
 }
 
@@ -21,6 +22,8 @@ bool COutputWindow::Init()
 {
     cv::namedWindow("Main Output");
     TopMostWindow("Main Output");
+
+    m_dwTickCount = GetTickCount();
     return true;
 }
 
@@ -48,10 +51,15 @@ void COutputWindow::SetBirdRects(const std::vector<cv::Rect> rects)
 void COutputWindow::Update()
 {
     auto mat = CCanvasObserver::GetInstance()->GetGrayCanvasMat();
+    if (NULL == mat.data) return;
+
+    /// count fps
+    TickCountFPS();
 
     /// draw text
     DrawText(mat, m_strCanvasStateText, 15);
     DrawText(mat, m_strGameStateText, 35);
+    DrawText(mat, m_strFPSText, mat.rows - 10);
 
     /// draw birds rect
     for (auto rect : m_rectBirds)
@@ -82,5 +90,21 @@ void COutputWindow::TopMostWindow(const std::string& strWindowName)
 
 void COutputWindow::DrawText(cv::Mat mat, const std::string& strText, int iHeight)
 {
+    if (0 == strText.size()) return;
     cv::putText(mat, strText, cv::Point(10, iHeight), CV_FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(255,255,255));
+}
+
+
+void COutputWindow::TickCountFPS()
+{
+    m_iFPS++;
+    auto tickcount = GetTickCount();
+    if (tickcount - m_dwTickCount > 1000)
+    {
+        m_dwTickCount = tickcount;
+        std::stringstream stmFPS;
+        stmFPS << m_iFPS;
+		m_iFPS = 0;
+        m_strFPSText = "FPS: " + stmFPS.str();
+    }
 }

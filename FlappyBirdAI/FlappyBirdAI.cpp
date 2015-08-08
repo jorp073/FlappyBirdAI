@@ -16,18 +16,21 @@ int _tmain(int argc, _TCHAR* argv[])
     CCanvasObserver::GetInstance()->Init();
 
     printf("start main loop\n");
+
     while (true)
     {
         cv::waitKey(1);
         CCanvasObserver::GetInstance()->Update();
         COutputWindow::GetInstance()->SetCanvasStateText();
-        if (!CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found")) continue;
-
-        CGameStateObserver::GetInstance()->Update();
-        COutputWindow::GetInstance()->SetGameStateText();
+        if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
+        {
+            CGameStateObserver::GetInstance()->Update();
+            COutputWindow::GetInstance()->SetGameStateText();
+            if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
+            {
+            }
+        }
         COutputWindow::GetInstance()->Update();
-        if (!CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play")) continue;
-        cv::waitKey(1);
     };
 
 
