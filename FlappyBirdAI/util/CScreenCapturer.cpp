@@ -1,12 +1,17 @@
 #include "stdafx.h"
 #include "CScreenCapturer.h"
-#include "PerformanceCounter.h"
+#include "CPerformanceCounter.h"
 
 
-CScreenCapturer* CScreenCapturer::m_pInstance = NULL;
+INIT_SINGLEINSTANCE(CScreenCapturer);
 
 
 DEFINE_COUNTER(CScreenCapturer_Capture);
+DEFINE_COUNTER(Capture1);
+DEFINE_COUNTER(Capture2);
+DEFINE_COUNTER(Capture3);
+DEFINE_COUNTER(Capture4);
+DEFINE_COUNTER(Capture5);
 
 CScreenCapturer::CScreenCapturer()
     :m_hOldBitmap(NULL)
@@ -64,6 +69,7 @@ bool CScreenCapturer::_ChangeSize(int width, int height)
 bool CScreenCapturer::Capture(RECT rect)
 {
     COUNTER_HELPER(CScreenCapturer_Capture);
+    BEGIN_COUNTER(Capture1);
     auto width = rect.right - rect.left;
     auto height = rect.bottom - rect.top;
 
@@ -71,20 +77,26 @@ bool CScreenCapturer::Capture(RECT rect)
     // if change width or height, then realloc buff memory
     if (m_iLastWidth != width || m_iLastHeight != height)
     {
+        DLOG(INFO) << "try change size when capture";
         if (!_ChangeSize(width, height)) return false;
         bChangedSize = true;
     }
+    DLOG(INFO) << "width: " << width << ", height: " << height;
     m_hOldBitmap = (HBITMAP)::SelectObject(m_hMemDC, m_hBitmap);
-
+    END_COUNTER(Capture1);
+    BEGIN_COUNTER(Capture2);
     auto BitBltRet = ::BitBlt(m_hMemDC, 0, 0, width, height,
         m_hSrcDC, rect.left, rect.top, SRCCOPY);
     if (!BitBltRet) return false;
 
+    END_COUNTER(Capture2);
+    BEGIN_COUNTER(Capture3);
     BITMAP bmp;
     ::GetObject(m_hBitmap, sizeof(BITMAP), &bmp);
 
     if (bChangedSize)
     {
+        DLOG(INFO) << "changed size, so realloc m_pBuffer";
         if (1 == bmp.bmBitsPixel) return false;
         m_image_nchannels = bmp.bmBitsPixel == 1 ? 1 : bmp.bmBitsPixel / 8;
         m_Mat = cv::Mat(cv::Size(width, height), CV_8UC(m_image_nchannels));
@@ -94,10 +106,13 @@ bool CScreenCapturer::Capture(RECT rect)
     }
 
     ::GetBitmapBits(m_hBitmap, width * height * m_image_nchannels, m_pBuffer);
+    END_COUNTER(Capture3);
+    BEGIN_COUNTER(Capture4);
     ::memcpy(m_Mat.data, m_pBuffer, width * height * m_image_nchannels);
-
+    END_COUNTER(Capture4);
+    BEGIN_COUNTER(Capture5);
     cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
-
+    END_COUNTER(Capture5);
     ::SelectObject(m_hMemDC, m_hOldBitmap);
     return true;
 }

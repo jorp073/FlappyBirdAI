@@ -63,7 +63,10 @@
     <ClInclude Include="output\OutputWindow.h">
       <Filter>源文件\output</Filter>
     </ClInclude>
-    <ClInclude Include="util\PerformanceCounter.h">
+    <ClInclude Include="util\CPerformanceCounter.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\SingleInstance.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +95,7 @@
     <ClCompile Include="output\OutputWindow.cpp">
       <Filter>源文件\output</Filter>
     </ClCompile>
-    <ClCompile Include="util\PerformanceCounter.cpp">
+    <ClCompile Include="util\CPerformanceCounter.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>

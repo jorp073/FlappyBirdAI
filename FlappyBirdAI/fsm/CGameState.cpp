@@ -3,9 +3,11 @@
 #include "../observers/CGameStateObserver.h"
 #include "../observers/CCanvasObserver.h"
 #include "../output/OutputWindow.h"
-
+#include "../util/CPerformanceCounter.h"
 
 using namespace GameState;
+
+DEFINE_COUNTER(CPlay_Update);
 
 const double CBase::MIN_MATCH_VALUE = 0.001;
 
@@ -105,7 +107,7 @@ bool CUnknown::Update(CGameStateObserver* observer)
         if (result < MIN_MATCH_VALUE)
         {
             /// change state
-            CBase* state;
+            CBase* state = NULL;
             switch(i)
             {
             case 0:
@@ -165,6 +167,8 @@ bool CGameOver::Update(CGameStateObserver* observer)
 
 bool CPlay::Update(CGameStateObserver* observer)
 {
+    COUNTER_HELPER(CPlay_Update);
+
     /// Binary gray image
     auto canvasmat = CCanvasObserver::GetInstance()->GetCanvasMat();
     auto mat = cv::Mat();

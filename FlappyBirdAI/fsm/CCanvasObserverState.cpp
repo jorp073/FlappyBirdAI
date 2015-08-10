@@ -2,11 +2,12 @@
 #include "CCanvasObserverState.h"
 #include "../util/CScreenCapturer.h"
 #include "../observers/CCanvasObserver.h"
-#include "../util/PerformanceCounter.h"
+#include "../util/CPerformanceCounter.h"
 
 using namespace CanvasObserverState;
 
 DEFINE_COUNTER(CSearch_Update);
+DEFINE_COUNTER(CFound_Update);
 
 /////////////////////// Search
 
@@ -87,6 +88,8 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
 bool CFound::Update(CCanvasObserver* observer)
 {
+    COUNTER_HELPER(CFound_Update);
+
     RECT rect = {
         m_CanvasRect.tl().x,
         m_CanvasRect.tl().y,

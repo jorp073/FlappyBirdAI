@@ -7,13 +7,13 @@
 #include "observers/CCanvasObserver.h"
 #include "observers/CGameStateObserver.h"
 #include "output/OutputWindow.h"
-#include "util/PerformanceCounter.h"
+#include "util/CPerformanceCounter.h"
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
     FLAGS_log_dir = "../logs/";
-    google::InitGoogleLogging("FlappyBirdAI.exe");
+    google::InitGoogleLogging(argv[0]);
 
     InitPreciseTickCount();
 
@@ -25,7 +25,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
     while (true)
     {
-        cv::waitKey(1);
+        auto key = cv::waitKey(1);
+        if (27 == key) break;
+
         CCanvasObserver::GetInstance()->Update();
         COutputWindow::GetInstance()->SetCanvasStateText();
         if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
@@ -38,6 +40,7 @@ int _tmain(int argc, _TCHAR* argv[])
         }
         COutputWindow::GetInstance()->Update();
     };
+    DLOG(INFO) << "exit main loop";
 
     CScreenCapturer::GetInstance()->Release();
     CCanvasObserver::GetInstance()->Release();

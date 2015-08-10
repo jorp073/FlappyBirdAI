@@ -77,4 +77,5 @@ private:
 #else
 #define BEGIN_COUNTER(counter_name)
 #define END_COUNTER(counter_name)
+#define COUNTER_HELPER(counter_name)
 #endif

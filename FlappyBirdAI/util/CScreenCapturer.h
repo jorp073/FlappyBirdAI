@@ -3,37 +3,17 @@
 #include <windows.h>
 #include <wingdi.h>
 #include "opencv2/opencv.hpp"
+#include "SingleInstance.h"
 
 class CScreenCapturer
 {
 public:
-    static CScreenCapturer* GetInstance()
-    {
-        if(NULL == m_pInstance)
-            m_pInstance = new CScreenCapturer();
-        return static_cast<CScreenCapturer*>(m_pInstance);
-    }
-
-    ~CScreenCapturer();
-
-    static void Release()
-    {
-        if(NULL != m_pInstance)
-        {
-            delete m_pInstance;
-            m_pInstance = NULL;
-        }
-    }
-
     bool Capture(RECT rect);
 
     RECT getScreenRect();
 
     cv::Mat& GetGrayMat() { return m_GrayMat; };
 
-protected:
-    CScreenCapturer();
-    static CScreenCapturer * m_pInstance;
 
 private:
     bool _ChangeSize(int width, int height);
@@ -45,4 +25,6 @@ private:
     int m_iLastWidth, m_iLastHeight;
 
     cv::Mat m_GrayMat, m_Mat;
+
+    DEFINE_SINGLEINSTANCE(CScreenCapturer);
 };

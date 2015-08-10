@@ -2,7 +2,7 @@
 #include "CGameStateObserver.h"
 #include "../fsm/CGameState.h"
 
-CGameStateObserver* CGameStateObserver::m_pInstance = NULL;
+INIT_SINGLEINSTANCE(CGameStateObserver);
 
 
 CGameStateObserver::CGameStateObserver()

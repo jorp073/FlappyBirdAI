@@ -2,6 +2,7 @@
 
 #include "../model/define.h"
 #include "opencv2/opencv.hpp"
+#include "../util/SingleInstance.h"
 
 
 template <class> class TStateMachine;
@@ -9,24 +10,6 @@ template <class> class TStateMachine;
 class CCanvasObserver
 {
 public:
-    static CCanvasObserver* GetInstance()
-    {
-        if(NULL == m_pInstance)
-            m_pInstance = new CCanvasObserver();
-        return static_cast<CCanvasObserver*>(m_pInstance);
-    }
-
-    ~CCanvasObserver();
-
-    static void Release()
-    {
-        if(NULL != m_pInstance)
-        {
-            delete m_pInstance;
-            m_pInstance = NULL;
-        }
-    }
-
     bool Init();
     bool Update();
 
@@ -35,9 +18,6 @@ public:
 
     TStateMachine<CCanvasObserver>* StateMachine() { return m_pStateMachine; };
 
-protected:
-    CCanvasObserver();
-    static CCanvasObserver * m_pInstance;
 
 private:
     cv::Rect _GetRectWithoutBorder(cv::Mat graymat);
@@ -50,5 +30,7 @@ private:
 
     // canvas Mat
     cv::Mat m_matCanvas, m_matGrayBg;
+
+    DEFINE_SINGLEINSTANCE(CCanvasObserver);
 };
 

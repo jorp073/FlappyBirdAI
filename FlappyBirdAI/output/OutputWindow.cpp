@@ -4,7 +4,7 @@
 #include "../observers/CGameStateObserver.h"
 #include "../fsm/base.h"
 
-COutputWindow* COutputWindow::m_pInstance = NULL;
+INIT_SINGLEINSTANCE(COutputWindow);
 
 
 COutputWindow::COutputWindow()

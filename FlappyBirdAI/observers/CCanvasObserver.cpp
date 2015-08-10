@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "CCanvasObserver.h"
 #include "../fsm/CCanvasObserverState.h"
+#include "../util/CPerformanceCounter.h"
 
-CCanvasObserver* CCanvasObserver::m_pInstance = NULL;
+DEFINE_COUNTER(CCanvasObserver_SetCanvasMat);
+
+INIT_SINGLEINSTANCE(CCanvasObserver);
 
 
 CCanvasObserver::CCanvasObserver()
@@ -39,6 +42,8 @@ bool CCanvasObserver::Update()
 
 void CCanvasObserver::SetCanvasMat(cv::Mat graymat)
 {
+    COUNTER_HELPER(CCanvasObserver_SetCanvasMat);
+
     /// remove border
     auto rect = _GetRectWithoutBorder(graymat);
     auto noborder = cv::Mat(graymat, rect);
