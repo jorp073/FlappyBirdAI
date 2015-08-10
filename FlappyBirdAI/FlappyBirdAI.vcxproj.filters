@@ -60,14 +60,17 @@
     <ClInclude Include="observers\CGameStateObserver.h">
       <Filter>源文件\observers</Filter>
     </ClInclude>
-    <ClInclude Include="output\OutputWindow.h">
-      <Filter>源文件\output</Filter>
-    </ClInclude>
     <ClInclude Include="util\CPerformanceCounter.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
     <ClInclude Include="util\SingleInstance.h">
       <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\CObjectObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="output\COutputWindow.h">
+      <Filter>源文件\output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,11 +95,14 @@
     <ClCompile Include="observers\CGameStateObserver.cpp">
       <Filter>源文件\observers</Filter>
     </ClCompile>
-    <ClCompile Include="output\OutputWindow.cpp">
-      <Filter>源文件\output</Filter>
-    </ClCompile>
     <ClCompile Include="util\CPerformanceCounter.cpp">
       <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\CObjectObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="output\COutputWindow.cpp">
+      <Filter>源文件\output</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

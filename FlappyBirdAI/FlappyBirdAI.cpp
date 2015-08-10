@@ -6,7 +6,8 @@
 #include "util/CScreenCapturer.h"
 #include "observers/CCanvasObserver.h"
 #include "observers/CGameStateObserver.h"
-#include "output/OutputWindow.h"
+#include "observers/CObjectObserver.h"
+#include "output/COutputWindow.h"
 #include "util/CPerformanceCounter.h"
 
 
@@ -28,14 +29,22 @@ int _tmain(int argc, _TCHAR* argv[])
         auto key = cv::waitKey(1);
         if (27 == key) break;
 
-        CCanvasObserver::GetInstance()->Update();
-        COutputWindow::GetInstance()->SetCanvasStateText();
-        if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
+        if (CCanvasObserver::GetInstance()->Update())
         {
-            CGameStateObserver::GetInstance()->Update();
-            COutputWindow::GetInstance()->SetGameStateText();
-            if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
+            COutputWindow::GetInstance()->SetCanvasStateText();
+            if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
             {
+                if (CGameStateObserver::GetInstance()->Update())
+                {
+                    COutputWindow::GetInstance()->SetGameStateText();
+                    if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
+                    {
+                        auto fBirdHeight = CObjectObserver::GetInstance()->GetBirdHeight();
+                        auto fPipeHeight = CObjectObserver::GetInstance()->GetPipeHeight();
+                        DLOG(INFO) << "bird height: " << fBirdHeight << ", pipe height: " << fPipeHeight;
+                        COutputWindow::GetInstance()->SetPipeHeight(fPipeHeight);
+                    }
+                }
             }
         }
         COutputWindow::GetInstance()->Update();

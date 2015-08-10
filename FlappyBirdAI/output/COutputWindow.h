@@ -11,6 +11,7 @@ public:
     void SetCanvasStateText();
     void SetGameStateText();
     void SetBirdRects(const std::vector<cv::Rect> rects);
+    void SetPipeHeight(float height) { m_fPipeHeight = height; };
 
     void Update();
 
@@ -28,6 +29,7 @@ private:
     int m_iFPS;
     std::string m_strFPSText;
     int m_dwTickCount;
+    float m_fPipeHeight;
 
     DEFINE_SINGLEINSTANCE(COutputWindow);
 };

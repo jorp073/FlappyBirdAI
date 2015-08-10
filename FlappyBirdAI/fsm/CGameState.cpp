@@ -2,7 +2,7 @@
 #include "CGameState.h"
 #include "../observers/CGameStateObserver.h"
 #include "../observers/CCanvasObserver.h"
-#include "../output/OutputWindow.h"
+#include "../observers/CObjectObserver.h"
 #include "../util/CPerformanceCounter.h"
 
 using namespace GameState;
@@ -129,7 +129,8 @@ bool CUnknown::Update(CGameStateObserver* observer)
 
     // change to play state
     observer->StateMachine()->ChangeState(new CPlay());
-    return true;
+    
+    return observer->StateMachine()->Update();
 }
 
 
@@ -169,43 +170,18 @@ bool CPlay::Update(CGameStateObserver* observer)
 {
     COUNTER_HELPER(CPlay_Update);
 
-    /// Binary gray image
     auto canvasmat = CCanvasObserver::GetInstance()->GetCanvasMat();
-    auto mat = cv::Mat();
-    cv::threshold(canvasmat, mat, 0, 255, 0);
+    bool ret = CObjectObserver::GetInstance()->Update(canvasmat);
+    if (!ret) return false;
 
-    /// Dilate and Erode, to get less contours
-    int dilation_size = 1;
-    cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT,
-        cv::Size( 2*dilation_size + 1, 2*dilation_size+1 ),
-        cv::Point( dilation_size, dilation_size ) );
-    cv::dilate(mat, mat, element);
-    cv::erode(mat, mat, element);
-    //cv::imshow("bin", mat);
+    auto count = CObjectObserver::GetInstance()->GetBirdRectsCount();
 
-    /// Find all contours
-    std::vector<std::vector<cv::Point> > contours;
-    std::vector<cv::Vec4i> hierarchy;
-    findContours(mat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-    DLOG(INFO) << "findContours count: " << contours.size();
-
-    /// Find bird contour, and get rect
-    std::vector<cv::Rect> rectBirds;
-    for (size_t i = 0; i < contours.size(); i++)
-    {
-        cv::Rect rect;
-        if (!getBirdRect(contours[i], rect)) continue;
-        rectBirds.push_back(rect);
-    }
-
-    COutputWindow::GetInstance()->SetBirdRects(rectBirds);
-
-    switch(rectBirds.size())
+    switch(count)
     {
     case 0:
         // not found any find
         observer->StateMachine()->ChangeState(new CUnknown());
-        return true;
+        return false;
     case 1:
         // find singleton bird
         break;
@@ -213,6 +189,7 @@ bool CPlay::Update(CGameStateObserver* observer)
         // find more than one bird
         // TODO get nearest bird
         observer->StateMachine()->ChangeState(new CUnknown());
+        return false;
         break;
     }
 
@@ -220,23 +197,3 @@ bool CPlay::Update(CGameStateObserver* observer)
 
     return true;
 }
-
-bool CPlay::getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
-{
-    auto rectBound = cv::boundingRect(cv::Mat(contour));
-
-    // check rect center x ratio on canvas
-    float cx = (rectBound.tl().x + rectBound.br().x)/2.0f;
-    float cxratio = cx/CANVAS_SCALETO_WIDTH;
-    DLOG(INFO) << "cxratio = " << cxratio;
-    if (fabs(cxratio - BIRDX_RATIO) > BIRDX_RATIO_OFFSET) return false;
-
-    // check contour area
-    double area = fabs(contourArea(contour));
-    DLOG(INFO) << "area= " << area;
-    if (fabs(area - BIRD_CONTOUR_AREA) > BIRD_CONTROU_AREA_OFFSET) return false;
-
-    rect = rectBound;
-    return true;
-}
-

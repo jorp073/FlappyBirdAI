@@ -69,9 +69,5 @@ namespace GameState
         CPlay() : CBase("Play") {};
 
         virtual bool Update(CGameStateObserver* observer);
-
-    private:
-        // return whether find bird or not
-        bool getBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
     };
 };

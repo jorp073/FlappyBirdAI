@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "OutputWindow.h"
+#include "COutputWindow.h"
 #include "../observers/CCanvasObserver.h"
 #include "../observers/CGameStateObserver.h"
 #include "../fsm/base.h"
@@ -9,6 +9,7 @@ INIT_SINGLEINSTANCE(COutputWindow);
 
 COutputWindow::COutputWindow()
     : m_iFPS(0)
+    , m_fPipeHeight(0)
 {
 }
 
@@ -62,12 +63,15 @@ void COutputWindow::Update()
     DrawText(mat, m_strGameStateText, 35);
     DrawText(mat, m_strFPSText, mat.rows - 10);
 
+    auto color = cv::Scalar(255, 255, 255);
     /// draw birds rect
     for (auto rect : m_rectBirds)
     {
-        auto color = cv::Scalar(255, 255, 255);
         cv::rectangle(mat, rect.tl(), rect.br(), color, 1, 8, 0);
     }
+
+    /// draw pipe height line
+    cv::line(mat, cv::Point(0, m_fPipeHeight), cv::Point(mat.cols-1, m_fPipeHeight), color);
 
     cv::imshow("Main Output", mat);
 

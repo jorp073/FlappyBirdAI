@@ -50,6 +50,8 @@ void CCanvasObserver::SetCanvasMat(cv::Mat graymat)
 
     /// scale to defined size
     cv::resize(noborder, m_matCanvas, cv::Size(CANVAS_SCALETO_WIDTH, CANVAS_SCALETO_HEIGHT));
+
+    /// remove ground
     auto noground = cv::Mat(m_matCanvas, cv::Rect(0, 0, CANVAS_SCALETO_WIDTH, m_matGrayBg.rows));
 
     /// remove background
