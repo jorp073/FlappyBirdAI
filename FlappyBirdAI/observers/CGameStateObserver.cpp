@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CGameStateObserver.h"
 #include "../fsm/CGameState.h"
+#include "../output/COutputWindow.h"
 
 INIT_SINGLEINSTANCE(CGameStateObserver);
 
@@ -20,7 +21,12 @@ CGameStateObserver::~CGameStateObserver()
 
 bool CGameStateObserver::Update()
 {
-    return m_pStateMachine->Update();
+    if (m_pStateMachine->Update())
+    {
+        COutputWindow::GetInstance()->SetGameStateText();
+        return true;
+    }
+    return false;
 }
 
 

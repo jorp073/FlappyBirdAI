@@ -72,6 +72,12 @@
     <ClInclude Include="output\COutputWindow.h">
       <Filter>源文件\output</Filter>
     </ClInclude>
+    <ClInclude Include="model\CHeightTimeModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\CBirdHeightObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -103,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="output\COutputWindow.cpp">
       <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="model\CHeightTimeModel.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\CBirdHeightObserver.cpp">
+      <Filter>源文件\observers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

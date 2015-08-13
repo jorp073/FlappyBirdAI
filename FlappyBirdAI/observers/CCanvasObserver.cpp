@@ -2,6 +2,7 @@
 #include "CCanvasObserver.h"
 #include "../fsm/CCanvasObserverState.h"
 #include "../util/CPerformanceCounter.h"
+#include "../output/COutputWindow.h"
 
 DEFINE_COUNTER(CCanvasObserver_SetCanvasMat);
 
@@ -36,7 +37,12 @@ bool CCanvasObserver::Init()
 
 bool CCanvasObserver::Update()
 {
-    return m_pStateMachine->Update();
+    if (m_pStateMachine->Update())
+    {
+        COutputWindow::GetInstance()->SetCanvasStateText();
+        return true;
+    }
+    return false;
 }
 
 

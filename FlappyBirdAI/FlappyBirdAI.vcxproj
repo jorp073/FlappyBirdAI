@@ -85,6 +85,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="model\CHeightTimeModel.h" />
+    <ClInclude Include="observers\CBirdHeightObserver.h" />
     <ClInclude Include="observers\CCanvasObserver.h" />
     <ClInclude Include="observers\CGameStateObserver.h" />
     <ClInclude Include="fsm\base.h" />
@@ -100,6 +102,8 @@
     <ClInclude Include="util\SingleInstance.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="model\CHeightTimeModel.cpp" />
+    <ClCompile Include="observers\CBirdHeightObserver.cpp" />
     <ClCompile Include="observers\CCanvasObserver.cpp" />
     <ClCompile Include="observers\CGameStateObserver.cpp" />
     <ClCompile Include="FlappyBirdAI.cpp" />
