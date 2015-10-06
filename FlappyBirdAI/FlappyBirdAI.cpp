@@ -24,8 +24,15 @@ int _tmain(int argc, _TCHAR* argv[])
 
     DLOG(INFO) << "start main loop";
 
+    auto llTime = GetPreciseTickCount();
+
     while (true)
     {
+        /// get delta time
+        auto llTickCount = GetPreciseTickCount();
+        float dt = llTickCount - llTime;
+        llTime = llTickCount;
+
         auto key = cv::waitKey(1);
         if (27 == key) break;
 
@@ -37,7 +44,7 @@ int _tmain(int argc, _TCHAR* argv[])
                 {
                     if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
                     {
-                        if (CBirdHeightObserver::GetInstance()->Update(1))
+                        if (CBirdHeightObserver::GetInstance()->Update(dt))
                         {
                         }
                     }

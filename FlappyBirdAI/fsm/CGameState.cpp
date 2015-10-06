@@ -180,6 +180,7 @@ bool CPlay::Update(CGameStateObserver* observer)
     {
     case 0:
         // not found any find
+        DLOG(INFO) << "not found any bird";
         observer->StateMachine()->ChangeState(new CUnknown());
         return false;
     case 1:
@@ -188,6 +189,7 @@ bool CPlay::Update(CGameStateObserver* observer)
     default:
         // find more than one bird
         // TODO get nearest bird
+        DLOG(INFO) << "find more than one bird";
         observer->StateMachine()->ChangeState(new CUnknown());
         return false;
         break;

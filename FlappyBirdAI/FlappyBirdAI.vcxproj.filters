@@ -78,6 +78,9 @@
     <ClInclude Include="observers\CBirdHeightObserver.h">
       <Filter>源文件\observers</Filter>
     </ClInclude>
+    <ClInclude Include="util\CMouseClicker.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -115,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="observers\CBirdHeightObserver.cpp">
       <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="util\CMouseClicker.cpp">
+      <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

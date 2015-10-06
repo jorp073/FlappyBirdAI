@@ -11,7 +11,7 @@ public:
     void SetCanvasStateText();
     void SetGameStateText();
     void SetBirdRects(const std::vector<cv::Rect> rects);
-    void SetPipeHeight(float height) { m_fPipeHeight = height; };
+    void SetPipeHeight(float height) { m_fPipeHeight = (1-height)*CANVAS_SCALETO_HEIGHT; };
 
     void Update();
 

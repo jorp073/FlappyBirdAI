@@ -2,8 +2,8 @@
 #pragma once
 
 void InitPreciseTickCount();
-LONGLONG GetPreciseTickCount();
-void LogPerformance(const char* name, LONGLONG tickcount);
+double GetPreciseTickCount();
+void LogPerformance(const char* name, double tickcount);
 
 template<class T>
 class CPerformanceCounter

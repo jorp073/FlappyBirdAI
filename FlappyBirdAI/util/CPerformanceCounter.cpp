@@ -12,14 +12,14 @@ void InitPreciseTickCount()
 }
 
 
-LONGLONG GetPreciseTickCount() {
+double GetPreciseTickCount() {
     LARGE_INTEGER llStart;
     QueryPerformanceCounter(&llStart);
-    return (LONGLONG)(llStart.QuadPart * QUADPART);
+    return (double)(llStart.QuadPart * QUADPART);
 }
 
 
-void LogPerformance(const char* name, LONGLONG tickcount)
+void LogPerformance(const char* name, double tickcount)
 {
-    DLOG(INFO) << "PerformaceCounter: " << name << ": " << (unsigned int)tickcount;
+    DLOG(INFO) << "PerformaceCounter: " << name << ": " << (double)tickcount;
 }

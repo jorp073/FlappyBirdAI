@@ -61,7 +61,8 @@ float CObjectObserver::GetBirdHeight()
     CHECK(1 == m_rectBirds.size()) << "m_rectBirds must has singleton value!";
 
     float h = (m_rectBirds[0].tl().y + m_rectBirds[0].br().y) / 2.0f;
-    return h;
+
+    return 1 - h/CANVAS_SCALETO_HEIGHT;
 }
 
 
@@ -71,10 +72,11 @@ float CObjectObserver::GetPipeHeight()
 
     DLOG(INFO) << "rectPipes.size()=" << rectPipes.size();
 
+    float heightInCanvas = CANVAS_SCALETO_HEIGHT;
     switch (rectPipes.size())
     {
     case 0: // not found pipes
-        return 0.0f;
+        break;
 
     case 2: // multi result, sort by x pos
         {
@@ -83,11 +85,13 @@ float CObjectObserver::GetPipeHeight()
         }
 
     case 1: // singleton
-        return (float)rectPipes[0].tl().y;
+        heightInCanvas = (float)rectPipes[0].tl().y;
 
     default:
-        return 0.0f;
+        break;
     }
+
+    return 1 - heightInCanvas/CANVAS_SCALETO_HEIGHT;
 }
 
 
