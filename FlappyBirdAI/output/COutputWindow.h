@@ -2,7 +2,7 @@
 #include <string>
 #include "opencv2/opencv.hpp"
 #include "../util/SingleInstance.h"
-
+#include "../model/define.h"
 
 class COutputWindow
 {
@@ -13,13 +13,19 @@ public:
     void SetBirdRects(const std::vector<cv::Rect> rects);
     void SetPipeHeight(float height) { m_fPipeHeight = (1-height)*CANVAS_SCALETO_HEIGHT; };
 
+    void DrawParabola(
+        std::vector<PARABOLA_POINT>& points,
+        int iOutputWindowWidth,
+        float fRemainCrashTime,
+        bool bClick);
+
     void Update();
 
 
 private:
     void TopMostWindow(const std::string& strWindowName);
 
-    void DrawText(cv::Mat mat, const std::string& strText, int iHeight);
+    void CVDrawText(cv::Mat mat, const std::string& strText, int iHeight);
 
     void TickCountFPS();
 
@@ -30,6 +36,8 @@ private:
     std::string m_strFPSText;
     int m_dwTickCount;
     float m_fPipeHeight;
+
+    cv::Mat m_matParabola;
 
     DEFINE_SINGLEINSTANCE(COutputWindow);
 };

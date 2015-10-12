@@ -21,5 +21,5 @@ double GetPreciseTickCount() {
 
 void LogPerformance(const char* name, double tickcount)
 {
-    DLOG(INFO) << "PerformaceCounter: " << name << ": " << (double)tickcount;
+    DLOG(INFO) << "PerformanceCounter: " << name << ": " << (double)tickcount;
 }

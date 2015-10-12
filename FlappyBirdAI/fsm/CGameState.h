@@ -59,6 +59,7 @@ namespace GameState
     public:
         CGameOver() : CBase("GameOver") {};
 
+        virtual void Enter(CGameStateObserver* observer);
         virtual bool Update(CGameStateObserver* observer);
     };
 

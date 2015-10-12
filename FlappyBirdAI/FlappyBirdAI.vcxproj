@@ -85,6 +85,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="model\CCrashTimeForecaster.h" />
     <ClInclude Include="model\CHeightTimeModel.h" />
     <ClInclude Include="observers\CBirdHeightObserver.h" />
     <ClInclude Include="observers\CCanvasObserver.h" />
@@ -100,9 +101,11 @@
     <ClInclude Include="util\CMouseClicker.h" />
     <ClInclude Include="util\CScreenCapturer.h" />
     <ClInclude Include="util\CPerformanceCounter.h" />
+    <ClInclude Include="util\MathUtil.h" />
     <ClInclude Include="util\SingleInstance.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="model\CCrashTimeForecaster.cpp" />
     <ClCompile Include="model\CHeightTimeModel.cpp" />
     <ClCompile Include="observers\CBirdHeightObserver.cpp" />
     <ClCompile Include="observers\CCanvasObserver.cpp" />
@@ -119,6 +122,7 @@
     <ClCompile Include="util\CMouseClicker.cpp" />
     <ClCompile Include="util\CScreenCapturer.cpp" />
     <ClCompile Include="util\CPerformanceCounter.cpp" />
+    <ClCompile Include="util\MathUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

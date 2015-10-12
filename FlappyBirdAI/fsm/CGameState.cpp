@@ -3,7 +3,9 @@
 #include "../observers/CGameStateObserver.h"
 #include "../observers/CCanvasObserver.h"
 #include "../observers/CObjectObserver.h"
+#include "../observers/CBirdHeightObserver.h"
 #include "../util/CPerformanceCounter.h"
+
 
 using namespace GameState;
 
@@ -155,6 +157,12 @@ bool CGetReady::Update(CGameStateObserver* observer)
 
 
 //////////////////////// Game Over
+
+void CGameOver::Enter(CGameStateObserver* observer)
+{
+    CBirdHeightObserver::GetInstance()->ResetData();
+}
+
 
 bool CGameOver::Update(CGameStateObserver* observer)
 {

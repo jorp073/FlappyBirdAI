@@ -1,4 +1,4 @@
-// the macro to make a class into a single instance
+// the macro that make a class a single instance
 
 
 // put DEFINE_SINGLEINSTANCE at the end of class definition

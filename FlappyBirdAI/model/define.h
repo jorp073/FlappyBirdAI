@@ -6,6 +6,17 @@ struct POS
     float y;
 };
 
+
+struct PARABOLA_POINT
+{
+    int x;
+    int y;
+
+    // type: 0-origin data, 1-fill in data
+    BYTE type;
+};
+
+
 #define CANVAS_BORDER_COLOR     101
 #define CANVAS_BORDER_MIN_AREA  30000
 
@@ -19,3 +30,7 @@ struct POS
 
 #define BIRD_CONTOUR_AREA           250
 #define BIRD_CONTROU_AREA_OFFSET    50
+
+
+#define PARABOLA_GRAPH_W        300
+#define PARABOLA_GRAPH_H        200
