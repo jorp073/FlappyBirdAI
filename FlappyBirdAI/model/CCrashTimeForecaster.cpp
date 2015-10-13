@@ -11,13 +11,20 @@ DEFINE_COUNTER(CCrashTimeForecaster_UPDATE);
 CCrashTimeForecaster::CCrashTimeForecaster(CHeightTimeModel* pModel)
     : m_pModel(pModel)
     , m_iOutputWindowWidth(PARABOLA_GRAPH_W)
+    , m_bIsDroppingDown(false)
 {
+}
+
+
+void CCrashTimeForecaster::ResetData()
+{
+    m_bIsDroppingDown = false;
 }
 
 
 bool CCrashTimeForecaster::IsBirdDroppingDown()
 {
-#define DROPDOWN_COUNT 6
+#define DROPDOWN_COUNT 3
     auto heightdata = m_pModel->GetBirdHeightData();
 
     auto count = heightdata.size();
@@ -52,14 +59,19 @@ void CCrashTimeForecaster::Update()
     // emergency jump when bird under pipe
     if (heightdata.back() <= 0)
     {
+        DLOG(INFO) << "ai emergency jump";
         m_bIsNeedJumpNow = true;
         return;
     }
 
-    if (!IsBirdDroppingDown())
+    if (!m_bIsDroppingDown)
     {
-        m_bIsNeedJumpNow = false;
-        return;
+        m_bIsDroppingDown = IsBirdDroppingDown();
+        if (!m_bIsDroppingDown)
+        {
+            m_bIsNeedJumpNow = false;
+            return;
+        }
     }
 
     if (heightdata.size() < 5)
@@ -98,8 +110,8 @@ void CCrashTimeForecaster::Update()
     }
 
     // bird will crash pipe/ground when ax2+bx+c = BIRD_HEIGHT/2
-    // according to log, BIRD_HEIGHT/2 is 0.162745
-    c = c - 0.162745;
+    // according to log, BIRD_HEIGHT/2 is about 0.16
+    c = c + 0.22;
 
     double t = (-b - sqrt(delta)) /2/a;
 
@@ -107,6 +119,7 @@ void CCrashTimeForecaster::Update()
     float remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
 
     DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
+    DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
 
     m_iRemainCrashTime = remaintime2;
     m_bIsNeedJumpNow = m_iRemainCrashTime <= 175;

@@ -42,6 +42,7 @@ bool CBirdHeightObserver::Update(float dt)
     {
         m_pMouseClicker->TryClick();
         m_pHeightData->ResetData();
+        m_pCrashTimeForecaster->ResetData();
     }
 
     COutputWindow::GetInstance()->DrawParabola(

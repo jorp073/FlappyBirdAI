@@ -27,6 +27,8 @@ public:
 
     int GetOutputWindowWidth() { return m_iOutputWindowWidth; };
 
+    void ResetData();
+
 private:
     // return whether bird is dropping down
     bool IsBirdDroppingDown();
@@ -41,4 +43,5 @@ private:
     bool m_bIsNeedJumpNow;
     float m_iRemainCrashTime;
     double m_a, m_b, m_c;
+    bool m_bIsDroppingDown;
 };
