@@ -3,6 +3,8 @@
 #include "../observers/CCanvasObserver.h"
 #include "../observers/CGameStateObserver.h"
 #include "../fsm/base.h"
+#include "../recorder/CRecorder.h"
+
 
 INIT_SINGLEINSTANCE(COutputWindow);
 
@@ -10,6 +12,7 @@ INIT_SINGLEINSTANCE(COutputWindow);
 COutputWindow::COutputWindow()
     : m_iFPS(0)
     , m_fPipeHeight(0)
+    , m_pRecorder(CRecorder::GetInstance())
 {
 }
 
@@ -21,11 +24,11 @@ COutputWindow::~COutputWindow()
 
 bool COutputWindow::Init()
 {
-    cv::namedWindow("Main Output");
-    TopMostWindow("Main Output");
+    cv::namedWindow(WINDOW_NAME_CANVAS);
+    TopMostWindow(WINDOW_NAME_CANVAS);
 
-    cv::namedWindow("Parabola");
-    TopMostWindow("Parabola");
+    cv::namedWindow(WINDOW_NAME_PARABOLA);
+    TopMostWindow(WINDOW_NAME_PARABOLA);
 
     m_dwTickCount = ::GetTickCount();
     return true;
@@ -58,6 +61,8 @@ void COutputWindow::DrawParabola(
     float fRemainCrashTime,
     bool bClick)
 {
+    if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
+
     iOutputWindowWidth = iOutputWindowWidth < PARABOLA_GRAPH_W ? PARABOLA_GRAPH_W : iOutputWindowWidth;
 
     m_matParabola = cv::Mat(PARABOLA_GRAPH_H, iOutputWindowWidth, CV_8UC3, cv::Scalar(0, 0, 0));
@@ -79,12 +84,17 @@ void COutputWindow::DrawParabola(
     }
 
 
-    cv::imshow("Parabola", m_matParabola);
+    cv::imshow(WINDOW_NAME_PARABOLA, m_matParabola);
+
+    // record parabola
+    m_pRecorder->RecordParabola(m_matParabola);
 }
 
 
 void COutputWindow::Update()
 {
+    if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
+
     auto mat = CCanvasObserver::GetInstance()->GetCanvasMat();
     if (NULL == mat.data) return;
     mat = mat.clone();
@@ -107,7 +117,10 @@ void COutputWindow::Update()
     /// draw pipe height line
     cv::line(mat, cv::Point(0, m_fPipeHeight), cv::Point(mat.cols-1, m_fPipeHeight), color);
 
-    cv::imshow("Main Output", mat);
+    cv::imshow(WINDOW_NAME_CANVAS, mat);
+    
+    // record canvas
+    m_pRecorder->RecordCanvas(mat);
 
     m_strCanvasStateText.clear();
     m_strGameStateText.clear();

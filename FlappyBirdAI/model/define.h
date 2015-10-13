@@ -34,3 +34,7 @@ struct PARABOLA_POINT
 
 #define PARABOLA_GRAPH_W        300
 #define PARABOLA_GRAPH_H        200
+
+
+#define WINDOW_NAME_CANVAS      "Canvas"
+#define WINDOW_NAME_PARABOLA    "Parabola"

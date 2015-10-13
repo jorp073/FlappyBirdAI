@@ -207,3 +207,11 @@ bool CPlay::Update(CGameStateObserver* observer)
 
     return true;
 }
+
+
+//////////////////////// PlayBack
+
+bool CPlayBack::Update(CGameStateObserver* observer)
+{
+    return true;
+}

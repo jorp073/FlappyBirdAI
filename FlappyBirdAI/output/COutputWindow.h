@@ -4,6 +4,10 @@
 #include "../util/SingleInstance.h"
 #include "../model/define.h"
 
+
+class CRecorder;
+
+
 class COutputWindow
 {
 public:
@@ -38,6 +42,8 @@ private:
     float m_fPipeHeight;
 
     cv::Mat m_matParabola;
+
+    CRecorder* m_pRecorder;
 
     DEFINE_SINGLEINSTANCE(COutputWindow);
 };

@@ -71,4 +71,13 @@ namespace GameState
 
         virtual bool Update(CGameStateObserver* observer);
     };
+
+
+    class CPlayBack : public CBase
+    {
+    public:
+        CPlayBack() : CBase("PlayBack") {};
+
+        virtual bool Update(CGameStateObserver* observer);
+    };
 };

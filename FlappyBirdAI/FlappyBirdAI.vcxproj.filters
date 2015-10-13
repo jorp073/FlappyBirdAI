@@ -28,6 +28,9 @@
     <Filter Include="源文件\output">
       <UniqueIdentifier>{e99dc077-c49a-4591-a921-0c1a80b4e4f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\recorder">
+      <UniqueIdentifier>{78c8b8e3-1e15-4624-a125-cba95e0493b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -87,6 +90,9 @@
     <ClInclude Include="util\MathUtil.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
+    <ClInclude Include="recorder\CRecorder.h">
+      <Filter>源文件\recorder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -133,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="util\MathUtil.cpp">
       <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="recorder\CRecorder.cpp">
+      <Filter>源文件\recorder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

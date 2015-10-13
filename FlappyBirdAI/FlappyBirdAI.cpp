@@ -10,6 +10,8 @@
 #include "observers/CBirdHeightObserver.h"
 #include "util/CPerformanceCounter.h"
 #include "output/COutputWindow.h"
+#include "recorder/CRecorder.h"
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -33,9 +35,28 @@ int _tmain(int argc, _TCHAR* argv[])
         float dt = llTickCount - llTime;
         llTime = llTickCount;
 
+        /// parse key press
         auto key = cv::waitKey(1);
-        if (27 == key) break;
+        bool bBreak = false;
+        switch (key)
+        {
+        case VK_ESCAPE:
+            bBreak = true;
+            break;
+        case 2424832: // CV LEFT KEY
+            CRecorder::GetInstance()->OnDisplayPreviousFrame();
+            bBreak = false;
+            break;
+        case 2555904: // CV RIGHT KEY
+            CRecorder::GetInstance()->OnDisplayNextFrame();
+            bBreak = false;
+            break;
+        default:
+            if (-1 != key) std::cout << "press key:" << key << std::endl;
+        };
+        if (bBreak) break;
 
+        /// observe
         if (CCanvasObserver::GetInstance()->Update())
         {
             if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
@@ -52,6 +73,7 @@ int _tmain(int argc, _TCHAR* argv[])
             }
         }
         COutputWindow::GetInstance()->Update();
+        CRecorder::GetInstance()->PushRecord();
     };
     DLOG(INFO) << "exit main loop";
 

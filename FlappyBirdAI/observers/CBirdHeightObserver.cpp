@@ -5,6 +5,7 @@
 #include "../model/CHeightTimeModel.h"
 #include "../util/CMouseClicker.h"
 #include "../model/CCrashTimeForecaster.h"
+#include "../recorder/CRecorder.h"
 
 
 INIT_SINGLEINSTANCE(CBirdHeightObserver);
@@ -48,6 +49,16 @@ bool CBirdHeightObserver::Update(float dt)
         m_pCrashTimeForecaster->GetOutputWindowWidth(),
         m_pCrashTimeForecaster->GetRemainCrashTime(),
         m_pCrashTimeForecaster->IsNeedJumpNow());
+
+    // record data
+    auto heightdata = m_pHeightData->GetBirdHeightData();
+    if (heightdata.size() > 0)
+    {
+        double a, b, c;
+        m_pCrashTimeForecaster->GetABC(a, b, c);
+        auto dHeight = m_pHeightData->GetBirdHeightData().back();
+        CRecorder::GetInstance()->RecordData(a, b, c, dHeight);
+    }
 
     return true;
 }

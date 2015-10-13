@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 
 // fit parabola by x[], y[]

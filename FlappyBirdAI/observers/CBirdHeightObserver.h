@@ -17,9 +17,9 @@ public:
 
 private:
 
-    CHeightTimeModel* m_pHeightData;
-    CMouseClicker* m_pMouseClicker;
-    CCrashTimeForecaster* m_pCrashTimeForecaster;
+    CHeightTimeModel*       m_pHeightData;
+    CMouseClicker*          m_pMouseClicker;
+    CCrashTimeForecaster*   m_pCrashTimeForecaster;
 
 
     DEFINE_SINGLEINSTANCE(CBirdHeightObserver);

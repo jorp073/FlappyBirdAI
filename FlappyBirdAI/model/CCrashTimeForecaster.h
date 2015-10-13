@@ -8,6 +8,7 @@
 
 class CHeightTimeModel;
 
+
 class CCrashTimeForecaster
 {
 public:
@@ -18,6 +19,8 @@ public:
     bool IsNeedJumpNow() { return m_bIsNeedJumpNow; };
 
     float GetRemainCrashTime() { return m_iRemainCrashTime; };
+
+    void GetABC(double& a, double& b, double& c);
 
     // 获取抛物线点集
     std::vector<PARABOLA_POINT>& GetParabolaDots() { return m_vParabolaDots; };
@@ -37,4 +40,5 @@ private:
     int m_iOutputWindowWidth;
     bool m_bIsNeedJumpNow;
     float m_iRemainCrashTime;
+    double m_a, m_b, m_c;
 };

@@ -30,12 +30,24 @@ bool CCrashTimeForecaster::IsBirdDroppingDown()
 }
 
 
+void CCrashTimeForecaster::GetABC(double& a, double& b, double& c)
+{
+    a = m_a;
+    b = m_b;
+    c = m_c;
+}
+
+
 void CCrashTimeForecaster::Update()
 {
     COUNTER_HELPER(CCrashTimeForecaster_UPDATE);
     auto heightdata = m_pModel->GetBirdHeightData();
 
     m_bIsNeedJumpNow = false;
+
+    m_a = 0;
+    m_b = 0;
+    m_c = 0;
 
     // emergency jump when bird under pipe
     if (heightdata.back() <= 0)
@@ -61,6 +73,9 @@ void CCrashTimeForecaster::Update()
 
     double a, b, c;
     ParabolaFit(timedata, heightdata, a, b, c);
+    m_a = a;
+    m_b = b;
+    m_c = c;
 
     DLOG(INFO) << "ai a:" << a << " b:" << b << " c:" << c;
 
