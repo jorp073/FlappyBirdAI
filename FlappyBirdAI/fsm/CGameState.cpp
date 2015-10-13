@@ -5,6 +5,7 @@
 #include "../observers/CObjectObserver.h"
 #include "../observers/CBirdHeightObserver.h"
 #include "../util/CPerformanceCounter.h"
+#include "../recorder/CRecorder.h"
 
 
 using namespace GameState;
@@ -153,6 +154,13 @@ bool CGetReady::Update(CGameStateObserver* observer)
     auto result = MatchGetReady(observer);
     isMatchResultIncrease(observer, result);
     return true;
+}
+
+
+void CGetReady::Exit(CGameStateObserver* observer)
+{
+    // clear play back data
+    CRecorder::GetInstance()->ResetData();
 }
 
 

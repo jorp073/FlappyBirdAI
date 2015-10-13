@@ -21,6 +21,7 @@ public:
         std::vector<PARABOLA_POINT>& points,
         int iOutputWindowWidth,
         float fRemainCrashTime,
+        double dHeight,
         bool bClick);
 
     void Update();

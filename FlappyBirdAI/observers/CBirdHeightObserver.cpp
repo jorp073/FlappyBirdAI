@@ -45,11 +45,7 @@ bool CBirdHeightObserver::Update(float dt)
         m_pCrashTimeForecaster->ResetData();
     }
 
-    COutputWindow::GetInstance()->DrawParabola(
-        m_pCrashTimeForecaster->GetParabolaDots(),
-        m_pCrashTimeForecaster->GetOutputWindowWidth(),
-        m_pCrashTimeForecaster->GetRemainCrashTime(),
-        m_pCrashTimeForecaster->IsNeedJumpNow());
+    double dHeight = 0;
 
     // record data
     auto heightdata = m_pHeightData->GetBirdHeightData();
@@ -57,9 +53,18 @@ bool CBirdHeightObserver::Update(float dt)
     {
         double a, b, c;
         m_pCrashTimeForecaster->GetABC(a, b, c);
-        auto dHeight = m_pHeightData->GetBirdHeightData().back();
+        dHeight = m_pHeightData->GetBirdHeightData().back();
         CRecorder::GetInstance()->RecordData(a, b, c, dHeight);
     }
+
+    COutputWindow::GetInstance()->DrawParabola(
+        m_pCrashTimeForecaster->GetParabolaDots(),
+        m_pCrashTimeForecaster->GetOutputWindowWidth(),
+        m_pCrashTimeForecaster->GetRemainCrashTime(),
+        dHeight,
+        m_pCrashTimeForecaster->IsNeedJumpNow());
+
+
 
     return true;
 }

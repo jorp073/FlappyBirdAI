@@ -59,6 +59,7 @@ void COutputWindow::DrawParabola(
     std::vector<PARABOLA_POINT>& points,
     int iOutputWindowWidth,
     float fRemainCrashTime,
+    double dHeight,
     bool bClick)
 {
     if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
@@ -68,19 +69,29 @@ void COutputWindow::DrawParabola(
     m_matParabola = cv::Mat(PARABOLA_GRAPH_H, iOutputWindowWidth, CV_8UC3, cv::Scalar(0, 0, 0));
     for (auto& point : points)
     {
-        auto color = cv::Scalar(255, 255, 255);
-        if (0 == point.type) color = cv::Scalar(0, 255, 0);
-
-        cv::circle(m_matParabola, cv::Point(point.x, point.y), 5, color);
+        if (0 == point.type)
+        {
+            // collected original data
+            cv::circle(m_matParabola, cv::Point(point.x, point.y), 7, cv::Scalar(0, 255, 0));
+        }
+        else
+        {
+            // fit parabola
+            cv::circle(m_matParabola, cv::Point(point.x, point.y), 2, cv::Scalar(255, 0, 255));
+        }
     }
 
-    std::stringstream str;
-    str << "Crash Forecast: " << fRemainCrashTime;
-    CVDrawText(m_matParabola, str.str(), 15);
+    std::stringstream ssForecast;
+    ssForecast << "Crash Forecast: " << fRemainCrashTime;
+    CVDrawText(m_matParabola, ssForecast.str(), 15);
+
+    std::stringstream ssHeight;
+    ssHeight << "Bird Height: " << dHeight;
+    CVDrawText(m_matParabola, ssHeight.str(), 35);
 
     if (bClick)
     {
-        CVDrawText(m_matParabola, "Jump Now", 35);
+        CVDrawText(m_matParabola, "Jump Now!", 55);
     }
 
 

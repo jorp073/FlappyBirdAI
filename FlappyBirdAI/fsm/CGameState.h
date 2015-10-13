@@ -51,6 +51,8 @@ namespace GameState
         CGetReady() : CBase("GetReady") {};
 
         virtual bool Update(CGameStateObserver* observer);
+
+        virtual void Exit(CGameStateObserver* observer);
     };
 
 

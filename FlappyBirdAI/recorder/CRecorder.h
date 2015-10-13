@@ -23,6 +23,8 @@ public:
     void OnDisplayPreviousFrame();
     void OnDisplayNextFrame();
 
+    void ResetData();
+
 private:
     bool IsRecordable();
 

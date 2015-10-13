@@ -12,12 +12,14 @@ INIT_SINGLEINSTANCE(CRecorder);
 CRecorder::CRecorder()
     : m_bDisplaying(false)
 {
+    m_FrameData.dHeight = 1; // make sure dHeight>0, to be enable to record
 }
 
 
 bool CRecorder::IsRecordable()
 {
-    return "Play" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
+    return m_FrameData.dHeight > 0 // donot record when bird crash ground
+        && "Play" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
 }
 
 
@@ -54,6 +56,13 @@ void CRecorder::PushRecord()
 
         //memset(&m_FrameData, 0, sizeof(m_FrameData));
     }
+}
+
+
+void CRecorder::ResetData()
+{
+    m_lFrameData.clear();
+    m_FrameData.dHeight = 1;
 }
 
 
