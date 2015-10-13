@@ -38,11 +38,10 @@ bool CBirdHeightObserver::Update(float dt)
 
     ///
     m_pCrashTimeForecaster->Update();
-    if (m_pCrashTimeForecaster->IsNeedJumpNow())
+    bool bNeedJumpNow = m_pCrashTimeForecaster->IsNeedJumpNow();
+    if (bNeedJumpNow)
     {
         m_pMouseClicker->TryClick();
-        m_pHeightData->ResetData();
-        m_pCrashTimeForecaster->ResetData();
     }
 
     double dHeight = 0;
@@ -63,6 +62,12 @@ bool CBirdHeightObserver::Update(float dt)
         m_pCrashTimeForecaster->GetRemainCrashTime(),
         dHeight,
         m_pCrashTimeForecaster->IsNeedJumpNow());
+
+    if (bNeedJumpNow)
+    {
+        m_pHeightData->ResetData();
+        m_pCrashTimeForecaster->ResetData();
+    }
 
 
 

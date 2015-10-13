@@ -2,6 +2,8 @@
 #include "../model/define.h"
 #include "CObjectObserver.h"
 #include "../output/COutputWindow.h"
+#include "CCanvasObserver.h"
+
 
 INIT_SINGLEINSTANCE(CObjectObserver);
 
@@ -60,19 +62,22 @@ float CObjectObserver::GetBirdHeight()
 {
     CHECK(1 == m_rectBirds.size()) << "m_rectBirds must has singleton value!";
 
-    float h = (m_rectBirds[0].tl().y + m_rectBirds[0].br().y) / 2.0f;
+    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
 
-    return 1 - h/CANVAS_SCALETO_HEIGHT;
+    float h = (m_rectBirds[0].tl().y + m_rectBirds[0].br().y) / 2.0f;
+    return 1 - h/iNoGroundCanvasHeight;
 }
 
 
 float CObjectObserver::GetPipeHeight()
 {
+    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
+
     auto rectPipes =  GetPipeRects(m_rectContours);
 
     DLOG(INFO) << "rectPipes.size()=" << rectPipes.size();
 
-    float heightInCanvas = CANVAS_SCALETO_HEIGHT;
+    float heightInCanvas = iNoGroundCanvasHeight;
     switch (rectPipes.size())
     {
     case 0: // not found pipes
@@ -91,7 +96,7 @@ float CObjectObserver::GetPipeHeight()
         break;
     }
 
-    return 1 - heightInCanvas/CANVAS_SCALETO_HEIGHT;
+    return 1 - heightInCanvas/iNoGroundCanvasHeight;
 }
 
 

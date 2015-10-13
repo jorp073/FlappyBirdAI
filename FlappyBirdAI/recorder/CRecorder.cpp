@@ -18,8 +18,7 @@ CRecorder::CRecorder()
 
 bool CRecorder::IsRecordable()
 {
-    return m_FrameData.dHeight > 0 // donot record when bird crash ground
-        && "Play" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
+    return "Play" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
 }
 
 

@@ -59,9 +59,10 @@ void CCrashTimeForecaster::Update()
     /// emergency jump when bird under pipe
     if (heightdata.back() <= 0)
     {
-        DLOG(WARNING) << "ai need emergency jump";
-        //m_bIsNeedJumpNow = true;
-        //return;
+        DLOG(INFO) << "ai need emergency jump";
+        m_bIsNeedJumpNow = true;
+        m_iRemainCrashTime = 0;
+        return;
     }
 
     /// get is dropping
@@ -76,7 +77,10 @@ void CCrashTimeForecaster::Update()
 
     if (heightdata.size() < 5)
     {
+        DLOG(INFO) << "ai dots count < 5";
         m_bIsNeedJumpNow = false;
+        m_iRemainCrashTime = 0;
+        return;
     }
 
     /// fit parabola
@@ -97,40 +101,43 @@ void CCrashTimeForecaster::Update()
     {
         if (a>=0)
         {
-            DLOG(WARNING) << "ai a>=0 a=" << a;
+            DLOG(INFO) << "ai a>=0 a=" << a;
             m_iRemainCrashTime = 9999;
-            return;
         }
-
-        double delta = b*b - 4*a*c;
-
-        if (delta<0)
+        else
         {
-            DLOG(WARNING) << "ai delta<=0 delta=" << delta;
-            m_iRemainCrashTime = 9999;
-            return;
+            // bird will crash pipe/ground when ax2+bx+c = BIRD_HEIGHT/2
+            // according to log, BIRD_HEIGHT/2 is about 0.16
+            c = c - 0.0426;
+
+            double delta = b*b - 4*a*c;
+
+            if (delta<0)
+            {
+                DLOG(INFO) << "ai delta<=0 delta=" << delta;
+                // when bird is near ground, and pipe appears, bird is under pipe
+                m_iRemainCrashTime = 0;
+            }
+            else
+            {
+                double t = (-b - sqrt(delta)) /2/a;
+
+                float remaintime1 = t - timedata.back();
+                float remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
+
+                DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
+                DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
+
+                m_iRemainCrashTime = remaintime2;
+            }
         }
-
-        // bird will crash pipe/ground when ax2+bx+c = BIRD_HEIGHT/2
-        // according to log, BIRD_HEIGHT/2 is about 0.16
-        c = c + 0.22;
-
-        double t = (-b - sqrt(delta)) /2/a;
-
-        float remaintime1 = t - timedata.back();
-        float remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
-
-        DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
-        DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
-
-        m_iRemainCrashTime = remaintime2;
     }
     else
     {
         m_iRemainCrashTime = 9999;
     }
 
-    m_bIsNeedJumpNow = m_iRemainCrashTime <= 17*4;
+    m_bIsNeedJumpNow = m_iRemainCrashTime <= 55;
 }
 
 

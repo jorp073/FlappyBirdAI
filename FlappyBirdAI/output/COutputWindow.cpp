@@ -74,10 +74,14 @@ void COutputWindow::DrawParabola(
             // collected original data
             cv::circle(m_matParabola, cv::Point(point.x, point.y), 7, cv::Scalar(0, 255, 0));
         }
-        else
+    }
+
+    for (auto& point : points)
+    {
+        if (1 == point.type)
         {
             // fit parabola
-            cv::circle(m_matParabola, cv::Point(point.x, point.y), 2, cv::Scalar(255, 0, 255));
+            cv::circle(m_matParabola, cv::Point(point.x, point.y), 2, cv::Scalar(0, 0, 255), -1);
         }
     }
 
