@@ -137,7 +137,7 @@ void CCrashTimeForecaster::Update()
         m_iRemainCrashTime = 9999;
     }
 
-    m_bIsNeedJumpNow = m_iRemainCrashTime <= 55;
+    m_bIsNeedJumpNow = m_iRemainCrashTime <= 41;
 }
 
 
