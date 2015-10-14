@@ -11,7 +11,7 @@ INIT_SINGLEINSTANCE(COutputWindow);
 
 COutputWindow::COutputWindow()
     : m_iFPS(0)
-    , m_fPipeHeight(0)
+    , m_fPipeHeight(1)
     , m_pRecorder(CRecorder::GetInstance())
 {
 }
@@ -49,9 +49,15 @@ void COutputWindow::SetGameStateText()
 }
 
 
-void COutputWindow::SetBirdRects(const std::vector<cv::Rect> rects)
+void COutputWindow::SetBirdRects(const std::vector<cv::Rect>& rects)
 {
     m_rectBirds = rects;
+}
+
+
+void COutputWindow::SetPipeRects(const std::vector<cv::Rect>& rects)
+{
+    m_rectPipes = rects;
 }
 
 
@@ -122,15 +128,26 @@ void COutputWindow::Update()
     CVDrawText(mat, m_strGameStateText, 35);
     CVDrawText(mat, m_strFPSText, mat.rows - 10);
 
-    auto color = cv::Scalar(255, 255, 255);
+    const auto cWhite = cv::Scalar(255, 255, 255);
+    const auto cGray = cv::Scalar(127, 127, 127);
     /// draw birds rect
     for (auto rect : m_rectBirds)
     {
-        cv::rectangle(mat, rect.tl(), rect.br(), color, 1, 8, 0);
+        cv::rectangle(mat, rect.tl(), rect.br(), cWhite, 1, 8, 0);
+    }
+
+    /// draw pipe rect
+    for (auto rect : m_rectPipes)
+    {
+        cv::rectangle(mat, rect.tl(), rect.br(), cGray, CV_FILLED, 8, 0);
     }
 
     /// draw pipe height line
-    cv::line(mat, cv::Point(0, m_fPipeHeight), cv::Point(mat.cols-1, m_fPipeHeight), color);
+    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
+    int height = (int)((1-m_fPipeHeight) * iNoGroundCanvasHeight + 0.5f);
+    height = height < 0 ? 0 : height;
+    height = height > mat.rows-1 ? mat.rows-1 : height;
+    cv::line(mat, cv::Point(0, height), cv::Point(mat.cols-1, height), cWhite);
 
     cv::imshow(WINDOW_NAME_CANVAS, mat);
     
@@ -139,6 +156,11 @@ void COutputWindow::Update()
 
     m_strCanvasStateText.clear();
     m_strGameStateText.clear();
+
+    // clear data
+    m_rectPipes.clear();
+    m_rectBirds.clear();
+    m_fPipeHeight = 1;
 }
 
 

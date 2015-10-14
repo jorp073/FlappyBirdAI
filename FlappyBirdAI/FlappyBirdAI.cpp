@@ -32,29 +32,24 @@ int _tmain(int argc, _TCHAR* argv[])
     {
         /// get delta time
         auto llTickCount = GetPreciseTickCount();
-        float dt = llTickCount - llTime;
+        float dt = (float)(llTickCount - llTime);
         llTime = llTickCount;
 
         /// parse key press
         auto key = cv::waitKey(1);
-        bool bBreak = false;
+        if (VK_ESCAPE == key) return 0;
+
         switch (key)
         {
-        case VK_ESCAPE:
-            bBreak = true;
-            break;
         case 2424832: // CV LEFT KEY
             CRecorder::GetInstance()->OnDisplayPreviousFrame();
-            bBreak = false;
             break;
         case 2555904: // CV RIGHT KEY
             CRecorder::GetInstance()->OnDisplayNextFrame();
-            bBreak = false;
             break;
         default:
             if (-1 != key) std::cout << "press key:" << key << std::endl;
         };
-        if (bBreak) break;
 
         /// observe
         if (CCanvasObserver::GetInstance()->Update())
@@ -65,9 +60,7 @@ int _tmain(int argc, _TCHAR* argv[])
                 {
                     if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
                     {
-                        if (CBirdHeightObserver::GetInstance()->Update(dt))
-                        {
-                        }
+                        CBirdHeightObserver::GetInstance()->Update(dt);
                     }
                 }
             }

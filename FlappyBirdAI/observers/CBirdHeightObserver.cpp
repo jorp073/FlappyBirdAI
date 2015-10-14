@@ -69,8 +69,6 @@ bool CBirdHeightObserver::Update(float dt)
         m_pCrashTimeForecaster->ResetData();
     }
 
-
-
     return true;
 }
 

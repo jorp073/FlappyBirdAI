@@ -12,7 +12,7 @@ void ParabolaFit(
     double sum_x4=0, sum_x3=0, sum_x2=0, sum_x=0, sum_n=0, sum_y=0, sum_yx=0, sum_yx2=0;
 
     auto count = x.size();
-    for (int i=0;i<count;i++)
+    for (size_t i=0;i<count;i++)
     {
         sum_n += 1;
         sum_x += x[i];

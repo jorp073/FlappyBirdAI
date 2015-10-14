@@ -122,13 +122,13 @@ void CCrashTimeForecaster::Update()
             {
                 double t = (-b - sqrt(delta)) /2/a;
 
-                float remaintime1 = t - timedata.back();
-                float remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
+                double remaintime1 = t - timedata.back();
+                double remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
 
                 DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
                 DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
 
-                m_iRemainCrashTime = remaintime2;
+                m_iRemainCrashTime = (float)remaintime2;
             }
         }
     }
@@ -155,9 +155,9 @@ void CCrashTimeForecaster::GenParabolaDots(int h, double a, double b, double c, 
     }
 
     /// Vert and hori scale ratio
-    float vratio = h+1;
+    float vratio = (float)(h+1);
     float hratio = vratio/1000;
-    w = hratio * timedata.back() + 1;
+    w = (int)(hratio * timedata.back() + 1);
 
     PARABOLA_POINT originPt;
     PARABOLA_POINT fillinPt;
@@ -169,8 +169,8 @@ void CCrashTimeForecaster::GenParabolaDots(int h, double a, double b, double c, 
     {
         // captured data (green dots)
         auto time = timedata[i];
-        int x = hratio* time + 0.5;
-        int y = h - vratio * heightdata[i] + 0.5;
+        int x = (int)(hratio* time + 0.5f);
+        int y = (int)(h - vratio * heightdata[i] + 0.5f);
         if (x>= w)
             x = w -1;
         if (y>= h)
@@ -185,7 +185,7 @@ void CCrashTimeForecaster::GenParabolaDots(int h, double a, double b, double c, 
         m_vParabolaDots.push_back(originPt);
 
         // fill in new dots (white dots)
-        y = h - vratio * (a*time*time+b*time+c) + 0.5;
+        y = (int)(h - vratio * (a*time*time+b*time+c) + 0.5);
         if (y>= h)
             y = h - 1;
         if (y<0)

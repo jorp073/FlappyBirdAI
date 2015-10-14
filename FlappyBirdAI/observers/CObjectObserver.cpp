@@ -48,7 +48,7 @@ std::vector<cv::Rect> CObjectObserver::GetBirdRects(const std::vector<std::vecto
     for (size_t i = 0; i < rectContours.size(); i++)
     {
         cv::Rect rect;
-        if (IsBirdRect(rectContours[i], rect))
+        if (_IsBirdRect(rectContours[i], rect))
         {
             rects.push_back(rect);
         }
@@ -56,6 +56,9 @@ std::vector<cv::Rect> CObjectObserver::GetBirdRects(const std::vector<std::vecto
 
     return rects;
 }
+
+
+
 
 
 float CObjectObserver::GetBirdHeight()
@@ -74,10 +77,11 @@ float CObjectObserver::GetPipeHeight()
     const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
 
     auto rectPipes =  GetPipeRects(m_rectContours);
+    COutputWindow::GetInstance()->SetPipeRects(rectPipes);
 
     DLOG(INFO) << "rectPipes.size()=" << rectPipes.size();
 
-    float heightInCanvas = iNoGroundCanvasHeight;
+    float heightInCanvas = (float)iNoGroundCanvasHeight;
     switch (rectPipes.size())
     {
     case 0: // not found pipes
@@ -106,7 +110,7 @@ std::vector<cv::Rect> CObjectObserver::GetPipeRects(const std::vector<std::vecto
     for (size_t i = 0; i < rectContours.size(); i++)
     {
         cv::Rect rect;
-        if (IsPipeRect(rectContours[i], rect))
+        if (_IsPipeRect(rectContours[i], rect))
         {
             rects.push_back(rect);
         }
@@ -116,7 +120,7 @@ std::vector<cv::Rect> CObjectObserver::GetPipeRects(const std::vector<std::vecto
 }
 
 
-bool CObjectObserver::IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
+bool CObjectObserver::_IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
 {
     auto rectBound = cv::boundingRect(cv::Mat(contour));
 
@@ -136,7 +140,7 @@ bool CObjectObserver::IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::
 }
 
 
-bool CObjectObserver::IsPipeRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
+bool CObjectObserver::_IsPipeRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect)
 {
     static const int PIPE_WIDTH_MAX = CANVAS_SCALETO_WIDTH * 37 / 191;
     static const int PIPE_WIDTH_MIN = 10;

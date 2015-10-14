@@ -23,8 +23,8 @@ private:
     std::vector<cv::Rect> GetBirdRects(const std::vector<std::vector<cv::Point>> & rectContours);
     std::vector<cv::Rect> GetPipeRects(const std::vector<std::vector<cv::Point>> & rectContours);
 
-    bool IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
-    bool IsPipeRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
+    bool _IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
+    bool _IsPipeRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
 
     cv::Mat m_matBinary;
     std::vector<cv::Rect> m_rectBirds;

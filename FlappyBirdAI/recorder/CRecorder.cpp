@@ -84,7 +84,7 @@ void CRecorder::OnDisplayNextFrame()
 
     m_iterFrame++;
     m_iCurPlayID++;
-    if (m_iCurPlayID >= m_lFrameData.size()) m_iCurPlayID = 0;
+    if (m_iCurPlayID >= (int)m_lFrameData.size()) m_iCurPlayID = 0;
 
     if (m_lFrameData.end() == m_iterFrame) m_iterFrame = m_lFrameData.begin();
 

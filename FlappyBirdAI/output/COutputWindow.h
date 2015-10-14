@@ -14,8 +14,9 @@ public:
     bool Init();
     void SetCanvasStateText();
     void SetGameStateText();
-    void SetBirdRects(const std::vector<cv::Rect> rects);
-    void SetPipeHeight(float height) { m_fPipeHeight = (1-height)*CANVAS_SCALETO_HEIGHT; };
+    void SetBirdRects(const std::vector<cv::Rect>& rects);
+    void SetPipeRects(const std::vector<cv::Rect>& rects);
+    void SetPipeHeight(float height) { m_fPipeHeight = height; };
 
     void DrawParabola(
         std::vector<PARABOLA_POINT>& points,
@@ -36,7 +37,7 @@ private:
 
     std::string m_strCanvasStateText;
     std::string m_strGameStateText;
-    std::vector<cv::Rect> m_rectBirds;
+    std::vector<cv::Rect> m_rectBirds, m_rectPipes;
     int m_iFPS;
     std::string m_strFPSText;
     int m_dwTickCount;
