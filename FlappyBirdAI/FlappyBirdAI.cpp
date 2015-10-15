@@ -11,11 +11,12 @@
 #include "util/CPerformanceCounter.h"
 #include "output/COutputWindow.h"
 #include "recorder/CRecorder.h"
-
+#include <direct.h>
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    FLAGS_log_dir = "../logs/";
+    FLAGS_log_dir = "logs/";
+    ::_mkdir(FLAGS_log_dir.c_str());
     google::InitGoogleLogging(argv[0]);
 
     InitPreciseTickCount();
