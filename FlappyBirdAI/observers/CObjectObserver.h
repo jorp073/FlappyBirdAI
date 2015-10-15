@@ -17,10 +17,10 @@ public:
     float GetBirdHeight();
     float GetPipeHeight();
 
+    void ResetData();
 
 private:
     // return whether find bird or not
-    std::vector<cv::Rect> GetBirdRects(const std::vector<std::vector<cv::Point>> & rectContours);
     std::vector<cv::Rect> GetPipeRects(const std::vector<std::vector<cv::Point>> & rectContours);
 
     bool _IsBirdRect(const std::vector<cv::Point>& contour, OUT cv::Rect& rect);
@@ -29,6 +29,7 @@ private:
     cv::Mat m_matBinary;
     std::vector<cv::Rect> m_rectBirds;
     std::vector<std::vector<cv::Point>> m_rectContours;
+    float m_fPipeHeight;
 
     DEFINE_SINGLEINSTANCE(CObjectObserver);
 };

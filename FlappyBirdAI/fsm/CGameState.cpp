@@ -161,6 +161,7 @@ void CGetReady::Exit(CGameStateObserver* observer)
 {
     // clear play back data
     CRecorder::GetInstance()->ResetData();
+    CObjectObserver::GetInstance()->ResetData();
 }
 
 

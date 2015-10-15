@@ -10,7 +10,14 @@ INIT_SINGLEINSTANCE(CObjectObserver);
 
 CObjectObserver::CObjectObserver()
     : m_matBinary(cv::Mat())
+    , m_fPipeHeight(0.5f)
 {
+}
+
+
+void CObjectObserver::ResetData()
+{
+    m_fPipeHeight = 0.5f;
 }
 
 
@@ -33,8 +40,16 @@ bool CObjectObserver::Update(cv::Mat matGrayCanvas)
     findContours(m_matBinary, m_rectContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
     DLOG(INFO) << "findContours count: " << m_rectContours.size();
 
-    /// Find bird contour, and get rect
-    m_rectBirds =  GetBirdRects(m_rectContours);
+    /// Find bird rect
+    m_rectBirds.clear();
+    cv::Rect rect;
+    for (auto & contour : m_rectContours)
+    {
+        if (_IsBirdRect(contour, rect))
+        {
+            m_rectBirds.push_back(rect);
+        }
+    }
 
     COutputWindow::GetInstance()->SetBirdRects(m_rectBirds);
 
@@ -42,13 +57,13 @@ bool CObjectObserver::Update(cv::Mat matGrayCanvas)
 }
 
 
-std::vector<cv::Rect> CObjectObserver::GetBirdRects(const std::vector<std::vector<cv::Point>> & rectContours)
+std::vector<cv::Rect> CObjectObserver::GetPipeRects(const std::vector<std::vector<cv::Point>> & rectContours)
 {
     std::vector<cv::Rect> rects;
     for (size_t i = 0; i < rectContours.size(); i++)
     {
         cv::Rect rect;
-        if (_IsBirdRect(rectContours[i], rect))
+        if (_IsPipeRect(rectContours[i], rect))
         {
             rects.push_back(rect);
         }
@@ -56,9 +71,6 @@ std::vector<cv::Rect> CObjectObserver::GetBirdRects(const std::vector<std::vecto
 
     return rects;
 }
-
-
-
 
 
 float CObjectObserver::GetBirdHeight()
@@ -84,7 +96,8 @@ float CObjectObserver::GetPipeHeight()
     float heightInCanvas = (float)iNoGroundCanvasHeight;
     switch (rectPipes.size())
     {
-    case 0: // not found pipes
+    case 0: // found on pipes
+        // return pipe height of last frame
         break;
 
     case 2: // multi result, sort by x pos
@@ -95,28 +108,13 @@ float CObjectObserver::GetPipeHeight()
 
     case 1: // singleton
         heightInCanvas = (float)rectPipes[0].tl().y;
+        m_fPipeHeight = 1 - heightInCanvas/iNoGroundCanvasHeight;
 
     default:
         break;
     }
 
-    return 1 - heightInCanvas/iNoGroundCanvasHeight;
-}
-
-
-std::vector<cv::Rect> CObjectObserver::GetPipeRects(const std::vector<std::vector<cv::Point>> & rectContours)
-{
-    std::vector<cv::Rect> rects;
-    for (size_t i = 0; i < rectContours.size(); i++)
-    {
-        cv::Rect rect;
-        if (_IsPipeRect(rectContours[i], rect))
-        {
-            rects.push_back(rect);
-        }
-    }
-
-    return rects;
+    return m_fPipeHeight;
 }
 
 
