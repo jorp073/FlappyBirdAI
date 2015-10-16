@@ -18,8 +18,6 @@ public:
 
     TStateMachine<CCanvasObserver>* StateMachine() { return m_pStateMachine; };
 
-    int GetNoGroundCanvasHeight();
-
 
 private:
     cv::Rect _GetRectWithoutBorder(cv::Mat graymat);

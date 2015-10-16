@@ -5,14 +5,23 @@
 #include <iostream>
 #include "../util/MathUtil.h"
 
+INIT_SINGLEINSTANCE(CCrashTimeForecaster);
+
 DEFINE_COUNTER(CCrashTimeForecaster_UPDATE);
 
 
-CCrashTimeForecaster::CCrashTimeForecaster(CHeightTimeModel* pModel)
-    : m_pModel(pModel)
-    , m_iOutputWindowWidth(PARABOLA_GRAPH_W)
+CCrashTimeForecaster::CCrashTimeForecaster()
+    : m_iOutputWindowWidth(PARABOLA_GRAPH_W)
     , m_bIsDroppingDown(false)
+    , m_fBestJumpOffsetY(0)
+    , m_pModel(NULL)
 {
+}
+
+
+void CCrashTimeForecaster::SetModel(CHeightTimeModel* pModel)
+{
+    m_pModel = pModel;
 }
 
 
@@ -106,9 +115,7 @@ void CCrashTimeForecaster::Update()
         }
         else
         {
-            // bird will crash pipe/ground when ax2+bx+c = BIRD_HEIGHT/2
-            // according to log, BIRD_HEIGHT/2 is about 0.16
-            c = c - 0.0426;
+            c = c - m_fBestJumpOffsetY;
 
             double delta = b*b - 4*a*c;
 
@@ -137,7 +144,14 @@ void CCrashTimeForecaster::Update()
         m_iRemainCrashTime = 9999;
     }
 
-    m_bIsNeedJumpNow = m_iRemainCrashTime <= 41;
+    m_bIsNeedJumpNow = m_iRemainCrashTime <= 36;
+}
+
+
+void CCrashTimeForecaster::SetBestJumpOffsetY(float fOffsetY)
+{
+    DLOG(INFO) << "ai CCrashTimeForecaster::SetBestJumpOffsetY " << fOffsetY;
+    m_fBestJumpOffsetY = fOffsetY;
 }
 
 

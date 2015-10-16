@@ -35,12 +35,6 @@ bool CCanvasObserver::Init()
 }
 
 
-int CCanvasObserver::GetNoGroundCanvasHeight()
-{
-    return m_matGrayBg.rows;
-}
-
-
 bool CCanvasObserver::Update()
 {
     if (m_pStateMachine->Update())

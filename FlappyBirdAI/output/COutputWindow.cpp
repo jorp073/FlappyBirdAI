@@ -143,8 +143,7 @@ void COutputWindow::Update()
     }
 
     /// draw pipe height line
-    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
-    int height = (int)((1-m_fPipeHeight) * iNoGroundCanvasHeight + 0.5f);
+    int height = (int)((1-m_fPipeHeight) * CANVAS_NOGROUND_HEIGHT + 0.5f);
     height = height < 0 ? 0 : height;
     height = height > mat.rows-1 ? mat.rows-1 : height;
     cv::line(mat, cv::Point(0, height), cv::Point(mat.cols-1, height), cWhite);

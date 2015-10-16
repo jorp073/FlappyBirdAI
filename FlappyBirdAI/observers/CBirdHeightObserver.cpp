@@ -6,6 +6,7 @@
 #include "../util/CMouseClicker.h"
 #include "../model/CCrashTimeForecaster.h"
 #include "../recorder/CRecorder.h"
+#include "../model/CJumpRangeModel.h"
 
 
 INIT_SINGLEINSTANCE(CBirdHeightObserver);
@@ -13,9 +14,10 @@ INIT_SINGLEINSTANCE(CBirdHeightObserver);
 
 CBirdHeightObserver::CBirdHeightObserver()
     : m_pHeightData(new CHeightTimeModel())
+    , m_pJumpRangeData(new CJumpRangeModel())
     , m_pMouseClicker(new CMouseClicker())
-    , m_pCrashTimeForecaster(new CCrashTimeForecaster(m_pHeightData))
 {
+    CCrashTimeForecaster::GetInstance()->SetModel(m_pHeightData);
 }
 
 
@@ -33,15 +35,19 @@ bool CBirdHeightObserver::Update(float dt)
     DLOG(INFO) << "bird height: " << fBirdHeight << ", pipe height: " << fPipeHeight;
 
     m_pHeightData->Append(fBirdHeight, fPipeHeight, dt);
-
     COutputWindow::GetInstance()->SetPipeHeight(fPipeHeight);
 
     ///
-    m_pCrashTimeForecaster->Update();
-    bool bNeedJumpNow = m_pCrashTimeForecaster->IsNeedJumpNow();
+    m_pJumpRangeData->OnBirdHeightChanged(fBirdHeight);
+
+    ///
+    auto pCrashTimeForecaster = CCrashTimeForecaster::GetInstance();
+    pCrashTimeForecaster->Update();
+    bool bNeedJumpNow = pCrashTimeForecaster->IsNeedJumpNow();
     if (bNeedJumpNow)
     {
         m_pMouseClicker->TryClick();
+        m_pJumpRangeData->OnClick(fPipeHeight);
     }
 
     double dHeight = 0;
@@ -51,22 +57,22 @@ bool CBirdHeightObserver::Update(float dt)
     if (heightdata.size() > 0)
     {
         double a, b, c;
-        m_pCrashTimeForecaster->GetABC(a, b, c);
+        CCrashTimeForecaster::GetInstance()->GetABC(a, b, c);
         dHeight = m_pHeightData->GetBirdHeightData().back();
         CRecorder::GetInstance()->RecordData(a, b, c, dHeight);
     }
 
     COutputWindow::GetInstance()->DrawParabola(
-        m_pCrashTimeForecaster->GetParabolaDots(),
-        m_pCrashTimeForecaster->GetOutputWindowWidth(),
-        m_pCrashTimeForecaster->GetRemainCrashTime(),
+        pCrashTimeForecaster->GetParabolaDots(),
+        pCrashTimeForecaster->GetOutputWindowWidth(),
+        pCrashTimeForecaster->GetRemainCrashTime(),
         dHeight,
-        m_pCrashTimeForecaster->IsNeedJumpNow());
+        pCrashTimeForecaster->IsNeedJumpNow());
 
     if (bNeedJumpNow)
     {
         m_pHeightData->ResetData();
-        m_pCrashTimeForecaster->ResetData();
+        pCrashTimeForecaster->ResetData();
     }
 
     return true;

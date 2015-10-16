@@ -93,6 +93,9 @@
     <ClInclude Include="recorder\CRecorder.h">
       <Filter>源文件\recorder</Filter>
     </ClInclude>
+    <ClInclude Include="model\CJumpRangeModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="recorder\CRecorder.cpp">
       <Filter>源文件\recorder</Filter>
+    </ClCompile>
+    <ClCompile Include="model\CJumpRangeModel.cpp">
+      <Filter>源文件\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

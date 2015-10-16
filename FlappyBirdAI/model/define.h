@@ -24,6 +24,8 @@ struct PARABOLA_POINT
 #define CANVAS_SCALETO_WIDTH    (383/2)
 #define CANVAS_SCALETO_HEIGHT   (511/2)
 
+#define CANVAS_NOGROUND_HEIGHT  223
+
 // ratio rect of bird positionX in canvas
 #define BIRDX_RATIO             0.314f
 #define BIRDX_RATIO_OFFSET      0.02f
@@ -38,3 +40,7 @@ struct PARABOLA_POINT
 
 #define WINDOW_NAME_CANVAS      "Canvas"
 #define WINDOW_NAME_PARABOLA    "Parabola"
+
+#define DEFAULT_PIPE_HEIGHT     0.5f
+
+#define PIPE_VERTICAL_DISTANCE  (64.0f/CANVAS_NOGROUND_HEIGHT)

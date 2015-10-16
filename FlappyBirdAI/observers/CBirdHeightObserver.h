@@ -4,7 +4,7 @@
 
 class CHeightTimeModel;
 class CMouseClicker;
-class CCrashTimeForecaster;
+class CJumpRangeModel;
 
 
 class CBirdHeightObserver
@@ -18,8 +18,8 @@ public:
 private:
 
     CHeightTimeModel*       m_pHeightData;
+    CJumpRangeModel*        m_pJumpRangeData;
     CMouseClicker*          m_pMouseClicker;
-    CCrashTimeForecaster*   m_pCrashTimeForecaster;
 
 
     DEFINE_SINGLEINSTANCE(CBirdHeightObserver);

@@ -7,11 +7,11 @@ INIT_SINGLEINSTANCE(CScreenCapturer);
 
 
 DEFINE_COUNTER(CScreenCapturer_Capture);
-DEFINE_COUNTER(Capture1);
-DEFINE_COUNTER(Capture2);
-DEFINE_COUNTER(Capture3);
-DEFINE_COUNTER(Capture4);
-DEFINE_COUNTER(Capture5);
+//DEFINE_COUNTER(Capture1);
+//DEFINE_COUNTER(Capture2);
+//DEFINE_COUNTER(Capture3);
+//DEFINE_COUNTER(Capture4);
+//DEFINE_COUNTER(Capture5);
 
 CScreenCapturer::CScreenCapturer()
     :m_hOldBitmap(NULL)
@@ -69,7 +69,7 @@ bool CScreenCapturer::_ChangeSize(int width, int height)
 bool CScreenCapturer::Capture(RECT rect)
 {
     COUNTER_HELPER(CScreenCapturer_Capture);
-    BEGIN_COUNTER(Capture1);
+    //BEGIN_COUNTER(Capture1);
     auto width = rect.right - rect.left;
     auto height = rect.bottom - rect.top;
 
@@ -83,14 +83,14 @@ bool CScreenCapturer::Capture(RECT rect)
     }
     DLOG(INFO) << "width: " << width << ", height: " << height;
     m_hOldBitmap = (HBITMAP)::SelectObject(m_hMemDC, m_hBitmap);
-    END_COUNTER(Capture1);
-    BEGIN_COUNTER(Capture2);
+    //END_COUNTER(Capture1);
+    //BEGIN_COUNTER(Capture2);
     auto BitBltRet = ::BitBlt(m_hMemDC, 0, 0, width, height,
         m_hSrcDC, rect.left, rect.top, SRCCOPY);
     if (!BitBltRet) return false;
 
-    END_COUNTER(Capture2);
-    BEGIN_COUNTER(Capture3);
+    //END_COUNTER(Capture2);
+    //BEGIN_COUNTER(Capture3);
     BITMAP bmp;
     ::GetObject(m_hBitmap, sizeof(BITMAP), &bmp);
 
@@ -106,13 +106,13 @@ bool CScreenCapturer::Capture(RECT rect)
     }
 
     ::GetBitmapBits(m_hBitmap, width * height * m_image_nchannels, m_pBuffer);
-    END_COUNTER(Capture3);
-    BEGIN_COUNTER(Capture4);
+    //END_COUNTER(Capture3);
+    //BEGIN_COUNTER(Capture4);
     ::memcpy(m_Mat.data, m_pBuffer, width * height * m_image_nchannels);
-    END_COUNTER(Capture4);
-    BEGIN_COUNTER(Capture5);
+    //END_COUNTER(Capture4);
+    //BEGIN_COUNTER(Capture5);
     cv::cvtColor(m_Mat, m_GrayMat, CV_BGR2GRAY);
-    END_COUNTER(Capture5);
+    //END_COUNTER(Capture5);
     ::SelectObject(m_hMemDC, m_hOldBitmap);
     return true;
 }

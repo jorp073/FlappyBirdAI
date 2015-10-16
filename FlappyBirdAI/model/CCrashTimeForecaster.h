@@ -4,6 +4,7 @@
 
 #include <Windows.h>
 #include "define.h"
+#include "../util/SingleInstance.h"
 
 
 class CHeightTimeModel;
@@ -12,7 +13,7 @@ class CHeightTimeModel;
 class CCrashTimeForecaster
 {
 public:
-    CCrashTimeForecaster(CHeightTimeModel* pModel);
+    void SetModel(CHeightTimeModel* pModel);
 
     void Update();
 
@@ -29,6 +30,8 @@ public:
 
     void ResetData();
 
+    void SetBestJumpOffsetY(float fOffsetY);
+
 private:
     // return whether bird is dropping down
     bool IsBirdDroppingDown();
@@ -44,4 +47,11 @@ private:
     float m_iRemainCrashTime;
     double m_a, m_b, m_c;
     bool m_bIsDroppingDown;
+
+    // height offset of jump place from ground/bottom pipe
+    // the height offset that bird worst possibly contacts bottom and top pipe
+    float m_fBestJumpOffsetY;
+
+
+    DEFINE_SINGLEINSTANCE(CCrashTimeForecaster);
 };

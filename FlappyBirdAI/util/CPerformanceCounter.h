@@ -41,7 +41,7 @@ private:
 
 
     const char* m_szName ;
-    LONGLONG m_tmpCounter ;
+    double m_tmpCounter ;
 
 };
 

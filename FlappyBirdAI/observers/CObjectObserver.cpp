@@ -10,14 +10,14 @@ INIT_SINGLEINSTANCE(CObjectObserver);
 
 CObjectObserver::CObjectObserver()
     : m_matBinary(cv::Mat())
-    , m_fPipeHeight(0.5f)
 {
+    ResetData();
 }
 
 
 void CObjectObserver::ResetData()
 {
-    m_fPipeHeight = 0.5f;
+    m_fPipeHeight = DEFAULT_PIPE_HEIGHT;
 }
 
 
@@ -77,23 +77,19 @@ float CObjectObserver::GetBirdHeight()
 {
     CHECK(1 == m_rectBirds.size()) << "m_rectBirds must has singleton value!";
 
-    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
-
     float h = (m_rectBirds[0].tl().y + m_rectBirds[0].br().y) / 2.0f;
-    return 1 - h/iNoGroundCanvasHeight;
+    return 1 - h/CANVAS_NOGROUND_HEIGHT;
 }
 
 
 float CObjectObserver::GetPipeHeight()
 {
-    const int iNoGroundCanvasHeight = CCanvasObserver::GetInstance()->GetNoGroundCanvasHeight();
-
     auto rectPipes =  GetPipeRects(m_rectContours);
     COutputWindow::GetInstance()->SetPipeRects(rectPipes);
 
     DLOG(INFO) << "rectPipes.size()=" << rectPipes.size();
 
-    float heightInCanvas = (float)iNoGroundCanvasHeight;
+    float heightInCanvas = (float)CANVAS_NOGROUND_HEIGHT;
     switch (rectPipes.size())
     {
     case 0: // found on pipes
@@ -108,7 +104,7 @@ float CObjectObserver::GetPipeHeight()
 
     case 1: // singleton
         heightInCanvas = (float)rectPipes[0].tl().y;
-        m_fPipeHeight = 1 - heightInCanvas/iNoGroundCanvasHeight;
+        m_fPipeHeight = 1 - heightInCanvas/CANVAS_NOGROUND_HEIGHT;
 
     default:
         break;

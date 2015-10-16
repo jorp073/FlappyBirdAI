@@ -27,6 +27,5 @@ void CMouseClicker::Click()
 {
     DLOG(INFO) << "ai Click";
     ::mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-    ::Sleep(100);
     ::mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 }
