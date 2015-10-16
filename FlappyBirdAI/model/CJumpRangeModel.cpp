@@ -11,7 +11,7 @@ CJumpRangeModel::CJumpRangeModel()
     : m_fPipeHeight(DEFAULT_PIPE_HEIGHT)
     , m_fAverageRange(0)
     , m_iTotalDataCount(0)
-    , m_fBestBottomOffset(0)
+    , m_fBestBottomOffset(PIPE_VERTICAL_DISTANCE/2)
 {
     ResetData();
 }

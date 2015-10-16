@@ -84,9 +84,9 @@ void CCrashTimeForecaster::Update()
         }
     }
 
-    if (heightdata.size() < 5)
+    if (heightdata.size() < MIN_HEIGHT_DATA_TO_JUMP)
     {
-        DLOG(INFO) << "ai dots count < 5";
+        DLOG(INFO) << "ai dots count: " << heightdata.size() << " < " << MIN_HEIGHT_DATA_TO_JUMP;
         m_bIsNeedJumpNow = false;
         m_iRemainCrashTime = 0;
         return;
