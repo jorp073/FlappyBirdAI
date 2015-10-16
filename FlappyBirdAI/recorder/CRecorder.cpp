@@ -4,7 +4,7 @@
 #include "../fsm/CGameState.h"
 #include <strstream>
 
-#define RECORD_FRAME_MAX_COUNT 120
+#define RECORD_FRAME_MAX_COUNT 240
 
 INIT_SINGLEINSTANCE(CRecorder);
 
@@ -62,6 +62,7 @@ void CRecorder::ResetData()
 {
     m_lFrameData.clear();
     m_FrameData.dHeight = 1;
+    m_bDisplaying = false;
 }
 
 
