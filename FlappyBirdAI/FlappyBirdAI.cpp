@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "fsm/base.h"
+#include "fsm/CGameState.h"
 #include "util/CScreenCapturer.h"
 #include "observers/CCanvasObserver.h"
 #include "observers/CGameStateObserver.h"
@@ -38,7 +38,18 @@ int _tmain(int argc, _TCHAR* argv[])
 
         /// parse key press
         auto key = cv::waitKey(1);
-        if (VK_ESCAPE == key) return 0;
+        if (VK_ESCAPE == key)
+        {
+            if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack"))
+            {
+                // exit PlayBack, back to auto play
+                CGameStateObserver::GetInstance()->StateMachine()->ChangeState(new GameState::CUnknown());
+            }
+            else
+            {
+                break;
+            }
+        }
 
         switch (key)
         {
