@@ -69,6 +69,8 @@ bool CBirdHeightObserver::Update(float dt)
         dHeight,
         pCrashTimeForecaster->IsNeedJumpNow());
 
+    COutputWindow::GetInstance()->DrawJumpRange(m_pJumpRangeData);
+
     if (bNeedJumpNow)
     {
         m_pHeightData->ResetData();

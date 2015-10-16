@@ -11,6 +11,7 @@ CJumpRangeModel::CJumpRangeModel()
     : m_fPipeHeight(DEFAULT_PIPE_HEIGHT)
     , m_fAverageRange(0)
     , m_iTotalDataCount(0)
+    , m_fBestBottomOffset(0)
 {
     ResetData();
 }
@@ -72,8 +73,8 @@ void CJumpRangeModel::_PushData()
     m_fAverageRange = (float)(m_iTotalDataCount) / count * m_fAverageRange + data.fRange / count;
     m_iTotalDataCount = count;
 
-    float fBestBottomOffset = (PIPE_VERTICAL_DISTANCE - m_fAverageRange)/2;
-    CCrashTimeForecaster::GetInstance()->SetBestJumpOffsetY(fBestBottomOffset);
+    m_fBestBottomOffset = (PIPE_VERTICAL_DISTANCE - m_fAverageRange)/2;
+    CCrashTimeForecaster::GetInstance()->SetBestJumpOffsetY(m_fBestBottomOffset);
 
 
     DLOG(INFO) << "ai jump avr range:" << m_fAverageRange <<  " range: " << data.fRange << " bottom: " << data.fBottom << " top: " << data.fTop;

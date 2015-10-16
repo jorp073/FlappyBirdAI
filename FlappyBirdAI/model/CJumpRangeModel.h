@@ -22,6 +22,10 @@ public:
 
     void ResetData();
 
+    const std::list<JUMP_RANGE>& GetRangeData() { return m_lData; };
+
+    float GetBestBottomOffset() { return m_fBestBottomOffset; };
+
 private:
 
     void _PushData();
@@ -36,7 +40,7 @@ private:
 
     bool m_bDataValid;
 
-    float m_fAverageRange;
+    float m_fAverageRange, m_fBestBottomOffset;
     size_t m_iTotalDataCount;
 
     std::vector<float> m_lBirdHeight;

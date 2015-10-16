@@ -6,6 +6,7 @@
 
 
 class CRecorder;
+class CJumpRangeModel;
 
 
 class COutputWindow
@@ -24,6 +25,8 @@ public:
         float fRemainCrashTime,
         double dHeight,
         bool bClick);
+
+    void DrawJumpRange(CJumpRangeModel* pModel);
 
     void Update();
 

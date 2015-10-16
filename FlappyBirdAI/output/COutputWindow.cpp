@@ -4,6 +4,7 @@
 #include "../observers/CGameStateObserver.h"
 #include "../fsm/base.h"
 #include "../recorder/CRecorder.h"
+#include "../model/CJumpRangeModel.h"
 
 
 INIT_SINGLEINSTANCE(COutputWindow);
@@ -29,6 +30,9 @@ bool COutputWindow::Init()
 
     cv::namedWindow(WINDOW_NAME_PARABOLA);
     TopMostWindow(WINDOW_NAME_PARABOLA);
+
+    cv::namedWindow(WINDOW_NAME_JUMPRANGE);
+    TopMostWindow(WINDOW_NAME_JUMPRANGE);
 
     m_dwTickCount = ::GetTickCount();
     return true;
@@ -70,9 +74,7 @@ void COutputWindow::DrawParabola(
 {
     if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
 
-    iOutputWindowWidth = iOutputWindowWidth < PARABOLA_GRAPH_W ? PARABOLA_GRAPH_W : iOutputWindowWidth;
-
-    m_matParabola = cv::Mat(PARABOLA_GRAPH_H, iOutputWindowWidth, CV_8UC3, cv::Scalar(0, 0, 0));
+    m_matParabola = cv::Mat(PARABOLA_GRAPH_H, PARABOLA_GRAPH_W, CV_8UC3, cv::Scalar(0, 0, 0));
     for (auto& point : points)
     {
         if (0 == point.type)
@@ -109,6 +111,41 @@ void COutputWindow::DrawParabola(
 
     // record parabola
     m_pRecorder->RecordParabola(m_matParabola);
+}
+
+
+void COutputWindow::DrawJumpRange(CJumpRangeModel* pModel)
+{
+    cv::Mat mat(JUMPRANGE_GRAPH_H, JUMPRANGE_GRAPH_W, CV_8UC1, cv::Scalar(0));
+
+    auto lData = pModel->GetRangeData();
+    int x = 0, iTop, iBottom;
+    for (auto & data : lData)
+    {
+        if (x >= JUMPRANGE_GRAPH_W-1) break;
+
+        iTop = (int)((1 - data.fTop/PIPE_VERTICAL_DISTANCE) * JUMPRANGE_GRAPH_H + 0.5f);
+        if (iTop > JUMPRANGE_GRAPH_H-1) iTop = JUMPRANGE_GRAPH_H-1;
+        if (iTop < 0) iTop = 0;
+
+        iBottom = (int)((1 - data.fBottom/PIPE_VERTICAL_DISTANCE) * JUMPRANGE_GRAPH_H + 0.5f);
+        if (iBottom > JUMPRANGE_GRAPH_H-1) iBottom = JUMPRANGE_GRAPH_H-1;
+        if (iBottom < 0) iBottom = 0;
+
+        cv::line(mat, cv::Point(x, iBottom), cv::Point(x, iTop), cv::Scalar(127));
+
+        x++;
+    }
+
+    int fBestBottomOffset = (int)((1 - pModel->GetBestBottomOffset()/PIPE_VERTICAL_DISTANCE) * JUMPRANGE_GRAPH_H + 0.5f);
+    cv::line(mat, cv::Point(0, fBestBottomOffset), cv::Point(JUMPRANGE_GRAPH_W-1, fBestBottomOffset), cv::Scalar(255));
+
+    CVDrawText(mat, "Best Bottom Offset:", 15);
+    std::stringstream ss;
+    ss << pModel->GetBestBottomOffset();
+    CVDrawText(mat, ss.str(), 35);
+
+    cv::imshow(WINDOW_NAME_JUMPRANGE, mat);
 }
 
 

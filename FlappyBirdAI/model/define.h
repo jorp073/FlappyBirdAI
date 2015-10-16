@@ -34,12 +34,16 @@ struct PARABOLA_POINT
 #define BIRD_CONTROU_AREA_OFFSET    50
 
 
-#define PARABOLA_GRAPH_W        300
-#define PARABOLA_GRAPH_H        200
+#define PARABOLA_GRAPH_W        200
+#define PARABOLA_GRAPH_H        150
+
+#define JUMPRANGE_GRAPH_W       160
+#define JUMPRANGE_GRAPH_H       100
 
 
 #define WINDOW_NAME_CANVAS      "Canvas"
 #define WINDOW_NAME_PARABOLA    "Parabola"
+#define WINDOW_NAME_JUMPRANGE   "Jump Range"
 
 #define DEFAULT_PIPE_HEIGHT     0.5f
 
