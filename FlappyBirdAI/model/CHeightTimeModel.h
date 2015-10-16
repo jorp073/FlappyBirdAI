@@ -7,13 +7,13 @@ class CHeightTimeModel
 public:
     CHeightTimeModel();
 
-    void Append(float fBirdHeightOnGround, float fPipeHeight, float dt);
+    void Append(float fBirdHeightOnGround, float fPipeHeight, double dTickcount);
 
     void ResetData();
 
     const std::vector<float>& GetBirdHeightData() { return m_lBirdHeightOnPipe; };
 
-    const std::vector<float>& GetTimeData() { return m_lTime; };
+    const std::vector<double>& GetTimeData() { return m_lTime; };
 
     double GetTimeSinceFirstData();
 
@@ -25,9 +25,8 @@ private:
 
     std::vector<float> m_lBirdHeightOnGround;
     std::vector<float> m_lBirdHeightOnPipe;
-    std::vector<float> m_lTime;
+    std::vector<double> m_lTime;
 
-    float m_fCurTime;
     float m_fPipeHeight;
     double m_dFirstDataTickCount;
 };

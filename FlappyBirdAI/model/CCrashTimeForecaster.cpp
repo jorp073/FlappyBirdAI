@@ -130,7 +130,7 @@ void CCrashTimeForecaster::Update()
                 double t = (-b - sqrt(delta)) /2/a;
 
                 double remaintime1 = t - timedata.back();
-                double remaintime2 = t - timedata.back() - (m_pModel->GetTimeSinceFirstData() - timedata.back()+timedata[0]);
+                double remaintime2 = t - m_pModel->GetTimeSinceFirstData() - timedata[0];
 
                 DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
                 DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
@@ -144,7 +144,7 @@ void CCrashTimeForecaster::Update()
         m_iRemainCrashTime = 9999;
     }
 
-    m_bIsNeedJumpNow = m_iRemainCrashTime <= 36;
+    m_bIsNeedJumpNow = m_iRemainCrashTime <= 13;
 }
 
 

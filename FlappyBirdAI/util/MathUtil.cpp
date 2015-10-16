@@ -3,7 +3,7 @@
 #include <math.h>
 
 void ParabolaFit(
-    const std::vector<float>& x,
+    const std::vector<double>& x,
     const std::vector<float>& y,
     /*OUT*/ double& a,
     /*OUT*/ double& b,

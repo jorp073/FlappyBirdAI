@@ -28,13 +28,13 @@ CBirdHeightObserver::~CBirdHeightObserver()
 }
 
 
-bool CBirdHeightObserver::Update(float dt)
+bool CBirdHeightObserver::Update(double dTickCount)
 {
     auto fBirdHeight = CObjectObserver::GetInstance()->GetBirdHeight();
     auto fPipeHeight = CObjectObserver::GetInstance()->GetPipeHeight();
     DLOG(INFO) << "bird height: " << fBirdHeight << ", pipe height: " << fPipeHeight;
 
-    m_pHeightData->Append(fBirdHeight, fPipeHeight, dt);
+    m_pHeightData->Append(fBirdHeight, fPipeHeight, dTickCount);
     COutputWindow::GetInstance()->SetPipeHeight(fPipeHeight);
 
     ///

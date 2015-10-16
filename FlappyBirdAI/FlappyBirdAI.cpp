@@ -27,14 +27,14 @@ int _tmain(int argc, _TCHAR* argv[])
 
     DLOG(INFO) << "start main loop";
 
-    auto llTime = GetPreciseTickCount();
+    auto dTime = GetPreciseTickCount();
 
     while (true)
     {
         /// get delta time
-        auto llTickCount = GetPreciseTickCount();
-        float dt = (float)(llTickCount - llTime);
-        llTime = llTickCount;
+        auto dTickCount = GetPreciseTickCount();
+        double dt = dTickCount - dTime;
+        dTime = dTickCount;
 
         /// parse key press
         auto key = cv::waitKey(1);
@@ -72,7 +72,7 @@ int _tmain(int argc, _TCHAR* argv[])
                 {
                     if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
                     {
-                        CBirdHeightObserver::GetInstance()->Update(dt);
+                        CBirdHeightObserver::GetInstance()->Update(dTickCount);
                     }
                 }
             }

@@ -4,29 +4,29 @@
 
 
 CHeightTimeModel::CHeightTimeModel()
-    : m_fCurTime(0)
-    , m_fPipeHeight(0)
+    : m_fPipeHeight(0)
     , m_dFirstDataTickCount(0)
 {
 }
 
 
-void CHeightTimeModel::Append(float fBirdHeightOnGround, float fPipeHeight, float dt)
+void CHeightTimeModel::Append(float fBirdHeightOnGround, float fPipeHeight, double dTickcount)
 {
     if (0 == m_lTime.size())
     {
-        m_dFirstDataTickCount = GetPreciseTickCount();
+        m_dFirstDataTickCount = dTickcount;
     }
 
-    DLOG(INFO) << "ai CHeightTimeModel::Append " << fBirdHeightOnGround << "," << fPipeHeight << "," << dt;
+    double dCurTime = dTickcount - m_dFirstDataTickCount;
 
-    if (fabs(fPipeHeight - m_fPipeHeight) > 0.0001f)
+    DLOG(INFO) << "ai CHeightTimeModel::Append " << fBirdHeightOnGround << "," << fPipeHeight << "," << dCurTime;
+
+    if (fabs(fPipeHeight - m_fPipeHeight) > 0.00001f)
     {
         OnPipeHeightChange(fPipeHeight);
     }
 
-    m_fCurTime += dt;
-    m_lTime.push_back(m_fCurTime);
+    m_lTime.push_back(dCurTime);
 
     m_lBirdHeightOnGround.push_back(fBirdHeightOnGround);
     PushBirdHeightOnPipe(fBirdHeightOnGround - m_fPipeHeight);
@@ -38,7 +38,6 @@ void CHeightTimeModel::ResetData()
     m_lBirdHeightOnGround.clear();
     m_lBirdHeightOnPipe.clear();
     m_lTime.clear();
-    m_fCurTime = 0;
 }
 
 

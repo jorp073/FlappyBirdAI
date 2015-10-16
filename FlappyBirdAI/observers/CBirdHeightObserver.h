@@ -11,7 +11,7 @@ class CBirdHeightObserver
 {
 public:
     bool Init();
-    bool Update(float dt);
+    bool Update(double dTickCount);
 
     void ResetData();
 
