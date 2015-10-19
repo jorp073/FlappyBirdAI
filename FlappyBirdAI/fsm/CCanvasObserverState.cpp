@@ -84,6 +84,14 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
         return false;
     }
 
+    // fix crash when click OK on game over state
+    // game over frame may change color in border color range
+    // so only find canvas in specific area
+    if (fabsf(202929 - fMaxArea) > 1e-5)
+    {
+        return false;
+    }
+
     /// ¾ØÐÎ±ß½ç¿ò
     auto boundRect = cv::boundingRect(cv::Mat(contours[iMaxAreaID]));
     rect = boundRect;
