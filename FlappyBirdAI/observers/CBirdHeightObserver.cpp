@@ -64,7 +64,6 @@ bool CBirdHeightObserver::Update(double dTickCount)
 
     COutputWindow::GetInstance()->DrawParabola(
         pCrashTimeForecaster->GetParabolaDots(),
-        pCrashTimeForecaster->GetOutputWindowWidth(),
         pCrashTimeForecaster->GetRemainCrashTime(),
         dHeight,
         pCrashTimeForecaster->IsNeedJumpNow());

@@ -11,8 +11,7 @@ DEFINE_COUNTER(CCrashTimeForecaster_UPDATE);
 
 
 CCrashTimeForecaster::CCrashTimeForecaster()
-    : m_iOutputWindowWidth(PARABOLA_GRAPH_W)
-    , m_bIsDroppingDown(false)
+    : m_bIsDroppingDown(false)
     , m_fBestJumpOffsetY(0)
     , m_pModel(NULL)
 {
@@ -104,7 +103,7 @@ void CCrashTimeForecaster::Update()
 
     DLOG(INFO) << "ai a:" << a << " b:" << b << " c:" << c;
 
-    GenParabolaDots(PARABOLA_GRAPH_H, a, b, c, m_iOutputWindowWidth);
+    GenParabolaDots(PARABOLA_GRAPH_H, PARABOLA_GRAPH_W, a, b, c);
 
     if (m_bIsDroppingDown)
     {
@@ -155,7 +154,7 @@ void CCrashTimeForecaster::SetBestJumpOffsetY(float fOffsetY)
 }
 
 
-void CCrashTimeForecaster::GenParabolaDots(int h, double a, double b, double c, /*OUT*/ int& w)
+void CCrashTimeForecaster::GenParabolaDots(int h, int w, double a, double b, double c)
 {
     m_vParabolaDots.clear();
 

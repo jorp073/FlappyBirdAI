@@ -21,7 +21,6 @@ public:
 
     void DrawParabola(
         std::vector<PARABOLA_POINT>& points,
-        int iOutputWindowWidth,
         float fRemainCrashTime,
         double dHeight,
         bool bClick);

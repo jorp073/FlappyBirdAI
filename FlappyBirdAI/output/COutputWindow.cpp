@@ -67,7 +67,6 @@ void COutputWindow::SetPipeRects(const std::vector<cv::Rect>& rects)
 
 void COutputWindow::DrawParabola(
     std::vector<PARABOLA_POINT>& points,
-    int iOutputWindowWidth,
     float fRemainCrashTime,
     double dHeight,
     bool bClick)

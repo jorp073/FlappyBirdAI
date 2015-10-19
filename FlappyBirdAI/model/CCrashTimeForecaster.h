@@ -26,8 +26,6 @@ public:
     // 获取抛物线点集
     std::vector<PARABOLA_POINT>& GetParabolaDots() { return m_vParabolaDots; };
 
-    int GetOutputWindowWidth() { return m_iOutputWindowWidth; };
-
     void ResetData();
 
     void SetBestJumpOffsetY(float fOffsetY);
@@ -38,13 +36,12 @@ private:
 
     // h: output window height
     // w: output window width
-    void GenParabolaDots(int h, double a, double b, double c, /*OUT*/ int& w);
+    void GenParabolaDots(int h, int w, double a, double b, double c);
 
     CHeightTimeModel* m_pModel;
     std::vector<PARABOLA_POINT> m_vParabolaDots;
-    int m_iOutputWindowWidth;
-    bool m_bIsNeedJumpNow;
     float m_iRemainCrashTime;
+    bool m_bIsNeedJumpNow;
     double m_a, m_b, m_c;
     bool m_bIsDroppingDown;
 
