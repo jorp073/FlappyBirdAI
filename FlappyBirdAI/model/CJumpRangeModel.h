@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <vector>
+#include <functional>
 
 
 struct JUMP_RANGE
@@ -11,6 +12,9 @@ struct JUMP_RANGE
 };
 
 
+typedef std::function<void(float)> PUSHDATA_CALLBACK_FUNC;
+
+
 class CJumpRangeModel
 {
 public:
@@ -18,7 +22,7 @@ public:
 
     void OnBirdHeightChanged(float fBirdHeight);
 
-    void OnClick(float fNewPipeHeight);
+    void TryPushData(float fNewPipeHeight);
 
     void ResetData();
 
@@ -26,9 +30,11 @@ public:
 
     float GetBestBottomOffset() { return m_fBestBottomOffset; };
 
+    void SetPushDataCallback(PUSHDATA_CALLBACK_FUNC func)  { m_fnPushDataCallback = func; };
+
 private:
 
-    void _PushData();
+    void _PushData(const JUMP_RANGE& data);
 
     bool _IsDataValid();
 
@@ -46,4 +52,6 @@ private:
     std::vector<float> m_lBirdHeight;
 
     std::list<JUMP_RANGE> m_lData;
+
+    PUSHDATA_CALLBACK_FUNC m_fnPushDataCallback;
 };

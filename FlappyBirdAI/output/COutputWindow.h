@@ -7,6 +7,7 @@
 
 class CRecorder;
 class CJumpRangeModel;
+class CClickDelayModel;
 
 
 class COutputWindow
@@ -24,6 +25,8 @@ public:
         float fRemainCrashTime,
         double dHeight,
         bool bClick);
+
+    void DrawClickDelay(CClickDelayModel* pModel);
 
     void DrawJumpRange(CJumpRangeModel* pModel);
 

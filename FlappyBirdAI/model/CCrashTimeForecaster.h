@@ -15,11 +15,11 @@ class CCrashTimeForecaster
 public:
     void SetModel(CHeightTimeModel* pModel);
 
-    void Update();
+    void Update(float fDelayTime);
 
     bool IsNeedJumpNow() { return m_bIsNeedJumpNow; };
 
-    float GetRemainCrashTime() { return m_iRemainCrashTime; };
+    float GetRemainCrashTime() { return m_fRemainCrashTime; };
 
     void GetABC(double& a, double& b, double& c);
 
@@ -40,7 +40,7 @@ private:
 
     CHeightTimeModel* m_pModel;
     std::vector<PARABOLA_POINT> m_vParabolaDots;
-    float m_iRemainCrashTime;
+    float m_fRemainCrashTime;
     bool m_bIsNeedJumpNow;
     double m_a, m_b, m_c;
     bool m_bIsDroppingDown;

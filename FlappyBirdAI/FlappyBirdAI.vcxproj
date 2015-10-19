@@ -85,6 +85,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="model\CClickDelayModel.h" />
     <ClInclude Include="model\CCrashTimeForecaster.h" />
     <ClInclude Include="model\CHeightTimeModel.h" />
     <ClInclude Include="model\CJumpRangeModel.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="util\SingleInstance.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="model\CClickDelayModel.cpp" />
     <ClCompile Include="model\CCrashTimeForecaster.cpp" />
     <ClCompile Include="model\CHeightTimeModel.cpp" />
     <ClCompile Include="model\CJumpRangeModel.cpp" />

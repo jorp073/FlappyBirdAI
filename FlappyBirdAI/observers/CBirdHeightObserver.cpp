@@ -7,6 +7,7 @@
 #include "../model/CCrashTimeForecaster.h"
 #include "../recorder/CRecorder.h"
 #include "../model/CJumpRangeModel.h"
+#include "../model/CClickDelayModel.h"
 
 
 INIT_SINGLEINSTANCE(CBirdHeightObserver);
@@ -16,8 +17,16 @@ CBirdHeightObserver::CBirdHeightObserver()
     : m_pHeightData(new CHeightTimeModel())
     , m_pJumpRangeData(new CJumpRangeModel())
     , m_pMouseClicker(new CMouseClicker())
+    , m_pClickDelay(new CClickDelayModel())
 {
     CCrashTimeForecaster::GetInstance()->SetModel(m_pHeightData);
+
+    auto pushdata_callback = [=](float fBottomOffset)
+    {
+        m_pClickDelay->OnGetBottomData(fBottomOffset);
+    };
+
+    m_pJumpRangeData->SetPushDataCallback(pushdata_callback);
 }
 
 
@@ -34,20 +43,23 @@ bool CBirdHeightObserver::Update(double dTickCount)
     auto fPipeHeight = CObjectObserver::GetInstance()->GetPipeHeight();
     DLOG(INFO) << "bird height: " << fBirdHeight << ", pipe height: " << fPipeHeight;
 
+    auto pOutputWindow = COutputWindow::GetInstance();
+
     m_pHeightData->Append(fBirdHeight, fPipeHeight, dTickCount);
-    COutputWindow::GetInstance()->SetPipeHeight(fPipeHeight);
+    pOutputWindow->SetPipeHeight(fPipeHeight);
 
     ///
     m_pJumpRangeData->OnBirdHeightChanged(fBirdHeight);
 
     ///
     auto pCrashTimeForecaster = CCrashTimeForecaster::GetInstance();
-    pCrashTimeForecaster->Update();
+    pCrashTimeForecaster->Update(m_pClickDelay->GetClickDelay());
     bool bNeedJumpNow = pCrashTimeForecaster->IsNeedJumpNow();
     if (bNeedJumpNow)
     {
         m_pMouseClicker->TryClick();
-        m_pJumpRangeData->OnClick(fPipeHeight);
+        m_pJumpRangeData->TryPushData(fPipeHeight);
+        m_pClickDelay->OnClick(pCrashTimeForecaster->GetRemainCrashTime());
     }
 
     double dHeight = 0;
@@ -62,13 +74,14 @@ bool CBirdHeightObserver::Update(double dTickCount)
         CRecorder::GetInstance()->RecordData(a, b, c, dHeight);
     }
 
-    COutputWindow::GetInstance()->DrawParabola(
+    pOutputWindow->DrawParabola(
         pCrashTimeForecaster->GetParabolaDots(),
         pCrashTimeForecaster->GetRemainCrashTime(),
         dHeight,
         pCrashTimeForecaster->IsNeedJumpNow());
 
-    COutputWindow::GetInstance()->DrawJumpRange(m_pJumpRangeData);
+    pOutputWindow->DrawJumpRange(m_pJumpRangeData);
+    pOutputWindow->DrawClickDelay(m_pClickDelay);
 
     if (bNeedJumpNow)
     {
@@ -83,4 +96,5 @@ bool CBirdHeightObserver::Update(double dTickCount)
 void CBirdHeightObserver::ResetData()
 {
     m_pHeightData->ResetData();
+    m_pClickDelay->ResetData();
 }

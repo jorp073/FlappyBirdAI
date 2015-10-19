@@ -49,30 +49,37 @@ void CJumpRangeModel::OnBirdHeightChanged(float fBirdHeight)
 }
 
 
-void CJumpRangeModel::OnClick(float fNewPipeHeight)
+void CJumpRangeModel::TryPushData(float fNewPipeHeight)
 {
-    if (m_bDataValid)  _PushData();
+    if (m_bDataValid)
+    {
+        JUMP_RANGE data;
+        data.fBottom = m_fBottom - m_fPipeHeight;
+        data.fTop = m_fTop - m_fPipeHeight;
+        data.fRange = data.fTop - data.fBottom;
+
+        _PushData(data);
+    }
 
     ResetData();
     m_fPipeHeight = fNewPipeHeight;
 }
 
 
-void CJumpRangeModel::_PushData()
+void CJumpRangeModel::_PushData(const JUMP_RANGE& data)
 {
-    JUMP_RANGE data;
-    data.fBottom = m_fBottom - m_fPipeHeight;
-    data.fTop = m_fTop - m_fPipeHeight;
-    data.fRange = data.fTop - data.fBottom;
-
     m_lData.push_back(data);
 
     if (m_lData.size() > MAX_TOPBOTTOM_RECORD_COUNT) m_lData.pop_front();
 
     auto count = m_iTotalDataCount + 1;
-    m_fAverageRange = (float)(m_iTotalDataCount) / count * m_fAverageRange + data.fRange / count;
+    m_fAverageRange = (float)m_iTotalDataCount / count * m_fAverageRange + data.fRange / count;
     m_iTotalDataCount = count;
 
+    /// record last click caused how much bottom height offset
+    m_fnPushDataCallback(data.fBottom - m_fBestBottomOffset);
+
+    /// calculate new best bottom offset
     m_fBestBottomOffset = (PIPE_VERTICAL_DISTANCE - m_fAverageRange)/2;
     CCrashTimeForecaster::GetInstance()->SetBestJumpOffsetY(m_fBestBottomOffset);
 

@@ -96,6 +96,9 @@
     <ClInclude Include="model\CJumpRangeModel.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
+    <ClInclude Include="model\CClickDelayModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -147,6 +150,9 @@
       <Filter>源文件\recorder</Filter>
     </ClCompile>
     <ClCompile Include="model\CJumpRangeModel.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\CClickDelayModel.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
   </ItemGroup>

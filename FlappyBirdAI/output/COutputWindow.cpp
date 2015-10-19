@@ -5,6 +5,7 @@
 #include "../fsm/base.h"
 #include "../recorder/CRecorder.h"
 #include "../model/CJumpRangeModel.h"
+#include "../model/CClickDelayModel.h"
 
 
 INIT_SINGLEINSTANCE(COutputWindow);
@@ -33,6 +34,9 @@ bool COutputWindow::Init()
 
     cv::namedWindow(WINDOW_NAME_JUMPRANGE);
     TopMostWindow(WINDOW_NAME_JUMPRANGE);
+
+    cv::namedWindow(WINDOW_NAME_CLICKDELAY);
+    TopMostWindow(WINDOW_NAME_CLICKDELAY);
 
     m_dwTickCount = ::GetTickCount();
     return true;
@@ -145,6 +149,83 @@ void COutputWindow::DrawJumpRange(CJumpRangeModel* pModel)
     CVDrawText(mat, ss.str(), 35);
 
     cv::imshow(WINDOW_NAME_JUMPRANGE, mat);
+}
+
+
+void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
+{
+    auto lRemainTime = pModel->GetRemainCrashTimeList();
+    auto lBottomOffset = pModel->GetBottomOffsetList();
+
+#define CLICKDELAY_WINDOW_W 200
+#define CLICKDELAY_WINDOW_H 200
+#define BASEX (CLICKDELAY_WINDOW_W/4)
+#define BASEY (CLICKDELAY_WINDOW_H*3/4)
+#define XRATIO 2
+#define YRATIO 800
+
+    cv::Mat mat(CLICKDELAY_WINDOW_H, CLICKDELAY_WINDOW_W, CV_8UC1, cv::Scalar(0));
+    cv::line(mat, cv::Point(0, BASEY), cv::Point(CLICKDELAY_WINDOW_W, BASEY), cv::Scalar(255));
+    cv::line(mat, cv::Point(BASEX, 0), cv::Point(BASEX, CLICKDELAY_WINDOW_H), cv::Scalar(255));
+
+    const auto PX = [](double x)
+    {
+        return (int)(x*XRATIO + BASEX + 0.5f);
+    };
+
+    const auto PY = [](float y)
+    {
+        return (int)(y*YRATIO + BASEY + 0.5f);
+    };
+
+    int x, y;
+    const size_t endcount = lRemainTime.size();
+    for (size_t count = 0; count < endcount; count++)
+    {
+        x = PX(lRemainTime[count]);
+        y = PY(lBottomOffset[count]);
+
+        if (x > CLICKDELAY_WINDOW_W-1) x = CLICKDELAY_WINDOW_W-1;
+        else if (x < 0) x = 0;
+
+        if (y > CLICKDELAY_WINDOW_H-1) y = CLICKDELAY_WINDOW_H-1;
+        else if (y < 0) y = 0;
+
+        mat.at<unsigned char>(y, x) = 255;
+
+        count++;
+        if (count == endcount)
+        {
+            // draw circle for the latest data
+            cv::circle(mat, cv::Point(x, y), 5, cv::Scalar(127), 1);
+        }
+    }
+
+    // draw parabola
+    double k, b;
+    pModel->GetKB(k, b);
+
+    auto x1 = -CLICKDELAY_WINDOW_W;
+    auto y1 = (float)(k*x1+b);
+    auto x2 = CLICKDELAY_WINDOW_W;
+    auto y2 = (float)(k*x2+b);
+
+    cv::line(mat, cv::Point(PX(x1), PY(y1)), cv::Point(PX(x2), PY(y2)), cv::Scalar(255));
+
+    // draw text
+    std::stringstream ssDelay;
+    ssDelay << "Click Delay: " << pModel->GetClickDelay();
+    CVDrawText(mat, ssDelay.str(), 15);
+
+    auto bestdelay = pModel->GetBestDelayTime();
+    if (0 != bestdelay)
+    {
+        std::stringstream ssBest;
+        ssBest << "Best: " << bestdelay;
+        CVDrawText(mat, ssBest.str(), 35);
+    }
+
+    cv::imshow(WINDOW_NAME_CLICKDELAY, mat);
 }
 
 

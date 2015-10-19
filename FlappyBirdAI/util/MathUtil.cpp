@@ -46,3 +46,22 @@ void ParabolaFit(
     a = e1-d1*c;
     b = e2-d2*c;
 }
+
+
+void StraightLineFit(
+    const std::vector<double>& x,
+    const std::vector<float>& y,
+    /*OUT*/ double& k,
+    /*OUT*/ double& b)
+{
+    double t1=0, t2=0, t3=0, t4=0;
+    for(size_t i=0; i<x.size(); ++i)
+    {
+        t1 += x[i]*x[i];
+        t2 += x[i];
+        t3 += x[i]*y[i];
+        t4 += y[i];
+    }
+    k = (t3*x.size() - t2*t4) / (t1*x.size() - t2*t2);
+    b = (t1*t4 - t2*t3) / (t1*x.size() - t2*t2); 
+}

@@ -5,6 +5,7 @@
 class CHeightTimeModel;
 class CMouseClicker;
 class CJumpRangeModel;
+class CClickDelayModel;
 
 
 class CBirdHeightObserver
@@ -20,6 +21,7 @@ private:
     CHeightTimeModel*       m_pHeightData;
     CJumpRangeModel*        m_pJumpRangeData;
     CMouseClicker*          m_pMouseClicker;
+    CClickDelayModel*       m_pClickDelay;
 
 
     DEFINE_SINGLEINSTANCE(CBirdHeightObserver);

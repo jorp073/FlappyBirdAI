@@ -53,7 +53,7 @@ void CCrashTimeForecaster::GetABC(double& a, double& b, double& c)
 }
 
 
-void CCrashTimeForecaster::Update()
+void CCrashTimeForecaster::Update(float fDelayTime)
 {
     COUNTER_HELPER(CCrashTimeForecaster_UPDATE);
     auto heightdata = m_pModel->GetBirdHeightData();
@@ -69,7 +69,7 @@ void CCrashTimeForecaster::Update()
     {
         DLOG(INFO) << "ai need emergency jump";
         m_bIsNeedJumpNow = true;
-        m_iRemainCrashTime = 0;
+        m_fRemainCrashTime = 0;
         return;
     }
 
@@ -87,7 +87,7 @@ void CCrashTimeForecaster::Update()
     {
         DLOG(INFO) << "ai dots count: " << heightdata.size() << " < " << MIN_HEIGHT_DATA_TO_JUMP;
         m_bIsNeedJumpNow = false;
-        m_iRemainCrashTime = 0;
+        m_fRemainCrashTime = 0;
         return;
     }
 
@@ -110,7 +110,7 @@ void CCrashTimeForecaster::Update()
         if (a>=0)
         {
             DLOG(INFO) << "ai a>=0 a=" << a;
-            m_iRemainCrashTime = 9999;
+            m_fRemainCrashTime = 9999;
         }
         else
         {
@@ -122,7 +122,7 @@ void CCrashTimeForecaster::Update()
             {
                 DLOG(INFO) << "ai delta<=0 delta=" << delta;
                 // when bird is near ground, and pipe appears, bird is under pipe
-                m_iRemainCrashTime = 0;
+                m_fRemainCrashTime = 0;
             }
             else
             {
@@ -134,16 +134,16 @@ void CCrashTimeForecaster::Update()
                 DLOG(INFO) << "ai remaintime1:" << remaintime1 << " remaintime2:" << remaintime2;
                 DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
 
-                m_iRemainCrashTime = (float)remaintime2;
+                m_fRemainCrashTime = (float)remaintime2;
             }
         }
     }
     else
     {
-        m_iRemainCrashTime = 9999;
+        m_fRemainCrashTime = 9999;
     }
 
-    m_bIsNeedJumpNow = m_iRemainCrashTime <= 13;
+    m_bIsNeedJumpNow = m_fRemainCrashTime <= fDelayTime;
 }
 
 
