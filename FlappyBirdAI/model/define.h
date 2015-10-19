@@ -17,7 +17,8 @@ struct PARABOLA_POINT
 };
 
 
-#define CANVAS_BORDER_COLOR     101
+#define CANVAS_BORDER_COLOR_BEGIN     98
+#define CANVAS_BORDER_COLOR_END     102
 #define CANVAS_BORDER_MIN_AREA  30000
 
 // size that canvas finally scale to

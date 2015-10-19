@@ -67,6 +67,12 @@ void CCanvasObserver::SetCanvasMat(cv::Mat graymat)
 }
 
 
+bool CCanvasObserver::IsBorderColor(uchar color)
+{
+    return color >= CANVAS_BORDER_COLOR_BEGIN && color <= CANVAS_BORDER_COLOR_END;
+}
+
+
 cv::Rect CCanvasObserver::_GetRectWithoutBorder(cv::Mat graymat)
 {
     assert(graymat.channels() == 1);
@@ -75,7 +81,7 @@ cv::Rect CCanvasObserver::_GetRectWithoutBorder(cv::Mat graymat)
 
     // top
     int top = 0;
-    while (CANVAS_BORDER_COLOR == graymat.at<uchar>(top, cx)
+    while (IsBorderColor(graymat.at<uchar>(top, cx))
         && top < cy)
     {
         top++;
@@ -83,7 +89,7 @@ cv::Rect CCanvasObserver::_GetRectWithoutBorder(cv::Mat graymat)
 
     // bottom
     int bottom = graymat.rows-1;
-    while (CANVAS_BORDER_COLOR == graymat.at<uchar>(bottom, cx)
+    while (IsBorderColor(graymat.at<uchar>(bottom, cx))
         && bottom > 0)
     {
         bottom--;
@@ -91,7 +97,7 @@ cv::Rect CCanvasObserver::_GetRectWithoutBorder(cv::Mat graymat)
 
     // left
     int left = 0;
-    while (CANVAS_BORDER_COLOR == graymat.at<uchar>(cy, left)
+    while (IsBorderColor(graymat.at<uchar>(cy, left))
         && left < cx) 
     {
         left++;
@@ -99,7 +105,7 @@ cv::Rect CCanvasObserver::_GetRectWithoutBorder(cv::Mat graymat)
 
     // right
     int right = graymat.cols-1;
-    while (CANVAS_BORDER_COLOR == graymat.at<uchar>(cy, right)
+    while (IsBorderColor(graymat.at<uchar>(cy, right))
         && right > 0)
     {
         right--;

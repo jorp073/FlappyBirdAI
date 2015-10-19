@@ -36,11 +36,18 @@ bool CSearch::Update(CCanvasObserver* observer)
 
 cv::Mat CSearch::_FilterCanvasBorder(cv::Mat mat)
 {
-    cv::Mat table(1, 256, CV_8U);
-    uchar* p = table.data;
-    for( int i = 0; i <= 255; ++i)
-        p[i] = 0;
-    p[CANVAS_BORDER_COLOR] = 255;
+    static cv::Mat table(1, 256, CV_8U);
+    static bool bInitialized = false;
+
+    if (!bInitialized)
+    {
+        bInitialized = true;
+
+        uchar* p = table.data;
+        for (int i = 0; i < CANVAS_BORDER_COLOR_BEGIN; ++i) p[i] = 0;
+        for (int i = CANVAS_BORDER_COLOR_BEGIN; i <= CANVAS_BORDER_COLOR_END; ++i) p[i] = 255;
+        for (int i = CANVAS_BORDER_COLOR_END+1; i <= 255; ++i) p[i] = 0;
+    }
 
     auto ret = mat.clone();
     LUT(mat, table, ret);
@@ -119,10 +126,10 @@ bool CFound::isCanvasPosMoved()
 {
     auto mat = CScreenCapturer::GetInstance()->GetGrayMat();
 
-    bool ret = CANVAS_BORDER_COLOR != mat.at<uchar>(0,0)
-        || CANVAS_BORDER_COLOR != mat.at<uchar>(mat.rows-1, 0)
-        || CANVAS_BORDER_COLOR != mat.at<uchar>(0, mat.cols-1)
-        || CANVAS_BORDER_COLOR != mat.at<uchar>(mat.rows-1, mat.cols-1);
+    bool ret = !CCanvasObserver::IsBorderColor(mat.at<uchar>(0,0))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, 0))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(0, mat.cols-1))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, mat.cols-1));
 
     return ret;
 }

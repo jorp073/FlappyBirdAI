@@ -18,6 +18,7 @@ public:
 
     TStateMachine<CCanvasObserver>* StateMachine() { return m_pStateMachine; };
 
+    static bool IsBorderColor(uchar color);
 
 private:
     cv::Rect _GetRectWithoutBorder(cv::Mat graymat);
