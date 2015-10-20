@@ -12,7 +12,7 @@ using namespace GameState;
 
 DEFINE_COUNTER(CPlay_Update);
 
-const double CBase::MIN_MATCH_VALUE = 0.001;
+const double CBase::MIN_MATCH_VALUE = 0.04;
 
 /////////////////////// CBase
 
