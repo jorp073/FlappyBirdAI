@@ -156,4 +156,18 @@
       <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Res\gamestate_gameover.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Res\gamestate_getready.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Res\gamestate_title.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\Res\graybg.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
