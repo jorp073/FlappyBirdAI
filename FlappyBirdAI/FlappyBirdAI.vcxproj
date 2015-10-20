@@ -101,7 +101,7 @@
     <ClInclude Include="recorder\CRecorder.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="util\CMouseClicker.h" />
+    <ClInclude Include="util\CMouseController.h" />
     <ClInclude Include="util\CScreenCapturer.h" />
     <ClInclude Include="util\CPerformanceCounter.h" />
     <ClInclude Include="util\MathUtil.h" />
@@ -125,7 +125,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="util\CMouseClicker.cpp" />
+    <ClCompile Include="util\CMouseController.cpp" />
     <ClCompile Include="util\CScreenCapturer.cpp" />
     <ClCompile Include="util\CPerformanceCounter.cpp" />
     <ClCompile Include="util\MathUtil.cpp" />

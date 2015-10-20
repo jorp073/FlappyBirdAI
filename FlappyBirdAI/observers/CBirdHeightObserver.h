@@ -3,7 +3,6 @@
 #include "../util/SingleInstance.h"
 
 class CHeightTimeModel;
-class CMouseClicker;
 class CJumpRangeModel;
 class CClickDelayModel;
 
@@ -20,7 +19,6 @@ private:
 
     CHeightTimeModel*       m_pHeightData;
     CJumpRangeModel*        m_pJumpRangeData;
-    CMouseClicker*          m_pMouseClicker;
     CClickDelayModel*       m_pClickDelay;
 
 

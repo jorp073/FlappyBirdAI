@@ -9,9 +9,11 @@
 #include "observers/CObjectObserver.h"
 #include "observers/CBirdHeightObserver.h"
 #include "util/CPerformanceCounter.h"
+#include "util/CMouseController.h"
 #include "output/COutputWindow.h"
 #include "recorder/CRecorder.h"
 #include <direct.h>
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -70,9 +72,25 @@ int _tmain(int argc, _TCHAR* argv[])
             {
                 if (CGameStateObserver::GetInstance()->Update())
                 {
-                    if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
+                    auto state = CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
+                    if ("Play" == state)
                     {
                         CBirdHeightObserver::GetInstance()->Update(dTickCount);
+                    }
+                    else if ("Title" == state)
+                    {
+                        ::Sleep(200);
+                        CMouseController::GetInstance()->Click_LeftButton();
+                    }
+                    else if ("GetReady" == state)
+                    {
+                        ::Sleep(200);
+                        CMouseController::GetInstance()->ClickInCanvas();
+                    }
+                    else if ("GameOver" == state)
+                    {
+                        ::Sleep(300);
+                        CMouseController::GetInstance()->Click_LeftButton();
                     }
                 }
             }

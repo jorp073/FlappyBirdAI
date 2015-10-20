@@ -81,9 +81,6 @@
     <ClInclude Include="observers\CBirdHeightObserver.h">
       <Filter>源文件\observers</Filter>
     </ClInclude>
-    <ClInclude Include="util\CMouseClicker.h">
-      <Filter>源文件\util</Filter>
-    </ClInclude>
     <ClInclude Include="model\CCrashTimeForecaster.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
@@ -98,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="model\CClickDelayModel.h">
       <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="util\CMouseController.h">
+      <Filter>源文件\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +137,6 @@
     <ClCompile Include="observers\CBirdHeightObserver.cpp">
       <Filter>源文件\observers</Filter>
     </ClCompile>
-    <ClCompile Include="util\CMouseClicker.cpp">
-      <Filter>源文件\util</Filter>
-    </ClCompile>
     <ClCompile Include="model\CCrashTimeForecaster.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
@@ -154,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="model\CClickDelayModel.cpp">
       <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="util\CMouseController.cpp">
+      <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

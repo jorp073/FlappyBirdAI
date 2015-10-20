@@ -25,16 +25,8 @@ namespace CanvasObserverState
     class CFound : public TState<CCanvasObserver>
     {
     public:
-        CFound(cv::Rect rect)
-            : TState("Found")
-            , m_CanvasRect(rect)
-        {};
+        CFound() : TState("Found") {};
 
         virtual bool Update(CCanvasObserver* observer);
-
-    private:
-        bool isCanvasPosMoved();
-
-        cv::Rect m_CanvasRect;
     };
 };

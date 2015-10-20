@@ -27,8 +27,8 @@ bool CSearch::Update(CCanvasObserver* observer)
 
     auto GrayMat = cv::Mat(CScreenCapturer::GetInstance()->GetGrayMat(), rectCanvas);
     observer->SetCanvasMat(GrayMat);
-    observer->StateMachine()->ChangeState(
-        new CanvasObserverState::CFound(rectCanvas));
+    observer->SetCanvasRect(rectCanvas);
+    observer->StateMachine()->ChangeState(new CanvasObserverState::CFound());
 
     return true;
 }
@@ -65,16 +65,16 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
     /// 最大面积的矩形
     int iMaxAreaID = -1;
-    double fMaxArea = -1;
+    double dMaxArea = -1;
     for (size_t i = 0; i < contours.size(); i++)
     {
         auto area = fabs(contourArea(contours[i]));
         if (area < CANVAS_BORDER_MIN_AREA) continue;
         DLOG(INFO) << "canvas area: " << area;
 
-        if (area > fMaxArea)
+        if (area > dMaxArea)
         {
-            fMaxArea = area;
+            dMaxArea = area;
             iMaxAreaID = i;
         }
     }
@@ -87,7 +87,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
     // fix crash when click OK on game over state
     // game over frame may change color in border color range
     // so only find canvas in specific area
-    if (fabsf(202929 - fMaxArea) > 1e-5)
+    if (fabsf(202929 - (float)dMaxArea) > 1e-5)
     {
         return false;
     }
@@ -105,11 +105,12 @@ bool CFound::Update(CCanvasObserver* observer)
 {
     COUNTER_HELPER(CFound_Update);
 
+    auto rectCanvas = observer->GetCanvasRect();
     RECT rect = {
-        m_CanvasRect.tl().x,
-        m_CanvasRect.tl().y,
-        m_CanvasRect.br().x,
-        m_CanvasRect.br().y,
+        rectCanvas.tl().x,
+        rectCanvas.tl().y,
+        rectCanvas.br().x,
+        rectCanvas.br().y,
     };
 
     auto bCaptureRet = CScreenCapturer::GetInstance()->Capture(rect);
@@ -117,7 +118,7 @@ bool CFound::Update(CCanvasObserver* observer)
 
 
     /// if canvas pos is moved, then switch to Search state
-    bool bIsMoved = isCanvasPosMoved();
+    bool bIsMoved = observer->IsCanvasPosMoved(CScreenCapturer::GetInstance()->GetGrayMat());
     if (bIsMoved)
     {
         observer->StateMachine()->ChangeState(
@@ -130,14 +131,3 @@ bool CFound::Update(CCanvasObserver* observer)
 }
 
 
-bool CFound::isCanvasPosMoved()
-{
-    auto mat = CScreenCapturer::GetInstance()->GetGrayMat();
-
-    bool ret = !CCanvasObserver::IsBorderColor(mat.at<uchar>(0,0))
-        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, 0))
-        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(0, mat.cols-1))
-        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, mat.cols-1));
-
-    return ret;
-}

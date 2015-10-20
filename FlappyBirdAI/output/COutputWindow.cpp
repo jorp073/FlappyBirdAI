@@ -75,7 +75,7 @@ void COutputWindow::DrawParabola(
     double dHeight,
     bool bClick)
 {
-    if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
+    if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack")) return;
 
     m_matParabola = cv::Mat(PARABOLA_GRAPH_H, PARABOLA_GRAPH_W, CV_8UC3, cv::Scalar(0, 0, 0));
     for (auto& point : points)
@@ -231,7 +231,7 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
 
 void COutputWindow::Update()
 {
-    if ("PlayBack" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName()) return;
+    if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack")) return;
 
     auto mat = CCanvasObserver::GetInstance()->GetCanvasMat();
     if (NULL == mat.data) return;

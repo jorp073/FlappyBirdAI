@@ -18,7 +18,7 @@ CRecorder::CRecorder()
 
 bool CRecorder::IsRecordable()
 {
-    return "Play" == CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
+    return CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play");
 }
 
 

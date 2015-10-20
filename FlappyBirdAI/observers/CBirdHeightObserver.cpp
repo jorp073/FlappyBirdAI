@@ -3,7 +3,7 @@
 #include "CObjectObserver.h"
 #include "../output/COutputWindow.h"
 #include "../model/CHeightTimeModel.h"
-#include "../util/CMouseClicker.h"
+#include "../util/CMouseController.h"
 #include "../model/CCrashTimeForecaster.h"
 #include "../recorder/CRecorder.h"
 #include "../model/CJumpRangeModel.h"
@@ -16,7 +16,6 @@ INIT_SINGLEINSTANCE(CBirdHeightObserver);
 CBirdHeightObserver::CBirdHeightObserver()
     : m_pHeightData(new CHeightTimeModel())
     , m_pJumpRangeData(new CJumpRangeModel())
-    , m_pMouseClicker(new CMouseClicker())
     , m_pClickDelay(new CClickDelayModel())
 {
     CCrashTimeForecaster::GetInstance()->SetModel(m_pHeightData);
@@ -33,7 +32,8 @@ CBirdHeightObserver::CBirdHeightObserver()
 CBirdHeightObserver::~CBirdHeightObserver()
 {
     delete m_pHeightData;
-    delete m_pMouseClicker;
+    delete m_pJumpRangeData;
+    delete m_pClickDelay;
 }
 
 
@@ -57,7 +57,7 @@ bool CBirdHeightObserver::Update(double dTickCount)
     bool bNeedJumpNow = pCrashTimeForecaster->IsNeedJumpNow();
     if (bNeedJumpNow)
     {
-        m_pMouseClicker->TryClick();
+        CMouseController::GetInstance()->ClickInCanvas();
         m_pJumpRangeData->TryPushData(fPipeHeight);
         m_pClickDelay->OnClick(pCrashTimeForecaster->GetRemainCrashTime());
     }

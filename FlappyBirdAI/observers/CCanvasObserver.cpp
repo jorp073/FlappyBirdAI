@@ -4,6 +4,7 @@
 #include "../util/CPerformanceCounter.h"
 #include "../output/COutputWindow.h"
 
+
 DEFINE_COUNTER(CCanvasObserver_SetCanvasMat);
 
 INIT_SINGLEINSTANCE(CCanvasObserver);
@@ -70,6 +71,17 @@ void CCanvasObserver::SetCanvasMat(cv::Mat graymat)
 bool CCanvasObserver::IsBorderColor(uchar color)
 {
     return color >= CANVAS_BORDER_COLOR_BEGIN && color <= CANVAS_BORDER_COLOR_END;
+}
+
+
+bool CCanvasObserver::IsCanvasPosMoved(const cv::Mat& mat)
+{
+    bool ret = !CCanvasObserver::IsBorderColor(mat.at<uchar>(0,0))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, 0))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(0, mat.cols-1))
+        || !CCanvasObserver::IsBorderColor(mat.at<uchar>(mat.rows-1, mat.cols-1));
+
+    return ret;
 }
 
 
