@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "COutputWindow.h"
-#include "../observers/CCanvasObserver.h"
-#include "../observers/CGameStateObserver.h"
+#include "OutputWindow.h"
+#include "../observers/CanvasObserver.h"
+#include "../observers/GameStateObserver.h"
 #include "../fsm/base.h"
-#include "../recorder/CRecorder.h"
-#include "../model/CJumpRangeModel.h"
-#include "../model/CClickDelayModel.h"
+#include "../recorder/Recorder.h"
+#include "../model/JumpRangeModel.h"
+#include "../model/ClickDelayModel.h"
 
 
 INIT_SINGLEINSTANCE(COutputWindow);
@@ -262,11 +262,17 @@ void COutputWindow::Update()
         cv::rectangle(mat, rect.tl(), rect.br(), cGray, CV_FILLED, 8, 0);
     }
 
-    /// draw pipe height line
+    /// draw pipe height and right cornor
     int height = (int)((1-m_fPipeHeight) * CANVAS_NOGROUND_HEIGHT + 0.5f);
     height = height < 0 ? 0 : height;
     height = height > mat.rows-1 ? mat.rows-1 : height;
-    cv::line(mat, cv::Point(0, height), cv::Point(mat.cols-1, height), cWhite);
+
+    int right = (int)(m_fPipeRight * CANVAS_SCALETO_WIDTH + 0.5f);
+    height = height < 0 ? 0 : height;
+    height = height > mat.cols-1 ? mat.cols-1 : height;
+
+    cv::line(mat, cv::Point(0, height), cv::Point(right, height), cWhite);
+    cv::line(mat, cv::Point(right, mat.rows-1), cv::Point(right, height), cWhite);
 
     cv::imshow(WINDOW_NAME_CANVAS, mat);
     
@@ -279,7 +285,8 @@ void COutputWindow::Update()
     // clear data
     m_rectPipes.clear();
     m_rectBirds.clear();
-    m_fPipeHeight = 1;
+    m_fPipeHeight = 0;
+    m_fPipeRight = 1;
 }
 
 

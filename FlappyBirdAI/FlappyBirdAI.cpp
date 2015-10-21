@@ -2,16 +2,16 @@
 //
 
 #include "stdafx.h"
-#include "fsm/CGameState.h"
-#include "util/CScreenCapturer.h"
-#include "observers/CCanvasObserver.h"
-#include "observers/CGameStateObserver.h"
-#include "observers/CObjectObserver.h"
-#include "observers/CBirdHeightObserver.h"
-#include "util/CPerformanceCounter.h"
-#include "util/CMouseController.h"
-#include "output/COutputWindow.h"
-#include "recorder/CRecorder.h"
+#include "fsm/GameState.h"
+#include "util/ScreenCapturer.h"
+#include "observers/CanvasObserver.h"
+#include "observers/GameStateObserver.h"
+#include "observers/ObjectObserver.h"
+#include "observers/BirdHeightObserver.h"
+#include "util/PerformanceCounter.h"
+#include "util/MouseController.h"
+#include "output/OutputWindow.h"
+#include "recorder/Recorder.h"
 #include <direct.h>
 
 
@@ -66,11 +66,11 @@ int _tmain(int argc, _TCHAR* argv[])
         };
 
         /// observe
-        if (CCanvasObserver::GetInstance()->Update())
+        if (CCanvasObserver::GetInstance()->Update(dt))
         {
             if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
             {
-                if (CGameStateObserver::GetInstance()->Update())
+                if (CGameStateObserver::GetInstance()->Update(dt))
                 {
                     auto state = CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
                     if ("Play" == state)

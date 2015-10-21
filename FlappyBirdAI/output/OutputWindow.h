@@ -19,6 +19,7 @@ public:
     void SetBirdRects(const std::vector<cv::Rect>& rects);
     void SetPipeRects(const std::vector<cv::Rect>& rects);
     void SetPipeHeight(float height) { m_fPipeHeight = height; };
+    void SetPipeRight(float right) { m_fPipeRight = right; };
 
     void DrawParabola(
         std::vector<PARABOLA_POINT>& points,
@@ -46,7 +47,7 @@ private:
     int m_iFPS;
     std::string m_strFPSText;
     int m_dwTickCount;
-    float m_fPipeHeight;
+    float m_fPipeHeight, m_fPipeRight;
 
     cv::Mat m_matParabola;
 

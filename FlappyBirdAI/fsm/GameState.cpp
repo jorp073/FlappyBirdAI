@@ -1,11 +1,13 @@
 #include "stdafx.h"
-#include "CGameState.h"
-#include "../observers/CGameStateObserver.h"
-#include "../observers/CCanvasObserver.h"
-#include "../observers/CObjectObserver.h"
-#include "../observers/CBirdHeightObserver.h"
-#include "../util/CPerformanceCounter.h"
-#include "../recorder/CRecorder.h"
+#include "GameState.h"
+#include "../observers/GameStateObserver.h"
+#include "../observers/CanvasObserver.h"
+#include "../observers/ObjectObserver.h"
+#include "../observers/BirdHeightObserver.h"
+#include "../observers/BirdRectObserver.h"
+#include "../observers/PipeObserver.h"
+#include "../util/PerformanceCounter.h"
+#include "../recorder/Recorder.h"
 
 
 using namespace GameState;
@@ -92,7 +94,7 @@ double CBase::MatchGameOver(CGameStateObserver* observer)
 /////////////////////// CUnknown
 
 
-bool CUnknown::Update(CGameStateObserver* observer)
+bool CUnknown::Update(CGameStateObserver* observer, double dt)
 {
     typedef double (CBase::*MATCH_FUNC)(CGameStateObserver*);
     MATCH_FUNC matchfunc[] = {
@@ -133,13 +135,13 @@ bool CUnknown::Update(CGameStateObserver* observer)
     // change to play state
     observer->StateMachine()->ChangeState(new CPlay());
     
-    return observer->StateMachine()->Update();
+    return observer->StateMachine()->Update(dt);
 }
 
 
 //////////////////////// Title
 
-bool CTitle::Update(CGameStateObserver* observer)
+bool CTitle::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchTitle(observer);
     isMatchResultIncrease(observer, result);
@@ -149,7 +151,7 @@ bool CTitle::Update(CGameStateObserver* observer)
 
 //////////////////////// Get Ready
 
-bool CGetReady::Update(CGameStateObserver* observer)
+bool CGetReady::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchGetReady(observer);
     isMatchResultIncrease(observer, result);
@@ -161,7 +163,7 @@ void CGetReady::Exit(CGameStateObserver* observer)
 {
     // clear play back data
     CRecorder::GetInstance()->ResetData();
-    CObjectObserver::GetInstance()->ResetData();
+    CPipeObserver::GetInstance()->ResetData();
 }
 
 
@@ -173,7 +175,7 @@ void CGameOver::Enter(CGameStateObserver* observer)
 }
 
 
-bool CGameOver::Update(CGameStateObserver* observer)
+bool CGameOver::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchGameOver(observer);
     isMatchResultIncrease(observer, result);
@@ -183,7 +185,7 @@ bool CGameOver::Update(CGameStateObserver* observer)
 
 //////////////////////// Play
 
-bool CPlay::Update(CGameStateObserver* observer)
+bool CPlay::Update(CGameStateObserver* observer, double dt)
 {
     COUNTER_HELPER(CPlay_Update);
 
@@ -191,9 +193,14 @@ bool CPlay::Update(CGameStateObserver* observer)
     bool ret = CObjectObserver::GetInstance()->Update(canvasmat);
     if (!ret) return false;
 
-    auto count = CObjectObserver::GetInstance()->GetBirdRectsCount();
+    auto contours = CObjectObserver::GetInstance()->GetAllObjContours();
 
-    switch(count)
+    auto pBirdRectObserver = CBirdRectObserver::GetInstance();
+    pBirdRectObserver->Update(contours);
+
+    auto nBirdCount = pBirdRectObserver->GetBirdRectsCount();
+
+    switch(nBirdCount)
     {
     case 0:
         // not found any find
@@ -202,6 +209,7 @@ bool CPlay::Update(CGameStateObserver* observer)
         return false;
     case 1:
         // find singleton bird
+        CPipeObserver::GetInstance()->Update(contours, pBirdRectObserver->GetBirdLeft(), dt);
         break;
     default:
         // find more than one bird
@@ -220,7 +228,7 @@ bool CPlay::Update(CGameStateObserver* observer)
 
 //////////////////////// PlayBack
 
-bool CPlayBack::Update(CGameStateObserver* observer)
+bool CPlayBack::Update(CGameStateObserver* observer, double dt)
 {
     return true;
 }

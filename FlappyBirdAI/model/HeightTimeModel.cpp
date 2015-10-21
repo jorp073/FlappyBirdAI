@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CHeightTimeModel.h"
-#include "../util/CPerformanceCounter.h"
+#include "HeightTimeModel.h"
+#include "../util/PerformanceCounter.h"
 
 
 CHeightTimeModel::CHeightTimeModel()

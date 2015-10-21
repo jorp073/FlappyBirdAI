@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CClickDelayModel.h"
-#include "CCrashTimeForecaster.h"
+#include "ClickDelayModel.h"
+#include "CrashTimeForecaster.h"
 #include "../util/MathUtil.h"
 
 

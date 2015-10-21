@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include "opencv2/opencv.hpp"
+
 struct POS
 {
     float x;
@@ -13,8 +16,12 @@ struct PARABOLA_POINT
     int y;
 
     // type: 0-origin data, 1-fill in data
-    BYTE type;
+    unsigned char type;
 };
+
+
+typedef std::vector<cv::Point> CV_CONTOUR;
+typedef std::vector<CV_CONTOUR> CV_CONTOURS;
 
 
 #define CANVAS_BORDER_COLOR_BEGIN     98

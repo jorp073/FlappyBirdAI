@@ -15,11 +15,11 @@ class TState
 {
 public :
     TState(const std::string name) : m_Name(name) {};
-    virtual void Enter( entity_type *) {};
+    virtual void Enter(entity_type *) {};
 
-    virtual void Exit( entity_type *) {};
+    virtual void Exit(entity_type *) {};
 
-    virtual bool Update( entity_type * ) { return false; };
+    virtual bool Update(entity_type *, double) { return false; };
 
     const std::string& GetName() const { return m_Name; };
 
@@ -51,11 +51,11 @@ public :
 
 
     //call this to update the FSM
-    bool Update()
+    bool Update(double dt)
     {
         //same for the current state
         if ( m_pCurrentState )
-            return m_pCurrentState -> Update( m_pOwner );
+            return m_pCurrentState -> Update(m_pOwner, dt);
         else
             return false;
     }

@@ -99,49 +99,53 @@ copy $(SolutionDir)\Res $(SolutionDir)\Bin\$(ConfigurationName)\Res\;</Command>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model\CClickDelayModel.h" />
-    <ClInclude Include="model\CCrashTimeForecaster.h" />
-    <ClInclude Include="model\CHeightTimeModel.h" />
-    <ClInclude Include="model\CJumpRangeModel.h" />
-    <ClInclude Include="observers\CBirdHeightObserver.h" />
-    <ClInclude Include="observers\CCanvasObserver.h" />
-    <ClInclude Include="observers\CGameStateObserver.h" />
+    <ClInclude Include="model\ClickDelayModel.h" />
+    <ClInclude Include="model\CrashTimeForecaster.h" />
+    <ClInclude Include="model\HeightTimeModel.h" />
+    <ClInclude Include="model\JumpRangeModel.h" />
+    <ClInclude Include="observers\BirdHeightObserver.h" />
+    <ClInclude Include="observers\BirdRectObserver.h" />
+    <ClInclude Include="observers\CanvasObserver.h" />
+    <ClInclude Include="observers\GameStateObserver.h" />
     <ClInclude Include="fsm\base.h" />
-    <ClInclude Include="fsm\CCanvasObserverState.h" />
-    <ClInclude Include="fsm\CGameState.h" />
+    <ClInclude Include="fsm\CanvasObserverState.h" />
+    <ClInclude Include="fsm\GameState.h" />
     <ClInclude Include="model\define.h" />
-    <ClInclude Include="observers\CObjectObserver.h" />
-    <ClInclude Include="output\COutputWindow.h" />
-    <ClInclude Include="recorder\CRecorder.h" />
+    <ClInclude Include="observers\ObjectObserver.h" />
+    <ClInclude Include="observers\PipeObserver.h" />
+    <ClInclude Include="output\OutputWindow.h" />
+    <ClInclude Include="recorder\Recorder.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="util\CMouseController.h" />
-    <ClInclude Include="util\CScreenCapturer.h" />
-    <ClInclude Include="util\CPerformanceCounter.h" />
+    <ClInclude Include="util\MouseController.h" />
+    <ClInclude Include="util\ScreenCapturer.h" />
+    <ClInclude Include="util\PerformanceCounter.h" />
     <ClInclude Include="util\MathUtil.h" />
     <ClInclude Include="util\SingleInstance.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="model\CClickDelayModel.cpp" />
-    <ClCompile Include="model\CCrashTimeForecaster.cpp" />
-    <ClCompile Include="model\CHeightTimeModel.cpp" />
-    <ClCompile Include="model\CJumpRangeModel.cpp" />
-    <ClCompile Include="observers\CBirdHeightObserver.cpp" />
-    <ClCompile Include="observers\CCanvasObserver.cpp" />
-    <ClCompile Include="observers\CGameStateObserver.cpp" />
+    <ClCompile Include="model\ClickDelayModel.cpp" />
+    <ClCompile Include="model\CrashTimeForecaster.cpp" />
+    <ClCompile Include="model\HeightTimeModel.cpp" />
+    <ClCompile Include="model\JumpRangeModel.cpp" />
+    <ClCompile Include="observers\BirdHeightObserver.cpp" />
+    <ClCompile Include="observers\BirdRectObserver.cpp" />
+    <ClCompile Include="observers\CanvasObserver.cpp" />
+    <ClCompile Include="observers\GameStateObserver.cpp" />
     <ClCompile Include="FlappyBirdAI.cpp" />
-    <ClCompile Include="fsm\CCanvasObserverState.cpp" />
-    <ClCompile Include="fsm\CGameState.cpp" />
-    <ClCompile Include="observers\CObjectObserver.cpp" />
-    <ClCompile Include="output\COutputWindow.cpp" />
-    <ClCompile Include="recorder\CRecorder.cpp" />
+    <ClCompile Include="fsm\CanvasObserverState.cpp" />
+    <ClCompile Include="fsm\GameState.cpp" />
+    <ClCompile Include="observers\ObjectObserver.cpp" />
+    <ClCompile Include="observers\PipeObserver.cpp" />
+    <ClCompile Include="output\OutputWindow.cpp" />
+    <ClCompile Include="recorder\Recorder.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="util\CMouseController.cpp" />
-    <ClCompile Include="util\CScreenCapturer.cpp" />
-    <ClCompile Include="util\CPerformanceCounter.cpp" />
+    <ClCompile Include="util\MouseController.cpp" />
+    <ClCompile Include="util\ScreenCapturer.cpp" />
+    <ClCompile Include="util\PerformanceCounter.cpp" />
     <ClCompile Include="util\MathUtil.cpp" />
   </ItemGroup>
   <ItemGroup>

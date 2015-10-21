@@ -48,56 +48,62 @@
     <ClInclude Include="model\define.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
-    <ClInclude Include="util\CScreenCapturer.h">
-      <Filter>源文件\util</Filter>
-    </ClInclude>
-    <ClInclude Include="fsm\CCanvasObserverState.h">
-      <Filter>源文件\fsm</Filter>
-    </ClInclude>
-    <ClInclude Include="fsm\CGameState.h">
-      <Filter>源文件\fsm</Filter>
-    </ClInclude>
-    <ClInclude Include="observers\CCanvasObserver.h">
-      <Filter>源文件\observers</Filter>
-    </ClInclude>
-    <ClInclude Include="observers\CGameStateObserver.h">
-      <Filter>源文件\observers</Filter>
-    </ClInclude>
-    <ClInclude Include="util\CPerformanceCounter.h">
-      <Filter>源文件\util</Filter>
-    </ClInclude>
     <ClInclude Include="util\SingleInstance.h">
       <Filter>源文件\util</Filter>
-    </ClInclude>
-    <ClInclude Include="observers\CObjectObserver.h">
-      <Filter>源文件\observers</Filter>
-    </ClInclude>
-    <ClInclude Include="output\COutputWindow.h">
-      <Filter>源文件\output</Filter>
-    </ClInclude>
-    <ClInclude Include="model\CHeightTimeModel.h">
-      <Filter>源文件\model</Filter>
-    </ClInclude>
-    <ClInclude Include="observers\CBirdHeightObserver.h">
-      <Filter>源文件\observers</Filter>
-    </ClInclude>
-    <ClInclude Include="model\CCrashTimeForecaster.h">
-      <Filter>源文件\model</Filter>
     </ClInclude>
     <ClInclude Include="util\MathUtil.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
-    <ClInclude Include="recorder\CRecorder.h">
+    <ClInclude Include="observers\BirdHeightObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\BirdRectObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\CanvasObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\GameStateObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\ObjectObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="observers\PipeObserver.h">
+      <Filter>源文件\observers</Filter>
+    </ClInclude>
+    <ClInclude Include="output\OutputWindow.h">
+      <Filter>源文件\output</Filter>
+    </ClInclude>
+    <ClInclude Include="recorder\Recorder.h">
       <Filter>源文件\recorder</Filter>
     </ClInclude>
-    <ClInclude Include="model\CJumpRangeModel.h">
-      <Filter>源文件\model</Filter>
-    </ClInclude>
-    <ClInclude Include="model\CClickDelayModel.h">
-      <Filter>源文件\model</Filter>
-    </ClInclude>
-    <ClInclude Include="util\CMouseController.h">
+    <ClInclude Include="util\MouseController.h">
       <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\PerformanceCounter.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\ScreenCapturer.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
+    <ClInclude Include="fsm\CanvasObserverState.h">
+      <Filter>源文件\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="fsm\GameState.h">
+      <Filter>源文件\fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ClickDelayModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\CrashTimeForecaster.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\HeightTimeModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\JumpRangeModel.h">
+      <Filter>源文件\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,53 +113,59 @@
     <ClCompile Include="FlappyBirdAI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="util\CScreenCapturer.cpp">
-      <Filter>源文件\util</Filter>
-    </ClCompile>
-    <ClCompile Include="fsm\CCanvasObserverState.cpp">
-      <Filter>源文件\fsm</Filter>
-    </ClCompile>
-    <ClCompile Include="fsm\CGameState.cpp">
-      <Filter>源文件\fsm</Filter>
-    </ClCompile>
-    <ClCompile Include="observers\CCanvasObserver.cpp">
-      <Filter>源文件\observers</Filter>
-    </ClCompile>
-    <ClCompile Include="observers\CGameStateObserver.cpp">
-      <Filter>源文件\observers</Filter>
-    </ClCompile>
-    <ClCompile Include="util\CPerformanceCounter.cpp">
-      <Filter>源文件\util</Filter>
-    </ClCompile>
-    <ClCompile Include="observers\CObjectObserver.cpp">
-      <Filter>源文件\observers</Filter>
-    </ClCompile>
-    <ClCompile Include="output\COutputWindow.cpp">
-      <Filter>源文件\output</Filter>
-    </ClCompile>
-    <ClCompile Include="model\CHeightTimeModel.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
-    <ClCompile Include="observers\CBirdHeightObserver.cpp">
-      <Filter>源文件\observers</Filter>
-    </ClCompile>
-    <ClCompile Include="model\CCrashTimeForecaster.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
     <ClCompile Include="util\MathUtil.cpp">
       <Filter>源文件\util</Filter>
     </ClCompile>
-    <ClCompile Include="recorder\CRecorder.cpp">
+    <ClCompile Include="observers\BirdHeightObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\BirdRectObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\CanvasObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\GameStateObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\ObjectObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="observers\PipeObserver.cpp">
+      <Filter>源文件\observers</Filter>
+    </ClCompile>
+    <ClCompile Include="output\OutputWindow.cpp">
+      <Filter>源文件\output</Filter>
+    </ClCompile>
+    <ClCompile Include="recorder\Recorder.cpp">
       <Filter>源文件\recorder</Filter>
     </ClCompile>
-    <ClCompile Include="model\CJumpRangeModel.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
-    <ClCompile Include="model\CClickDelayModel.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
-    <ClCompile Include="util\CMouseController.cpp">
+    <ClCompile Include="util\MouseController.cpp">
       <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\PerformanceCounter.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\ScreenCapturer.cpp">
+      <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="fsm\CanvasObserverState.cpp">
+      <Filter>源文件\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="fsm\GameState.cpp">
+      <Filter>源文件\fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="model\ClickDelayModel.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\CrashTimeForecaster.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\HeightTimeModel.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\JumpRangeModel.cpp">
+      <Filter>源文件\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

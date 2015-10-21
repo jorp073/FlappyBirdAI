@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CPerformanceCounter.h"
+#include "PerformanceCounter.h"
 
 static double QUADPART = 0;
 

@@ -33,7 +33,7 @@ class CUnknown : public CBase
 public:
     CUnknown() : CBase("Unknown") {};
 
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 };
 
 
@@ -42,7 +42,7 @@ class CTitle : public CBase
 public:
     CTitle() : CBase("Title") {};
 
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 };
 
 
@@ -51,7 +51,7 @@ class CGetReady : public CBase
 public:
     CGetReady() : CBase("GetReady") {};
 
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 
     virtual void Exit(CGameStateObserver* observer);
 };
@@ -63,7 +63,7 @@ public:
     CGameOver() : CBase("GameOver") {};
 
     virtual void Enter(CGameStateObserver* observer);
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 };
 
 
@@ -72,7 +72,7 @@ class CPlay : public CBase
 public:
     CPlay() : CBase("Play") {};
 
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 };
 
 
@@ -81,7 +81,7 @@ class CPlayBack : public CBase
 public:
     CPlayBack() : CBase("PlayBack") {};
 
-    virtual bool Update(CGameStateObserver* observer);
+    virtual bool Update(CGameStateObserver* observer, double dt);
 };
 
 }; // namespace GameState

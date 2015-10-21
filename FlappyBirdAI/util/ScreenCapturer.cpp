@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CScreenCapturer.h"
-#include "CPerformanceCounter.h"
+#include "ScreenCapturer.h"
+#include "PerformanceCounter.h"
 
 
 INIT_SINGLEINSTANCE(CScreenCapturer);

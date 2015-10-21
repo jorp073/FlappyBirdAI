@@ -13,7 +13,7 @@ namespace CanvasObserverState
     public:
         CSearch() : TState("Search") {};
 
-        virtual bool Update(CCanvasObserver* observer);
+        virtual bool Update(CCanvasObserver* observer, double dt);
 
     private:
         cv::Mat _FilterCanvasBorder(cv::Mat mat);
@@ -27,6 +27,6 @@ namespace CanvasObserverState
     public:
         CFound() : TState("Found") {};
 
-        virtual bool Update(CCanvasObserver* observer);
+        virtual bool Update(CCanvasObserver* observer, double dt);
     };
 };

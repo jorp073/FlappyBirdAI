@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "CRecorder.h"
-#include "../observers/CGameStateObserver.h"
-#include "../fsm/CGameState.h"
+#include "Recorder.h"
+#include "../observers/GameStateObserver.h"
+#include "../fsm/GameState.h"
 #include <strstream>
 
 #define RECORD_FRAME_MAX_COUNT 240

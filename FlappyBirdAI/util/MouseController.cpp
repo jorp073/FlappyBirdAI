@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CMouseController.h"
-#include "../observers/CCanvasObserver.h"
+#include "MouseController.h"
+#include "../observers/CanvasObserver.h"
 
 
 INIT_SINGLEINSTANCE(CMouseController);

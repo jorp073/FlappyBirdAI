@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CJumpRangeModel.h"
-#include "CCrashTimeForecaster.h"
+#include "JumpRangeModel.h"
+#include "CrashTimeForecaster.h"
 
 
 #define MAX_TOPBOTTOM_RECORD_COUNT 150

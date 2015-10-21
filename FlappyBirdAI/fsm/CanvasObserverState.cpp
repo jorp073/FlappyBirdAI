@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "CCanvasObserverState.h"
-#include "../util/CScreenCapturer.h"
-#include "../observers/CCanvasObserver.h"
-#include "../util/CPerformanceCounter.h"
+#include "CanvasObserverState.h"
+#include "../util/ScreenCapturer.h"
+#include "../observers/CanvasObserver.h"
+#include "../util/PerformanceCounter.h"
 
 using namespace CanvasObserverState;
 
@@ -11,7 +11,7 @@ DEFINE_COUNTER(CFound_Update);
 
 /////////////////////// Search
 
-bool CSearch::Update(CCanvasObserver* observer)
+bool CSearch::Update(CCanvasObserver* observer, double dt)
 {
     auto rect = CScreenCapturer::GetInstance()->getScreenRect();
     if (!CScreenCapturer::GetInstance()->Capture(rect)) return false;
@@ -57,7 +57,7 @@ cv::Mat CSearch::_FilterCanvasBorder(cv::Mat mat)
 
 bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 {
-    std::vector<std::vector<cv::Point> > contours;
+    CV_CONTOURS contours;
     std::vector<cv::Vec4i> hierarchy;
 
     /// Ñ°ÕÒÂÖÀª
@@ -101,7 +101,7 @@ bool CSearch::_GetCanvasBorderRect(cv::Mat mat, OUT cv::Rect& rect)
 
 //////////////////////// Found
 
-bool CFound::Update(CCanvasObserver* observer)
+bool CFound::Update(CCanvasObserver* observer, double dt)
 {
     COUNTER_HELPER(CFound_Update);
 

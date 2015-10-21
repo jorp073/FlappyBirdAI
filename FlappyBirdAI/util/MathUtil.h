@@ -27,7 +27,13 @@ template <typename T>
 class TAverageValue
 {
 public:
-    TAverageValue(T defData) : m_nCount(0) { m_AverageValue = defData; };
+    TAverageValue(T defData)
+        : m_nCount(0)
+        , m_DefaultValue(defData)
+        , m_AverageValue(defData)
+    {
+    };
+
 
     void Append(T data)
     {
@@ -36,11 +42,28 @@ public:
         m_nCount++;
     };
 
+    
     inline T GetAverageValue() { return m_AverageValue; };
+
+
+    // set average value to default and clear count
+    void Reset()
+    {
+        m_AverageValue = m_DefaultValue;
+        m_nCount = 0;
+    };
+
+
+    // retain average value, only clear count
+    void ClearCount()
+    {
+        m_nCount = 0;
+    };
 
 private:
     size_t m_nCount;
     T m_AverageValue;
+    T m_DefaultValue;
 };
 
 }; // namespace MathUtil

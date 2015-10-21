@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "CHeightTimeModel.h"
-#include "CCrashTimeForecaster.h"
-#include "../util/CPerformanceCounter.h"
+#include "HeightTimeModel.h"
+#include "CrashTimeForecaster.h"
+#include "../util/PerformanceCounter.h"
 #include <iostream>
 #include "../util/MathUtil.h"
 
