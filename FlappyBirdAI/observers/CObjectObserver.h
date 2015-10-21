@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "opencv2/opencv.hpp"
 #include "../util/SingleInstance.h"
+#include "../util/MathUtil.h"
 
 
 class CObjectObserver
@@ -16,6 +17,8 @@ public:
 
     float GetBirdHeight();
     float GetPipeHeight();
+
+    SIZE GetAverageBirdRect();
 
     void ResetData();
 
@@ -30,6 +33,9 @@ private:
     std::vector<cv::Rect> m_rectBirds;
     std::vector<std::vector<cv::Point>> m_rectContours;
     float m_fPipeHeight;
+
+    MathUtil::TAverageValue<float> m_fAverageBirdWidth;
+    MathUtil::TAverageValue<float> m_fAverageBirdHeight;
 
     DEFINE_SINGLEINSTANCE(CObjectObserver);
 };

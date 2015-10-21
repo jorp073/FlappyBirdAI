@@ -10,6 +10,8 @@ INIT_SINGLEINSTANCE(CObjectObserver);
 
 CObjectObserver::CObjectObserver()
     : m_matBinary(cv::Mat())
+    , m_fAverageBirdWidth(-1)
+    , m_fAverageBirdHeight(-1)
 {
     ResetData();
 }
@@ -77,7 +79,12 @@ float CObjectObserver::GetBirdHeight()
 {
     CHECK(1 == m_rectBirds.size()) << "m_rectBirds must has singleton value!";
 
-    float h = (m_rectBirds[0].tl().y + m_rectBirds[0].br().y) / 2.0f;
+    auto rect = m_rectBirds[0];
+
+    m_fAverageBirdWidth.Append(rect.br().x - rect.tl().x);
+    m_fAverageBirdHeight.Append(rect.br().y - rect.tl().y);
+
+    float h = (rect.tl().y + rect.br().y) / 2.0f;
     return 1 - h/CANVAS_NOGROUND_HEIGHT;
 }
 
@@ -111,6 +118,16 @@ float CObjectObserver::GetPipeHeight()
     }
 
     return m_fPipeHeight;
+}
+
+
+SIZE CObjectObserver::GetAverageBirdRect()
+{
+    SIZE size;
+    size.cx = m_fAverageBirdWidth.GetAverageValue();
+    size.cy = m_fAverageBirdHeight.GetAverageValue();
+
+    return size;
 }
 
 

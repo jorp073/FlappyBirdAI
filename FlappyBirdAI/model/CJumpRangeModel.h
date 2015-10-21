@@ -2,6 +2,7 @@
 #include <list>
 #include <vector>
 #include <functional>
+#include "../util/MathUtil.h"
 
 
 struct JUMP_RANGE
@@ -46,8 +47,9 @@ private:
 
     bool m_bDataValid;
 
-    float m_fAverageRange, m_fBestBottomOffset;
-    size_t m_iTotalDataCount;
+    MathUtil::TAverageValue<float> m_fAverageRange;
+
+    float m_fBestBottomOffset;
 
     std::vector<float> m_lBirdHeight;
 

@@ -2,6 +2,7 @@
 #include "MathUtil.h"
 #include <math.h>
 
+
 void MathUtil::ParabolaFit(
     const std::vector<double>& x,
     const std::vector<float>& y,
@@ -65,3 +66,4 @@ void MathUtil::StraightLineFit(
     k = (t3*x.size() - t2*t4) / (t1*x.size() - t2*t2);
     b = (t1*t4 - t2*t3) / (t1*x.size() - t2*t2); 
 }
+
