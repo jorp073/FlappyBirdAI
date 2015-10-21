@@ -9,6 +9,7 @@ struct RECORD_FRAME
     double dHeight;
     cv::Mat matCanvas;
     cv::Mat matParabola;
+    cv::Mat matClickDelay;
 };
 
 
@@ -18,6 +19,7 @@ public:
     void RecordData(double a, double b, double c, double height);
     void RecordCanvas(const cv::Mat& mat);
     void RecordParabola(const cv::Mat& mat);
+    void RecordClickDelay(const cv::Mat& mat);
     void PushRecord();
 
     void OnDisplayPreviousFrame();

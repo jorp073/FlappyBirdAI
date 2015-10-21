@@ -46,6 +46,12 @@ void CRecorder::RecordParabola(const cv::Mat& mat)
 }
 
 
+void CRecorder::RecordClickDelay(const cv::Mat& mat)
+{
+    if (IsRecordable()) m_FrameData.matClickDelay = mat;
+}
+
+
 void CRecorder::PushRecord()
 {
     if (IsRecordable())
@@ -121,6 +127,7 @@ void CRecorder::_DisplayFrame(const RECORD_FRAME& frame)
 
     cv::imshow(WINDOW_NAME_CANVAS, canvas);
     cv::imshow(WINDOW_NAME_PARABOLA, frame.matParabola);
+    cv::imshow(WINDOW_NAME_CLICKDELAY, frame.matClickDelay);
     
     // dump data
     std::cout << "id:" << ss.str()

@@ -226,6 +226,9 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
     }
 
     cv::imshow(WINDOW_NAME_CLICKDELAY, mat);
+
+    // record ClickDelay graph for playback
+    CRecorder::GetInstance()->RecordClickDelay(mat);
 }
 
 
