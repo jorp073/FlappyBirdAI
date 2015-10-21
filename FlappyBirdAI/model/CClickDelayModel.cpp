@@ -57,7 +57,7 @@ void CClickDelayModel::_PushData(double dRemainCrashTime, float fBottomOffset)
     // fit parabola
     if (m_lRemainCrashTime.size() > 1)
     {
-        StraightLineFit(m_lRemainCrashTime, m_lBottomOffset, m_k, m_b);
+        MathUtil::StraightLineFit(m_lRemainCrashTime, m_lBottomOffset, m_k, m_b);
     }
 
     // try get best click delay time

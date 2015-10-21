@@ -2,7 +2,7 @@
 #include "MathUtil.h"
 #include <math.h>
 
-void ParabolaFit(
+void MathUtil::ParabolaFit(
     const std::vector<double>& x,
     const std::vector<float>& y,
     /*OUT*/ double& a,
@@ -48,7 +48,7 @@ void ParabolaFit(
 }
 
 
-void StraightLineFit(
+void MathUtil::StraightLineFit(
     const std::vector<double>& x,
     const std::vector<float>& y,
     /*OUT*/ double& k,

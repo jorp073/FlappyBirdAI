@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 
+namespace MathUtil
+{
+
 // fit parabola by x[], y[]
 // y = ax^2 + bx + c
 void ParabolaFit(
@@ -18,3 +21,5 @@ void StraightLineFit(
     const std::vector<float>& y,
     /*OUT*/ double& k,
     /*OUT*/ double& b);
+
+}; // namespace MathUtil

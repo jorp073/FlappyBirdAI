@@ -96,7 +96,7 @@ void CCrashTimeForecaster::Update(float fDelayTime)
     auto count = heightdata.size();
 
     double a, b, c;
-    ParabolaFit(timedata, heightdata, a, b, c);
+    MathUtil::ParabolaFit(timedata, heightdata, a, b, c);
     m_a = a;
     m_b = b;
     m_c = c;
