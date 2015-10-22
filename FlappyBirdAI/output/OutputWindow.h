@@ -23,7 +23,7 @@ public:
 
     void DrawParabola(
         std::vector<PARABOLA_POINT>& points,
-        float fRemainCrashTime,
+        float fRemainCollisionTime,
         double dHeight,
         bool bClick);
 

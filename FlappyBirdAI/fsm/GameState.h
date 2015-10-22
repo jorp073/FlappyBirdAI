@@ -55,7 +55,7 @@ public:
 class CTitle : public CBase
 {
 public:
-    CTitle() : CBase("Title") { StartAutoClick(200); };
+    CTitle() : CBase("Title") { StartAutoClick(400); };
 
     virtual bool Update(CGameStateObserver* observer, double dt);
 
@@ -75,7 +75,7 @@ public:
 class CGetReady : public CBase
 {
 public:
-    CGetReady() : CBase("GetReady") { StartAutoClick(200); };
+    CGetReady() : CBase("GetReady") { StartAutoClick(400); };
 
     virtual bool Update(CGameStateObserver* observer, double dt);
     virtual void Exit(CGameStateObserver* observer);
@@ -87,7 +87,7 @@ public:
 class CGameOver : public CBase
 {
 public:
-    CGameOver() : CBase("GameOver") { StartAutoClick(300); };
+    CGameOver() : CBase("GameOver") { StartAutoClick(1000); };
 
     virtual void Enter(CGameStateObserver* observer);
     virtual bool Update(CGameStateObserver* observer, double dt);

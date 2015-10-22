@@ -14,6 +14,7 @@ public:
 
     float GetPipeHeight() { return m_fPipeHeight; };
     float GetPipeRight() { return m_fPipeRight; };
+    double GetPipeSpeed() { return m_AveragePipeSpeed.GetAverageValue(); };
 
     void ResetData();
 

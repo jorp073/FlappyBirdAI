@@ -8,8 +8,8 @@ INIT_SINGLEINSTANCE(CBirdRectObserver);
 
 
 CBirdRectObserver::CBirdRectObserver()
-    : m_fAverageBirdWidth(-1)
-    , m_fAverageBirdHeight(-1)
+    : m_fAverageBirdRectHeight(0)
+    , m_fAverageBirdLeft(0)
 {
 }
 
@@ -32,8 +32,8 @@ void CBirdRectObserver::Update(const CV_CONTOURS& rectAllObjContours)
     if (1 == m_rectBirds.size())
     {
         rect = m_rectBirds[0];
-        m_fAverageBirdWidth.Append((float)rect.br().x - rect.tl().x);
-        m_fAverageBirdHeight.Append((float)rect.br().y - rect.tl().y);
+        m_fAverageBirdLeft.Append((float)rect.tl().x / CANVAS_SCALETO_WIDTH);
+        m_fAverageBirdRectHeight.Append(((float)rect.br().y - rect.tl().y) / CANVAS_NOGROUND_HEIGHT);
     }
 }
 
@@ -53,16 +53,6 @@ int CBirdRectObserver::GetBirdLeft()
     CHECK(1 == m_rectBirds.size()) << "m_rectBirds must has singleton value!";
 
     return m_rectBirds[0].tl().x;
-}
-
-
-cv::Size2f CBirdRectObserver::GetAverageBirdSize()
-{
-    cv::Size2f size;
-    size.width = m_fAverageBirdWidth.GetAverageValue();
-    size.height = m_fAverageBirdHeight.GetAverageValue();
-
-    return size;
 }
 
 

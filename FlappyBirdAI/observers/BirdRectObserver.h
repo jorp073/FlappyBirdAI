@@ -17,7 +17,8 @@ public:
     float GetBirdHeight();
     int GetBirdLeft();
 
-    cv::Size2f GetAverageBirdSize();
+    float GetAverageBirdLeft() { return m_fAverageBirdLeft.GetAverageValue(); };
+    float GetAverageBirdRectHeight() { return m_fAverageBirdRectHeight.GetAverageValue(); };
 
 private:
 
@@ -25,8 +26,8 @@ private:
 
     std::vector<cv::Rect> m_rectBirds;
 
-    MathUtil::TAverageValue<float> m_fAverageBirdWidth;
-    MathUtil::TAverageValue<float> m_fAverageBirdHeight;
+    MathUtil::TAverageValue<float> m_fAverageBirdLeft;
+    MathUtil::TAverageValue<float> m_fAverageBirdRectHeight;
 
     DEFINE_SINGLEINSTANCE(CBirdRectObserver);
 };

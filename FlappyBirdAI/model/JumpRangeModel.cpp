@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "JumpRangeModel.h"
-#include "CrashTimeForecaster.h"
+#include "CollisionForecaster.h"
 
 
 #define MAX_TOPBOTTOM_RECORD_COUNT 150
@@ -78,7 +78,7 @@ void CJumpRangeModel::_PushData(const JUMP_RANGE& data)
 
     /// calculate new best bottom offset
     m_fBestBottomOffset = (PIPE_VERTICAL_DISTANCE - m_fAverageRange.GetAverageValue())/2;
-    CCrashTimeForecaster::GetInstance()->SetBestJumpOffsetY(m_fBestBottomOffset);
+    CCollisionTimeForecaster::GetInstance()->SetBestJumpOffsetY(m_fBestBottomOffset);
 
 
     DLOG(INFO) << "ai jump avr range:" << m_fAverageRange.GetAverageValue() <<  " range: " << data.fRange << " bottom: " << data.fBottom << " top: " << data.fTop;

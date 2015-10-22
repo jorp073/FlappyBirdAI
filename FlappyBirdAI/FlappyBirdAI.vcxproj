@@ -100,7 +100,7 @@ copy $(SolutionDir)\Res $(SolutionDir)\Bin\$(ConfigurationName)\Res\;</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\ClickDelayModel.h" />
-    <ClInclude Include="model\CrashTimeForecaster.h" />
+    <ClInclude Include="model\CollisionForecaster.h" />
     <ClInclude Include="model\HeightTimeModel.h" />
     <ClInclude Include="model\JumpRangeModel.h" />
     <ClInclude Include="observers\BirdHeightObserver.h" />
@@ -125,7 +125,7 @@ copy $(SolutionDir)\Res $(SolutionDir)\Bin\$(ConfigurationName)\Res\;</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="model\ClickDelayModel.cpp" />
-    <ClCompile Include="model\CrashTimeForecaster.cpp" />
+    <ClCompile Include="model\CollisionForecaster.cpp" />
     <ClCompile Include="model\HeightTimeModel.cpp" />
     <ClCompile Include="model\JumpRangeModel.cpp" />
     <ClCompile Include="observers\BirdHeightObserver.cpp" />

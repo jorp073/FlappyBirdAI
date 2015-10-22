@@ -96,13 +96,13 @@
     <ClInclude Include="model\ClickDelayModel.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
-    <ClInclude Include="model\CrashTimeForecaster.h">
-      <Filter>源文件\model</Filter>
-    </ClInclude>
     <ClInclude Include="model\HeightTimeModel.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
     <ClInclude Include="model\JumpRangeModel.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\CollisionForecaster.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,13 +158,13 @@
     <ClCompile Include="model\ClickDelayModel.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
-    <ClCompile Include="model\CrashTimeForecaster.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
     <ClCompile Include="model\HeightTimeModel.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
     <ClCompile Include="model\JumpRangeModel.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\CollisionForecaster.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
   </ItemGroup>

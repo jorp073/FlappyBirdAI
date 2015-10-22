@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ClickDelayModel.h"
-#include "CrashTimeForecaster.h"
+#include "CollisionForecaster.h"
 #include "../util/MathUtil.h"
 
 
@@ -9,7 +9,7 @@
 
 
 CClickDelayModel::CClickDelayModel()
-    : m_fRemainCrashTime(0)
+    : m_fRemainCollisionTime(0)
     , m_fBestDelayTime(0)
     , m_fClickDelay(DEFAULT_CLICK_DELAYTIME)
 {
@@ -22,10 +22,10 @@ void CClickDelayModel::ResetData()
     m_k = 0;
     m_b = 0;
 
-    // forget last data, last data maybe wrong because of bird's crash
-    if (m_lRemainCrashTime.size() > 1)
+    // forget last data, last data maybe wrong because of bird's collision
+    if (m_lRemainCollisionTime.size() > 1)
     {
-        m_lRemainCrashTime.pop_back();
+        m_lRemainCollisionTime.pop_back();
         m_lBottomOffset.pop_back();
     }
 }
@@ -35,29 +35,29 @@ void CClickDelayModel::OnGetBottomData(float fBottomOffset)
 {
     DLOG(INFO) << "ai CClickDelayModel::OnGetBottomData " << fBottomOffset;
 
-    _PushData(m_fRemainCrashTime, fBottomOffset);
+    _PushData(m_fRemainCollisionTime, fBottomOffset);
 }
 
 
-void CClickDelayModel::OnClick(float fRemainCrashTime)
+void CClickDelayModel::OnClick(float fRemainCollisionTime)
 {
-    DLOG(INFO) << "ai CClickDelayModel::OnClick " << fRemainCrashTime;
-    m_fRemainCrashTime = fRemainCrashTime;
+    DLOG(INFO) << "ai CClickDelayModel::OnClick " << fRemainCollisionTime;
+    m_fRemainCollisionTime = fRemainCollisionTime;
 }
 
 
-void CClickDelayModel::_PushData(double dRemainCrashTime, float fBottomOffset)
+void CClickDelayModel::_PushData(double dRemainCollisionTime, float fBottomOffset)
 {
     // do not push data of emergency jump and first invalid data
-    if (0 == dRemainCrashTime) return;
+    if (EMERGENCYJUMP == dRemainCollisionTime) return;
 
-    m_lRemainCrashTime.push_back(dRemainCrashTime);
+    m_lRemainCollisionTime.push_back(dRemainCollisionTime);
     m_lBottomOffset.push_back(fBottomOffset);
 
     // fit parabola
-    if (m_lRemainCrashTime.size() > 1)
+    if (m_lRemainCollisionTime.size() > 1)
     {
-        MathUtil::StraightLineFit(m_lRemainCrashTime, m_lBottomOffset, m_k, m_b);
+        MathUtil::StraightLineFit(m_lRemainCollisionTime, m_lBottomOffset, m_k, m_b);
     }
 
     // try get best click delay time
@@ -87,13 +87,13 @@ void CClickDelayModel::_PushData(double dRemainCrashTime, float fBottomOffset)
 
 void CClickDelayModel::_CompactData()
 {
-    if (m_lRemainCrashTime.size() > MAX_DATA_COUNT)
+    if (m_lRemainCollisionTime.size() > MAX_DATA_COUNT)
     {
         std::vector<double> tmp1;
         for (int i=0; i<MIN_DATA_COUNT; i++)
         {
-            tmp1.push_back(m_lRemainCrashTime.back());
-            m_lRemainCrashTime.pop_back();
+            tmp1.push_back(m_lRemainCollisionTime.back());
+            m_lRemainCollisionTime.pop_back();
         }
 
         std::vector<float> tmp2;
@@ -103,12 +103,12 @@ void CClickDelayModel::_CompactData()
             m_lBottomOffset.pop_back();
         }
 
-        m_lRemainCrashTime.clear();
+        m_lRemainCollisionTime.clear();
         m_lBottomOffset.clear();
 
         for (int i=0; i<MIN_DATA_COUNT; i++)
         {
-            m_lRemainCrashTime.push_back(tmp1.back());
+            m_lRemainCollisionTime.push_back(tmp1.back());
             tmp1.pop_back();
         }
 

@@ -6,20 +6,26 @@
 #include "define.h"
 #include "../util/SingleInstance.h"
 
+struct CRASH_FORECAST_PARAM
+{
+    float fAverageBirdLeft;
+    float fAverageBirdRectHeight;
+    double dPipeSpeed;
+    float fPipeRight;
+};
+
 
 class CHeightTimeModel;
 
 
-class CCrashTimeForecaster
+class CCollisionTimeForecaster
 {
 public:
     void SetModel(CHeightTimeModel* pModel);
 
-    void Update(float fDelayTime);
-
-    bool IsNeedJumpNow() { return m_bIsNeedJumpNow; };
-
-    float GetRemainCrashTime() { return m_fRemainCrashTime; };
+    float GetCollisionBottomRemainTime();
+    
+    bool IsWillCollisionPipeCorner(const CRASH_FORECAST_PARAM& data);
 
     void GetABC(double& a, double& b, double& c);
 
@@ -30,18 +36,16 @@ public:
 
     void SetBestJumpOffsetY(float fOffsetY);
 
+    // generate parabola graph for output window
+    // h, w: output window height and width
+    void GenParabolaDots(int h, int w, double a, double b, double c);
+
 private:
     // return whether bird is dropping down
-    bool IsBirdDroppingDown();
-
-    // h: output window height
-    // w: output window width
-    void GenParabolaDots(int h, int w, double a, double b, double c);
+    bool _IsBirdDroppingDown();
 
     CHeightTimeModel* m_pModel;
     std::vector<PARABOLA_POINT> m_vParabolaDots;
-    float m_fRemainCrashTime;
-    bool m_bIsNeedJumpNow;
     double m_a, m_b, m_c;
     bool m_bIsDroppingDown;
 
@@ -50,5 +54,5 @@ private:
     float m_fBestJumpOffsetY;
 
 
-    DEFINE_SINGLEINSTANCE(CCrashTimeForecaster);
+    DEFINE_SINGLEINSTANCE(CCollisionTimeForecaster);
 };

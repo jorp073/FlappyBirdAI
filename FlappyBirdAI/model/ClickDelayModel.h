@@ -9,11 +9,11 @@ public:
 
     void OnGetBottomData(float fBottomOffset);
 
-    void OnClick(float fRemainCrashTime);
+    void OnClick(float fRemainCollisionTime);
 
     void ResetData();
 
-    const std::vector<double>& GetRemainCrashTimeList() { return m_lRemainCrashTime; };
+    const std::vector<double>& GetRemainCollisionTimeList() { return m_lRemainCollisionTime; };
     const std::vector<float>& GetBottomOffsetList() { return m_lBottomOffset; };
 
     float GetBestDelayTime() { return m_fBestDelayTime; };
@@ -24,12 +24,12 @@ public:
 
 private:
 
-    void _PushData(double dRemainCrashTime, float fBottomOffset);
+    void _PushData(double dRemainCollisionTime, float fBottomOffset);
 
-    // delete some data when sizeof m_lRemainCrashTime is too large, to reduce memory usage.
+    // delete some data when sizeof m_lRemainCollisionTime is too large, to reduce memory usage.
     void _CompactData();
 
-    float m_fRemainCrashTime;
+    float m_fRemainCollisionTime;
 
     float m_fBestDelayTime;
     size_t m_iTotalDataCount;
@@ -39,6 +39,6 @@ private:
     // parameter of parabola
     double m_k, m_b;
 
-    std::vector<double> m_lRemainCrashTime;
+    std::vector<double> m_lRemainCollisionTime;
     std::vector<float> m_lBottomOffset;
 };

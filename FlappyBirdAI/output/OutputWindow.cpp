@@ -71,7 +71,7 @@ void COutputWindow::SetPipeRects(const std::vector<cv::Rect>& rects)
 
 void COutputWindow::DrawParabola(
     std::vector<PARABOLA_POINT>& points,
-    float fRemainCrashTime,
+    float fRemainCollisionTime,
     double dHeight,
     bool bClick)
 {
@@ -97,7 +97,7 @@ void COutputWindow::DrawParabola(
     }
 
     std::stringstream ssForecast;
-    ssForecast << "Crash Forecast: " << fRemainCrashTime;
+    ssForecast << "Will Collision In: " << fRemainCollisionTime;
     CVDrawText(m_matParabola, ssForecast.str(), 15);
 
     std::stringstream ssHeight;
@@ -135,7 +135,7 @@ void COutputWindow::DrawJumpRange(CJumpRangeModel* pModel)
         if (iBottom > JUMPRANGE_GRAPH_H-1) iBottom = JUMPRANGE_GRAPH_H-1;
         if (iBottom < 0) iBottom = 0;
 
-        cv::line(mat, cv::Point(x, iBottom), cv::Point(x, iTop), cv::Scalar(127));
+        cv::line(mat, cv::Point(x, iBottom), cv::Point(x, iTop), cv::Scalar(192));
 
         x++;
     }
@@ -154,7 +154,7 @@ void COutputWindow::DrawJumpRange(CJumpRangeModel* pModel)
 
 void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
 {
-    auto lRemainTime = pModel->GetRemainCrashTimeList();
+    auto lRemainTime = pModel->GetRemainCollisionTimeList();
     auto lBottomOffset = pModel->GetBottomOffsetList();
 
 #define CLICKDELAY_WINDOW_W 200
@@ -197,7 +197,7 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
         if (count == endcount)
         {
             // draw circle for the latest data
-            cv::circle(mat, cv::Point(x, y), 5, cv::Scalar(127), 1);
+            cv::circle(mat, cv::Point(x, y), 5, cv::Scalar(192), 1);
         }
     }
 

@@ -5,6 +5,7 @@
 
 #define CV_KEY_LEFT     2424832
 #define CV_KEY_RIGHT    2555904
+#define EMERGENCYJUMP   -9999
 
 struct POS
 {
