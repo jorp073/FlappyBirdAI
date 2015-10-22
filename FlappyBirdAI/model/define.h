@@ -3,6 +3,9 @@
 #include <vector>
 #include "opencv2/opencv.hpp"
 
+#define CV_KEY_LEFT     2424832
+#define CV_KEY_RIGHT    2555904
+
 struct POS
 {
     float x;

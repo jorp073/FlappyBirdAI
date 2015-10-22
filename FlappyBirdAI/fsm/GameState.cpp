@@ -8,7 +8,7 @@
 #include "../observers/PipeObserver.h"
 #include "../util/PerformanceCounter.h"
 #include "../recorder/Recorder.h"
-
+#include "../util/MouseController.h"
 
 using namespace GameState;
 
@@ -91,6 +91,31 @@ double CBase::MatchGameOver(CGameStateObserver* observer)
 }
 
 
+bool CBase::Update(CGameStateObserver* observer, double dt)
+{
+    if (m_bAutoClick)
+    {
+        m_dAutoClickRemainTime -= dt;
+        if (m_dAutoClickRemainTime <=0)
+        {
+            bool ret = OnAutoClick();
+            if (ret) m_bAutoClick = false;
+
+            return ret;
+        }
+    }
+
+    return false;
+};
+
+
+void CBase::StartAutoClick(double remaintime)
+{
+    m_bAutoClick = true;
+    m_dAutoClickRemainTime = remaintime;
+};
+
+
 /////////////////////// CUnknown
 
 
@@ -144,7 +169,35 @@ bool CUnknown::Update(CGameStateObserver* observer, double dt)
 bool CTitle::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchTitle(observer);
-    isMatchResultIncrease(observer, result);
+    if (!isMatchResultIncrease(observer, result))
+    {
+        if (CBase::Update(observer, dt))
+        {
+            observer->StateMachine()->ChangeState(new CWaitForGetReady());
+            return true;
+        }
+    }
+
+    return true;
+}
+
+
+bool CTitle::OnAutoClick()
+{
+    return CMouseController::GetInstance()->Click_LeftButton();
+}
+
+
+//////////////////////// Wait For Get Ready
+
+bool CWaitForGetReady::Update(CGameStateObserver* observer, double dt)
+{
+    auto result = MatchGetReady(observer);
+    if (result < MIN_MATCH_VALUE)
+    {
+        ::Sleep(300);
+        observer->StateMachine()->ChangeState(new CGetReady());
+    }
     return true;
 }
 
@@ -154,8 +207,18 @@ bool CTitle::Update(CGameStateObserver* observer, double dt)
 bool CGetReady::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchGetReady(observer);
-    isMatchResultIncrease(observer, result);
+    if (!isMatchResultIncrease(observer, result))
+    {
+        CBase::Update(observer, dt);
+    }
+
     return true;
+}
+
+
+bool CGetReady::OnAutoClick()
+{
+    return CMouseController::GetInstance()->ClickInCanvas();
 }
 
 
@@ -178,8 +241,18 @@ void CGameOver::Enter(CGameStateObserver* observer)
 bool CGameOver::Update(CGameStateObserver* observer, double dt)
 {
     auto result = MatchGameOver(observer);
-    isMatchResultIncrease(observer, result);
+    if (!isMatchResultIncrease(observer, result))
+    {
+        CBase::Update(observer, dt);
+    }
+
     return true;
+}
+
+
+bool CGameOver::OnAutoClick()
+{
+    return CMouseController::GetInstance()->Click_LeftButton();
 }
 
 

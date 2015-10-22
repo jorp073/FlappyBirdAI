@@ -15,6 +15,38 @@
 #include <direct.h>
 
 
+void OnPressKey(int key, /*OUT*/ bool& bExitMainLoop)
+{
+    bExitMainLoop = false;
+
+    switch (key)
+    {
+    case VK_ESCAPE:
+        if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack"))
+        {
+            // exit PlayBack state, back to play game state
+            CGameStateObserver::GetInstance()->StateMachine()->ChangeState(new GameState::CUnknown());
+        }
+        else
+        {
+            bExitMainLoop = true;
+        }
+        break;
+
+    case CV_KEY_LEFT:
+        CRecorder::GetInstance()->OnDisplayPreviousFrame();
+        break;
+
+    case CV_KEY_RIGHT:
+        CRecorder::GetInstance()->OnDisplayNextFrame();
+        break;
+
+    default:
+        if (-1 != key) std::cout << "press key:" << key << std::endl;
+    };
+}
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
     FLAGS_log_dir = "logs/";
@@ -27,7 +59,7 @@ int _tmain(int argc, _TCHAR* argv[])
     CGameStateObserver::GetInstance()->Init();
     CCanvasObserver::GetInstance()->Init();
 
-    DLOG(INFO) << "start main loop";
+    DLOG(INFO) << "Start main loop";
 
     auto dTime = GetPreciseTickCount();
 
@@ -40,30 +72,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
         /// parse key press
         auto key = cv::waitKey(1);
-        if (VK_ESCAPE == key)
-        {
-            if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack"))
-            {
-                // exit PlayBack, back to auto play
-                CGameStateObserver::GetInstance()->StateMachine()->ChangeState(new GameState::CUnknown());
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        switch (key)
-        {
-        case 2424832: // CV LEFT KEY
-            CRecorder::GetInstance()->OnDisplayPreviousFrame();
-            break;
-        case 2555904: // CV RIGHT KEY
-            CRecorder::GetInstance()->OnDisplayNextFrame();
-            break;
-        default:
-            if (-1 != key) std::cout << "press key:" << key << std::endl;
-        };
+        bool bExitMainLoop;
+        OnPressKey(key, bExitMainLoop);
+        if (bExitMainLoop) break;
 
         /// observe
         if (CCanvasObserver::GetInstance()->Update(dt))
@@ -72,25 +83,9 @@ int _tmain(int argc, _TCHAR* argv[])
             {
                 if (CGameStateObserver::GetInstance()->Update(dt))
                 {
-                    auto state = CGameStateObserver::GetInstance()->StateMachine()->CurrentState()->GetName();
-                    if ("Play" == state)
+                    if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
                     {
                         CBirdHeightObserver::GetInstance()->Update(dTickCount);
-                    }
-                    else if ("Title" == state)
-                    {
-                        ::Sleep(200);
-                        CMouseController::GetInstance()->Click_LeftButton();
-                    }
-                    else if ("GetReady" == state)
-                    {
-                        ::Sleep(200);
-                        CMouseController::GetInstance()->ClickInCanvas();
-                    }
-                    else if ("GameOver" == state)
-                    {
-                        ::Sleep(300);
-                        CMouseController::GetInstance()->Click_LeftButton();
                     }
                 }
             }
@@ -98,7 +93,8 @@ int _tmain(int argc, _TCHAR* argv[])
         COutputWindow::GetInstance()->Update();
         CRecorder::GetInstance()->PushRecord();
     };
-    DLOG(INFO) << "exit main loop";
+
+    DLOG(INFO) << "Exit main loop";
 
     CScreenCapturer::GetInstance()->Release();
     CCanvasObserver::GetInstance()->Release();

@@ -62,14 +62,18 @@ bool CMouseController::_IsEnableControl()
 }
 
 
-void CMouseController::ClickInCanvas()
+bool CMouseController::ClickInCanvas()
 {
     if (_IsEnableControl())
     {
         DLOG(INFO) << "ai Click";
         ::mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
         ::mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+
+        return true;
     }
+
+    return false;
 }
 
 
@@ -85,8 +89,8 @@ void CMouseController::_MoveTo(int x, int y)
 }
 
 
-void CMouseController::Click_LeftButton()
+bool CMouseController::Click_LeftButton()
 {
     _MoveTo(111, 412);
-    ClickInCanvas();
+    return ClickInCanvas();
 }

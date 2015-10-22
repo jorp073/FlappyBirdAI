@@ -6,10 +6,10 @@
 class CMouseController
 {
 public:
-    void ClickInCanvas();
+    bool ClickInCanvas();
 
     // Click Left Button In Canvas
-    void Click_LeftButton();
+    bool Click_LeftButton();
 
 private:
     bool _IsEnableControl();
