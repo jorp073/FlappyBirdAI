@@ -4,7 +4,7 @@
 
 
 #define MAX_TOPBOTTOM_RECORD_COUNT 150
-#define CHECK_DESCEND_COUNT 4
+#define CHECK_DESCEND_COUNT 6
 
 
 CJumpRangeModel::CJumpRangeModel()
@@ -93,7 +93,7 @@ bool CJumpRangeModel::_IsDataValid()
 
     for (int i=0; i<CHECK_DESCEND_COUNT; i++)
     {
-        if (m_lBirdHeight[count-1-i] >= m_lBirdHeight[count-2-i])
+        if (m_lBirdHeight[count-1-i] > m_lBirdHeight[count-2-i])
         {
             return false;
         }

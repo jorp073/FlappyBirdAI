@@ -34,7 +34,8 @@ void CClickDelayModel::ResetData()
 
 void CClickDelayModel::OnGetBottomData(float fBottomOffset)
 {
-    DLOG(INFO) << "ai CClickDelayModel::OnGetBottomData " << fBottomOffset;
+    DLOG(INFO) << "ai CClickDelayModel::OnGetBottomData " << fBottomOffset
+        << " m_dRemainCollisionTime:" << m_dRemainCollisionTime;
 
     _PushData(m_dRemainCollisionTime, fBottomOffset);
 }
