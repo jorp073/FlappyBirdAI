@@ -8,7 +8,7 @@
 #include "../model/ClickDelayModel.h"
 #include "../model/FPSCounter.h"
 
-#define JUMP_NOW_FADEOUT_TIME 0.8
+#define JUMP_NOW_FADEOUT_TIME 0.4
 
 
 INIT_SINGLEINSTANCE(COutputWindow);
@@ -171,7 +171,7 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
 
 #define CLICKDELAY_WINDOW_W 200
 #define CLICKDELAY_WINDOW_H 200
-#define BASEX (CLICKDELAY_WINDOW_W/4)
+#define BASEX (CLICKDELAY_WINDOW_W/2)
 #define BASEY (CLICKDELAY_WINDOW_H*3/4)
 #define XRATIO 2
 #define YRATIO 800
@@ -305,7 +305,7 @@ void COutputWindow::Update(double dt)
     m_fPipeRight = 1;
 
     // fadeout Jump Now text
-    unsigned char delta = 255*dt/1000/JUMP_NOW_FADEOUT_TIME;
+    unsigned char delta = (unsigned char)(255*dt/1000/JUMP_NOW_FADEOUT_TIME);
     m_cClickTextColor = m_cClickTextColor <= delta ? 0 : m_cClickTextColor - delta;
 }
 

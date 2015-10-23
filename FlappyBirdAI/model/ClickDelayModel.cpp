@@ -34,19 +34,15 @@ void CClickDelayModel::ResetData()
 
 void CClickDelayModel::OnGetBottomData(float fBottomOffset)
 {
-    DLOG(INFO) << "ai CClickDelayModel::OnGetBottomData " << fBottomOffset
-        << " m_dRemainCollisionTime:" << m_dRemainCollisionTime;
-
     _PushData(m_dRemainCollisionTime, fBottomOffset);
 }
 
 
 void CClickDelayModel::OnClick(double dRemainCollisionTime, double bCollisionTime)
 {
-    DLOG(INFO) << "ai CClickDelayModel::OnClick " << dRemainCollisionTime << "," << bCollisionTime;
     if (EMERGENCY_JUMP_TIME == bCollisionTime || WILL_NOT_CRASH_TIME == bCollisionTime)
     {
-        m_dRemainCollisionTime == INVALID_REMAIN_COLLISION_TIME;
+        m_dRemainCollisionTime = INVALID_REMAIN_COLLISION_TIME;
     }
     else
     {
@@ -59,6 +55,8 @@ void CClickDelayModel::_PushData(double dRemainCollisionTime, float fBottomOffse
 {
     // do not push data of emergency jump and first invalid data
     if (INVALID_REMAIN_COLLISION_TIME == dRemainCollisionTime) return;
+
+    DLOG(INFO) << "CClickDelayModel::_PushData " << dRemainCollisionTime << ", " << fBottomOffset;
 
     m_lRemainCollisionTime.push_back(dRemainCollisionTime);
     m_lBottomOffset.push_back(fBottomOffset);
