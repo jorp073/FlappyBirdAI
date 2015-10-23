@@ -27,7 +27,7 @@ COutputWindow::~COutputWindow()
 }
 
 
-bool COutputWindow::Init()
+void COutputWindow::Init()
 {
     cv::namedWindow(WINDOW_NAME_CANVAS);
     TopMostWindow(WINDOW_NAME_CANVAS);
@@ -40,8 +40,6 @@ bool COutputWindow::Init()
 
     cv::namedWindow(WINDOW_NAME_CLICKDELAY);
     TopMostWindow(WINDOW_NAME_CLICKDELAY);
-
-    return true;
 }
 
 

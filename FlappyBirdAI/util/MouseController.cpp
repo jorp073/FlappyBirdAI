@@ -17,6 +17,11 @@ CMouseController::CMouseController()
 }
 
 
+void CMouseController::Init()
+{
+}
+
+
 bool CMouseController::_IsInCanvas()
 {
     POINT point;

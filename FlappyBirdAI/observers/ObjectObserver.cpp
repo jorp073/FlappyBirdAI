@@ -13,6 +13,11 @@ CObjectObserver::CObjectObserver()
 }
 
 
+void CObjectObserver::Init()
+{
+}
+
+
 bool CObjectObserver::Update(cv::Mat matGrayCanvas)
 {
     /// Binary gray image

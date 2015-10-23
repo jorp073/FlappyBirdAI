@@ -5,9 +5,6 @@
 class CFPSCounter
 {
 public:
-
-    void Init();
-
     void OnCaptureScreen();
 
     void OnSkipFrame();

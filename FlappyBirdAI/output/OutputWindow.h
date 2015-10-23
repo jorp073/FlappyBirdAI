@@ -13,7 +13,6 @@ class CClickDelayModel;
 class COutputWindow
 {
 public:
-    bool Init();
     void SetCanvasStateText();
     void SetGameStateText();
     void SetBirdRects(const std::vector<cv::Rect>& rects);

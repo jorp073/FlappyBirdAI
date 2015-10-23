@@ -12,7 +12,6 @@ class CCanvasObserver
 public:
     static bool IsBorderColor(uchar color);
 
-    bool Init();
     bool Update(double dt);
 
     void SetCanvasMat(cv::Mat graymat);

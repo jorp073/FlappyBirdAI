@@ -56,11 +56,6 @@ void Init(_TCHAR* szModulePath)
     google::InitGoogleLogging(szModulePath);
 
     InitPreciseTickCount();
-
-    COutputWindow::GetInstance()->Init();
-    CGameStateObserver::GetInstance()->Init();
-    CCanvasObserver::GetInstance()->Init();
-    CFPSCounter::GetInstance()->Init();
 }
 
 

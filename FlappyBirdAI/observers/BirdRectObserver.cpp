@@ -14,6 +14,11 @@ CBirdRectObserver::CBirdRectObserver()
 }
 
 
+void CBirdRectObserver::Init()
+{
+}
+
+
 void CBirdRectObserver::Update(const CV_CONTOURS& rectAllObjContours)
 {
     m_rectBirds.clear();

@@ -16,6 +16,11 @@ CRecorder::CRecorder()
 }
 
 
+void CRecorder::Init()
+{
+}
+
+
 bool CRecorder::IsRecordable()
 {
     return CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play");

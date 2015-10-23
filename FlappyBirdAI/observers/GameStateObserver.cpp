@@ -30,14 +30,13 @@ bool CGameStateObserver::Update(double dt)
 }
 
 
-bool CGameStateObserver::Init()
+void CGameStateObserver::Init()
 {
     m_pStateMachine = new TStateMachine<CGameStateObserver>(this);
     m_pStateMachine->InitState(new GameState::CUnknown());
     _LoadTemplate("res/gamestate_title.png",    "title");
     _LoadTemplate("res/gamestate_getready.png", "getready");
     _LoadTemplate("res/gamestate_gameover.png", "gameover");
-    return true;
 }
 
 

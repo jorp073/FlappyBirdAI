@@ -22,7 +22,7 @@ CCanvasObserver::~CCanvasObserver()
 }
 
 
-bool CCanvasObserver::Init()
+void CCanvasObserver::Init()
 {
     m_pStateMachine = new TStateMachine<CCanvasObserver>(this);
     m_pStateMachine->InitState(new CanvasObserverState::CSearch());
@@ -32,7 +32,6 @@ bool CCanvasObserver::Init()
     assert(m_matGrayBg.cols == CANVAS_SCALETO_WIDTH);
 
     m_matCanvas = cv::Mat(CANVAS_SCALETO_HEIGHT, CANVAS_SCALETO_WIDTH, CV_8UC1);
-    return true;
 }
 
 

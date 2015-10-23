@@ -7,7 +7,10 @@ public: \
     static __TYPE__* GetInstance() \
     { \
         if(NULL == m_pInstance) \
+        { \
             m_pInstance = new __TYPE__(); \
+            m_pInstance->Init(); \
+        } \
         return static_cast<__TYPE__*>(m_pInstance); \
     } \
      \
@@ -21,6 +24,8 @@ public: \
             m_pInstance = NULL; \
         } \
     } \
+     \
+    void Init(); \
      \
 protected: \
     __TYPE__(); \

@@ -40,6 +40,11 @@ CBirdHeightObserver::~CBirdHeightObserver()
 }
 
 
+void CBirdHeightObserver::Init()
+{
+}
+
+
 bool CBirdHeightObserver::Update(double dTickCount)
 {
     auto pPipeObserver = CPipeObserver::GetInstance();

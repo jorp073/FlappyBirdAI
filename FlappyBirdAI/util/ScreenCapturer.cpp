@@ -45,6 +45,11 @@ CScreenCapturer::~CScreenCapturer()
 }
 
 
+void CScreenCapturer::Init()
+{
+}
+
+
 bool CScreenCapturer::_ChangeSize(int width, int height)
 {
     if (m_hSrcDC) ::DeleteDC(m_hSrcDC);

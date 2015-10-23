@@ -18,6 +18,11 @@ CCollisionTimeForecaster::CCollisionTimeForecaster()
 }
 
 
+void CCollisionTimeForecaster::Init()
+{
+}
+
+
 void CCollisionTimeForecaster::SetModel(CHeightTimeModel* pModel)
 {
     m_pModel = pModel;

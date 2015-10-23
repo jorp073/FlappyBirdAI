@@ -15,6 +15,11 @@ CPipeObserver::CPipeObserver()
 }
 
 
+void CPipeObserver::Init()
+{
+}
+
+
 void CPipeObserver::ResetData()
 {
     m_fPipeHeight = DEFAULT_PIPE_HEIGHT;
