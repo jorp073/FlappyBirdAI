@@ -31,13 +31,13 @@ public:
 
     void DrawJumpRange(CJumpRangeModel* pModel);
 
-    void Update();
+    void Update(double dt);
 
 
 private:
     void TopMostWindow(const std::string& strWindowName);
 
-    void CVDrawText(cv::Mat mat, const std::string& strText, int iHeight);
+    void CVDrawText(cv::Mat mat, const std::string& strText, int iHeight, unsigned char cColor = 255);
 
     void TickCountFPS();
 
@@ -52,6 +52,8 @@ private:
     cv::Mat m_matParabola;
 
     CRecorder* m_pRecorder;
+
+    unsigned char m_cClickTextColor;
 
     DEFINE_SINGLEINSTANCE(COutputWindow);
 };

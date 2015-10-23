@@ -59,20 +59,22 @@ bool CBirdHeightObserver::Update(double dTickCount)
     /// forecast collision bottom remain time
     auto pCollisionTimeForecaster = CCollisionTimeForecaster::GetInstance();
 
-    const auto bCollisionTime = pCollisionTimeForecaster->GetCollisionBottomTime();
-    const auto bCollisionTickcount = bCollisionTime + m_pHeightData->GetFirstTickCount();
+    const auto dCollisionTime = pCollisionTimeForecaster->GetCollisionBottomTime();
+    const auto dCollisionTickcount = dCollisionTime + m_pHeightData->GetFirstTickCount();
     const auto fClickDelay = m_pClickDelay->GetClickDelay();
-    auto bRemainClickTime = bCollisionTickcount - GetPreciseTickCount() - fClickDelay;
+    auto dRemainClickTime = dCollisionTickcount - GetPreciseTickCount() - fClickDelay;
 
-    bool bNeedJumpNow = WILL_NOT_CRASH_TIME != bCollisionTime;
-    DLOG(INFO) << "ai collision time: " << bCollisionTime << " needjumpnow: " << bNeedJumpNow;
+    bool bNeedJumpNow = WILL_NOT_CRASH_TIME != dCollisionTime;
+    bool bDisplayRemainTime = bNeedJumpNow;
+
+    DLOG(INFO) << "ai collision time: " << dCollisionTime << " needjumpnow: " << bNeedJumpNow;
 
     /// caculate remain click time
-    if (bNeedJumpNow && EMERGENCY_JUMP_TIME != bCollisionTime)
+    if (bNeedJumpNow && EMERGENCY_JUMP_TIME != dCollisionTime)
     {
-        DLOG(INFO) << "ai bRemainClickTime:" << bRemainClickTime;
+        DLOG(INFO) << "ai bRemainClickTime:" << dRemainClickTime;
 
-        bNeedJumpNow = bRemainClickTime <= 17;
+        bNeedJumpNow = dRemainClickTime <= 17;
     }
 
     /// forecast collision-corner
@@ -92,11 +94,11 @@ bool CBirdHeightObserver::Update(double dTickCount)
     if (bNeedJumpNow)
     {
         // wait for click time
-        if (EMERGENCY_JUMP_TIME != bCollisionTime)
+        if (EMERGENCY_JUMP_TIME != dCollisionTime)
         {
             auto fnIsTimeUp = [=]()
             {
-                auto bRemainClickTime = bCollisionTickcount - GetPreciseTickCount() - fClickDelay;
+                auto bRemainClickTime = dCollisionTickcount - GetPreciseTickCount() - fClickDelay;
                 DLOG(INFO) << "ai waitforclick bRemainClickTime=" << bRemainClickTime;
 
                 return bRemainClickTime < 0;
@@ -110,11 +112,11 @@ bool CBirdHeightObserver::Update(double dTickCount)
     }
 
     /// record and display
-    double dRemainCollisionTime = bCollisionTickcount - GetPreciseTickCount();
     if (bNeedJumpNow)
     {
+        double dRemainCollisionTime = dCollisionTickcount - GetPreciseTickCount();
         m_pJumpRangeData->TryPushData(fPipeHeight);
-        m_pClickDelay->OnClick(dRemainCollisionTime, bCollisionTime);
+        m_pClickDelay->OnClick(dRemainCollisionTime, dCollisionTime);
     }
 
     double dHeight = 0;
@@ -126,10 +128,14 @@ bool CBirdHeightObserver::Update(double dTickCount)
         dHeight = m_pHeightData->GetBirdHeightData().back();
         CRecorder::GetInstance()->RecordData(a, b, c, dHeight);
 
-        pCollisionTimeForecaster->GenParabolaDots(PARABOLA_GRAPH_H, PARABOLA_GRAPH_W, a, b, c);
+        pCollisionTimeForecaster->GenParabolaDots(
+            PARABOLA_GRAPH_H, PARABOLA_GRAPH_W,
+            a, b, c);
+
+        float fRemainTime = bDisplayRemainTime ? (float)dRemainClickTime : 0;
         pOutputWindow->DrawParabola(
             pCollisionTimeForecaster->GetParabolaDots(),
-            dRemainCollisionTime,
+            fRemainTime,
             dHeight,
             bNeedJumpNow);
 

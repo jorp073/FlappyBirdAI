@@ -201,10 +201,7 @@ void CCollisionTimeForecaster::GenParabolaDots(int h, int w, double a, double b,
     auto timedata = m_pModel->GetTimeData();
     auto count = heightdata.size();
 
-    if (count < 4)
-    {
-        return;
-    }
+    if (count < 4) return;
 
     /// Vert and hori scale ratio
     float vratio = (float)(h+1);
@@ -237,14 +234,17 @@ void CCollisionTimeForecaster::GenParabolaDots(int h, int w, double a, double b,
         m_vParabolaDots.push_back(originPt);
 
         // fill in new dots (white dots)
-        y = (int)(h - vratio * (a*time*time+b*time+c) + 0.5);
-        if (y>= h)
-            y = h - 1;
-        if (y<0)
-            y = 0;
+        if (a != 0)
+        {
+            y = (int)(h - vratio * (a*time*time+b*time+c) + 0.5);
+            if (y>= h)
+                y = h - 1;
+            if (y<0)
+                y = 0;
 
-        fillinPt.x = x;
-        fillinPt.y = y;
-        m_vParabolaDots.push_back(fillinPt);
+            fillinPt.x = x;
+            fillinPt.y = y;
+            m_vParabolaDots.push_back(fillinPt);
+        }
     }
 }

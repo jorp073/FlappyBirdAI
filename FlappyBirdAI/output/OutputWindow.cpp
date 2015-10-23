@@ -7,6 +7,8 @@
 #include "../model/JumpRangeModel.h"
 #include "../model/ClickDelayModel.h"
 
+#define JUMP_NOW_FADEOUT_TIME 0.8
+
 
 INIT_SINGLEINSTANCE(COutputWindow);
 
@@ -15,6 +17,7 @@ COutputWindow::COutputWindow()
     : m_iFPS(0)
     , m_fPipeHeight(1)
     , m_pRecorder(CRecorder::GetInstance())
+    , m_cClickTextColor(0)
 {
 }
 
@@ -96,19 +99,23 @@ void COutputWindow::DrawParabola(
         }
     }
 
-    std::stringstream ssForecast;
-    ssForecast << "Will Collision In: " << fRemainCollisionTime;
-    CVDrawText(m_matParabola, ssForecast.str(), 15);
-
     std::stringstream ssHeight;
     ssHeight << "Bird Height: " << dHeight;
-    CVDrawText(m_matParabola, ssHeight.str(), 35);
+    CVDrawText(m_matParabola, ssHeight.str(), 15);
 
-    if (bClick)
+    if (0 != fRemainCollisionTime)
     {
-        CVDrawText(m_matParabola, "Jump Now!", 55);
+        std::stringstream ssForecast;
+        ssForecast << "Will Collision In: " << fRemainCollisionTime;
+        CVDrawText(m_matParabola, ssForecast.str(), 35);
     }
 
+    if (bClick) m_cClickTextColor = 255;
+    if (m_cClickTextColor > 0)
+    {
+        auto color = m_cClickTextColor == 255 ? 255 : m_cClickTextColor/2;
+        CVDrawText(m_matParabola, "Jump Now!", 55, color);
+    }
 
     cv::imshow(WINDOW_NAME_PARABOLA, m_matParabola);
 
@@ -140,8 +147,16 @@ void COutputWindow::DrawJumpRange(CJumpRangeModel* pModel)
         x++;
     }
 
+    // draw best bottom offset line
     int fBestBottomOffset = (int)((1 - pModel->GetBestBottomOffset()/PIPE_VERTICAL_DISTANCE) * JUMPRANGE_GRAPH_H + 0.5f);
     cv::line(mat, cv::Point(0, fBestBottomOffset), cv::Point(JUMPRANGE_GRAPH_W-1, fBestBottomOffset), cv::Scalar(255));
+
+    // draw center line
+    cv::line(
+        mat,
+        cv::Point(0, JUMPRANGE_GRAPH_H/2),
+        cv::Point(JUMPRANGE_GRAPH_W-1, JUMPRANGE_GRAPH_H/2),
+        cv::Scalar(64));
 
     CVDrawText(mat, "Best Bottom Offset:", 15);
     std::stringstream ss;
@@ -165,8 +180,8 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
 #define YRATIO 800
 
     cv::Mat mat(CLICKDELAY_WINDOW_H, CLICKDELAY_WINDOW_W, CV_8UC1, cv::Scalar(0));
-    cv::line(mat, cv::Point(0, BASEY), cv::Point(CLICKDELAY_WINDOW_W, BASEY), cv::Scalar(255));
-    cv::line(mat, cv::Point(BASEX, 0), cv::Point(BASEX, CLICKDELAY_WINDOW_H), cv::Scalar(255));
+    cv::line(mat, cv::Point(0, BASEY), cv::Point(CLICKDELAY_WINDOW_W, BASEY), cv::Scalar(127));
+    cv::line(mat, cv::Point(BASEX, 0), cv::Point(BASEX, CLICKDELAY_WINDOW_H), cv::Scalar(127));
 
     const auto PX = [](double x)
     {
@@ -179,8 +194,8 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
     };
 
     int x, y;
-    const size_t endcount = lRemainTime.size();
-    for (size_t count = 0; count < endcount; count++)
+    const size_t size = lRemainTime.size();
+    for (size_t count = 0; count < size; count++)
     {
         x = PX(lRemainTime[count]);
         y = PY(lBottomOffset[count]);
@@ -194,23 +209,26 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
         mat.at<unsigned char>(y, x) = 255;
 
         count++;
-        if (count == endcount)
+        if (count == size)
         {
             // draw circle for the latest data
             cv::circle(mat, cv::Point(x, y), 5, cv::Scalar(192), 1);
         }
     }
 
-    // draw parabola
-    double k, b;
-    pModel->GetKB(k, b);
+    // draw line
+    if (size > 1)
+    {
+        double k, b;
+        pModel->GetKB(k, b);
 
-    auto x1 = -CLICKDELAY_WINDOW_W;
-    auto y1 = (float)(k*x1+b);
-    auto x2 = CLICKDELAY_WINDOW_W;
-    auto y2 = (float)(k*x2+b);
+        auto x1 = -CLICKDELAY_WINDOW_W;
+        auto y1 = (float)(k*x1+b);
+        auto x2 = CLICKDELAY_WINDOW_W;
+        auto y2 = (float)(k*x2+b);
 
-    cv::line(mat, cv::Point(PX(x1), PY(y1)), cv::Point(PX(x2), PY(y2)), cv::Scalar(255));
+        cv::line(mat, cv::Point(PX(x1), PY(y1)), cv::Point(PX(x2), PY(y2)), cv::Scalar(255));
+    }
 
     // draw text
     std::stringstream ssDelay;
@@ -232,7 +250,7 @@ void COutputWindow::DrawClickDelay(CClickDelayModel* pModel)
 }
 
 
-void COutputWindow::Update()
+void COutputWindow::Update(double dt)
 {
     if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("PlayBack")) return;
 
@@ -287,6 +305,10 @@ void COutputWindow::Update()
     m_rectBirds.clear();
     m_fPipeHeight = 0;
     m_fPipeRight = 1;
+
+    // fadeout Jump Now text
+    unsigned char delta = 255*dt/1000/JUMP_NOW_FADEOUT_TIME;
+    m_cClickTextColor = m_cClickTextColor <= delta ? 0 : m_cClickTextColor - delta;
 }
 
 
@@ -302,10 +324,10 @@ void COutputWindow::TopMostWindow(const std::string& strWindowName)
 }
 
 
-void COutputWindow::CVDrawText(cv::Mat mat, const std::string& strText, int iHeight)
+void COutputWindow::CVDrawText(cv::Mat mat, const std::string& strText, int iHeight, unsigned char cColor /*= 255*/)
 {
     if (0 == strText.size()) return;
-    cv::putText(mat, strText, cv::Point(10, iHeight), CV_FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(255,255,255));
+    cv::putText(mat, strText, cv::Point(10, iHeight), CV_FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(cColor,cColor,cColor));
 }
 
 

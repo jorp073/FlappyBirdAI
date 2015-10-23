@@ -90,7 +90,7 @@ int _tmain(int argc, _TCHAR* argv[])
                 }
             }
         }
-        COutputWindow::GetInstance()->Update();
+        COutputWindow::GetInstance()->Update(dt);
         CRecorder::GetInstance()->PushRecord();
     };
 
