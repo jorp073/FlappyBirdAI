@@ -74,7 +74,7 @@ bool CBirdHeightObserver::Update(double dTickCount)
     {
         DLOG(INFO) << "ai bRemainClickTime:" << dRemainClickTime;
 
-        bNeedJumpNow = dRemainClickTime <= 17;
+        bNeedJumpNow = dRemainClickTime <= 34;
     }
 
     /// forecast collision-corner

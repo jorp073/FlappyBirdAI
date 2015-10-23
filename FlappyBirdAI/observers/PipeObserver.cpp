@@ -9,6 +9,7 @@ INIT_SINGLEINSTANCE(CPipeObserver);
 
 CPipeObserver::CPipeObserver()
     : m_AveragePipeSpeed(0)
+    , m_bPipeRightChanged(false)
 {
     ResetData();
 }
@@ -55,7 +56,7 @@ bool CPipeObserver::Update(const CV_CONTOURS& rectAllObjContours, int iBirdLeft,
 
         // forecast pipe right by average pipe speed
         m_fPipeRight += (float)(m_AveragePipeSpeed.GetAverageValue() * dt);
-
+        m_bPipeRightChanged = true;
         break;
 
     case 2: // multi result, sort by x pos
@@ -68,6 +69,8 @@ bool CPipeObserver::Update(const CV_CONTOURS& rectAllObjContours, int iBirdLeft,
         heightInCanvas = (float)m_lPipeRects[0].tl().y;
         m_fPipeHeight = 1 - heightInCanvas/CANVAS_NOGROUND_HEIGHT;
         m_fPipeRight = (float)(m_lPipeRects[0].br().x) / CANVAS_SCALETO_WIDTH;
+
+        m_bPipeRightChanged = m_fPipeRight != m_fLastPipeRight;
 
         // pipe speed
         if (m_fPipeRight <= m_fLastPipeRight

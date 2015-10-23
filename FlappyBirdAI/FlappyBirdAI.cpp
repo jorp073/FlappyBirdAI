@@ -8,10 +8,12 @@
 #include "observers/GameStateObserver.h"
 #include "observers/ObjectObserver.h"
 #include "observers/BirdHeightObserver.h"
+#include "observers/PipeObserver.h"
 #include "util/PerformanceCounter.h"
 #include "util/MouseController.h"
 #include "output/OutputWindow.h"
 #include "recorder/Recorder.h"
+#include "model/FPSCounter.h"
 #include <direct.h>
 
 
@@ -58,6 +60,7 @@ void Init(_TCHAR* szModulePath)
     COutputWindow::GetInstance()->Init();
     CGameStateObserver::GetInstance()->Init();
     CCanvasObserver::GetInstance()->Init();
+    CFPSCounter::GetInstance()->Init();
 }
 
 
@@ -96,12 +99,21 @@ int _tmain(int argc, _TCHAR* argv[])
         /// observe
         if (CCanvasObserver::GetInstance()->Update(dt))
         {
+            CFPSCounter::GetInstance()->OnCaptureScreen();
+
             if (CCanvasObserver::GetInstance()->StateMachine()->IsInState("Found"))
             {
                 if (CGameStateObserver::GetInstance()->Update(dt))
                 {
                     if (CGameStateObserver::GetInstance()->StateMachine()->IsInState("Play"))
                     {
+                        // skip frame if pipe right doesn't change
+                        if (!CPipeObserver::GetInstance()->IsPipeRightChanged())
+                        {
+                            CFPSCounter::GetInstance()->OnSkipFrame();
+                            continue;
+                        }
+
                         CBirdHeightObserver::GetInstance()->Update(dTickCount);
                     }
                 }

@@ -108,6 +108,9 @@
     <ClInclude Include="util\TimeUtil.h">
       <Filter>源文件\util</Filter>
     </ClInclude>
+    <ClInclude Include="model\FPSCounter.h">
+      <Filter>源文件\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="util\TimeUtil.cpp">
       <Filter>源文件\util</Filter>
+    </ClCompile>
+    <ClCompile Include="model\FPSCounter.cpp">
+      <Filter>源文件\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

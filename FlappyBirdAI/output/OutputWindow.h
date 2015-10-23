@@ -39,14 +39,10 @@ private:
 
     void CVDrawText(cv::Mat mat, const std::string& strText, int iHeight, unsigned char cColor = 255);
 
-    void TickCountFPS();
-
     std::string m_strCanvasStateText;
     std::string m_strGameStateText;
     std::vector<cv::Rect> m_rectBirds, m_rectPipes;
-    int m_iFPS;
-    std::string m_strFPSText;
-    int m_dwTickCount;
+
     float m_fPipeHeight, m_fPipeRight;
 
     cv::Mat m_matParabola;

@@ -293,8 +293,6 @@ bool CPlay::Update(CGameStateObserver* observer, double dt)
         break;
     }
 
-    // try to find bird pos
-
     return true;
 }
 

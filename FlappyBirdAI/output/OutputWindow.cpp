@@ -6,6 +6,7 @@
 #include "../recorder/Recorder.h"
 #include "../model/JumpRangeModel.h"
 #include "../model/ClickDelayModel.h"
+#include "../model/FPSCounter.h"
 
 #define JUMP_NOW_FADEOUT_TIME 0.8
 
@@ -14,8 +15,7 @@ INIT_SINGLEINSTANCE(COutputWindow);
 
 
 COutputWindow::COutputWindow()
-    : m_iFPS(0)
-    , m_fPipeHeight(1)
+    : m_fPipeHeight(1)
     , m_pRecorder(CRecorder::GetInstance())
     , m_cClickTextColor(0)
 {
@@ -41,7 +41,6 @@ bool COutputWindow::Init()
     cv::namedWindow(WINDOW_NAME_CLICKDELAY);
     TopMostWindow(WINDOW_NAME_CLICKDELAY);
 
-    m_dwTickCount = ::GetTickCount();
     return true;
 }
 
@@ -258,14 +257,6 @@ void COutputWindow::Update(double dt)
     if (NULL == mat.data) return;
     mat = mat.clone();
 
-    /// count fps
-    TickCountFPS();
-
-    /// draw text
-    CVDrawText(mat, m_strCanvasStateText, 15);
-    CVDrawText(mat, m_strGameStateText, 35);
-    CVDrawText(mat, m_strFPSText, mat.rows - 10);
-
     const auto cWhite = cv::Scalar(255, 255, 255);
     const auto cGray = cv::Scalar(127, 127, 127);
     /// draw birds rect
@@ -291,6 +282,15 @@ void COutputWindow::Update(double dt)
 
     cv::line(mat, cv::Point(0, height), cv::Point(right, height), cWhite);
     cv::line(mat, cv::Point(right, mat.rows-1), cv::Point(right, height), cWhite);
+
+    /// draw text
+    CVDrawText(mat, m_strCanvasStateText, 15);
+    CVDrawText(mat, m_strGameStateText, 35);
+
+    std::stringstream ssFPS;
+    ssFPS << "FPS: " << CFPSCounter::GetInstance()->GetValidFPS()
+        << "/" << CFPSCounter::GetInstance()->GetCaptureFPS();
+    CVDrawText(mat, ssFPS.str(), mat.rows - 10);
 
     cv::imshow(WINDOW_NAME_CANVAS, mat);
     
@@ -330,17 +330,3 @@ void COutputWindow::CVDrawText(cv::Mat mat, const std::string& strText, int iHei
     cv::putText(mat, strText, cv::Point(10, iHeight), CV_FONT_HERSHEY_COMPLEX, 0.4, cv::Scalar(cColor,cColor,cColor));
 }
 
-
-void COutputWindow::TickCountFPS()
-{
-    m_iFPS++;
-    auto tickcount = GetTickCount();
-    if (tickcount - m_dwTickCount > 1000)
-    {
-        m_dwTickCount = tickcount;
-        std::stringstream stmFPS;
-        stmFPS << m_iFPS;
-        m_iFPS = 0;
-        m_strFPSText = "FPS: " + stmFPS.str();
-    }
-}

@@ -18,6 +18,8 @@ public:
 
     void ResetData();
 
+    bool IsPipeRightChanged() { return m_bPipeRightChanged; };
+
 private:
     bool _IsPipeRect(const CV_CONTOUR& contour, int iBirdLeft, /*OUT*/ cv::Rect& rect);
 
@@ -25,6 +27,8 @@ private:
 
     float m_fPipeHeight;
     float m_fPipeRight, m_fLastPipeRight;
+
+    bool m_bPipeRightChanged;
 
     MathUtil::TAverageValue<double> m_AveragePipeSpeed;
 
