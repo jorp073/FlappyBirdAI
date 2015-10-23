@@ -9,6 +9,8 @@
 #include "../model/ClickDelayModel.h"
 #include "BirdRectObserver.h"
 #include "PipeObserver.h"
+#include "../util/PerformanceCounter.h"
+#include "../util/TimeUtil.h"
 
 
 INIT_SINGLEINSTANCE(CBirdHeightObserver);
@@ -57,10 +59,21 @@ bool CBirdHeightObserver::Update(double dTickCount)
     /// forecast collision bottom remain time
     auto pCollisionTimeForecaster = CCollisionTimeForecaster::GetInstance();
 
-    auto fRemainCollisionTime = pCollisionTimeForecaster->GetCollisionBottomRemainTime();
-    bool bNeedJumpNow = fRemainCollisionTime < m_pClickDelay->GetClickDelay();
+    const auto bCollisionTime = pCollisionTimeForecaster->GetCollisionBottomTime();
+    const auto bCollisionTickcount = bCollisionTime + m_pHeightData->GetFirstTickCount();
+    const auto fClickDelay = m_pClickDelay->GetClickDelay();
+    auto bRemainClickTime = bCollisionTickcount - GetPreciseTickCount() - fClickDelay;
 
-    DLOG(INFO) << "ai remain collision time: " << fRemainCollisionTime << " needjumpnow: " << bNeedJumpNow;
+    bool bNeedJumpNow = WILL_NOT_CRASH_TIME != bCollisionTime;
+    DLOG(INFO) << "ai collision time: " << bCollisionTime << " needjumpnow: " << bNeedJumpNow;
+
+    /// caculate remain click time
+    if (bNeedJumpNow && EMERGENCY_JUMP_TIME != bCollisionTime)
+    {
+        DLOG(INFO) << "ai bRemainClickTime:" << bRemainClickTime;
+
+        bNeedJumpNow = bRemainClickTime <= 17;
+    }
 
     /// forecast collision-corner
     if (bNeedJumpNow)
@@ -76,15 +89,34 @@ bool CBirdHeightObserver::Update(double dTickCount)
         DLOG_IF(INFO, !bNeedJumpNow) << "ai collision bottom, but will not collision corner";
     }
 
-    /// make bird jump
     if (bNeedJumpNow)
     {
+        // wait for click time
+        if (EMERGENCY_JUMP_TIME != bCollisionTime)
+        {
+            auto fnIsTimeUp = [=]()
+            {
+                auto bRemainClickTime = bCollisionTickcount - GetPreciseTickCount() - fClickDelay;
+                DLOG(INFO) << "ai waitforclick bRemainClickTime=" << bRemainClickTime;
+
+                return bRemainClickTime < 0;
+            };
+
+            TimeUtil::WaitForEveryMS(fnIsTimeUp);
+        }
+
+        // click now
         CMouseController::GetInstance()->ClickInCanvas();
-        m_pJumpRangeData->TryPushData(fPipeHeight);
-        m_pClickDelay->OnClick(fRemainCollisionTime);
     }
 
     /// record and display
+    double dRemainCollisionTime = bCollisionTickcount - GetPreciseTickCount();
+    if (bNeedJumpNow)
+    {
+        m_pJumpRangeData->TryPushData(fPipeHeight);
+        m_pClickDelay->OnClick(dRemainCollisionTime, bCollisionTime);
+    }
+
     double dHeight = 0;
     auto heightdata = m_pHeightData->GetBirdHeightData();
     if (heightdata.size() > 0)
@@ -97,7 +129,7 @@ bool CBirdHeightObserver::Update(double dTickCount)
         pCollisionTimeForecaster->GenParabolaDots(PARABOLA_GRAPH_H, PARABOLA_GRAPH_W, a, b, c);
         pOutputWindow->DrawParabola(
             pCollisionTimeForecaster->GetParabolaDots(),
-            fRemainCollisionTime,
+            dRemainCollisionTime,
             dHeight,
             bNeedJumpNow);
 

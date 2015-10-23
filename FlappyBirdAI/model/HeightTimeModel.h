@@ -15,7 +15,7 @@ public:
 
     const std::vector<double>& GetTimeData() { return m_lTime; };
 
-    double GetTimeSinceFirstData();
+    double GetFirstTickCount() { return m_dFirstTickCount; };
 
 private:
 
@@ -28,5 +28,5 @@ private:
     std::vector<double> m_lTime;
 
     float m_fPipeHeight;
-    double m_dFirstDataTickCount;
+    double m_dFirstTickCount;
 };

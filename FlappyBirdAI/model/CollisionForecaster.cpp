@@ -53,7 +53,7 @@ void CCollisionTimeForecaster::GetABC(double& a, double& b, double& c)
 }
 
 
-float CCollisionTimeForecaster::GetCollisionBottomRemainTime()
+double CCollisionTimeForecaster::GetCollisionBottomTime()
 {
     COUNTER_HELPER(CCollisionTimeForecaster_UPDATE);
     auto heightdata = m_pModel->GetBirdHeightData();
@@ -69,7 +69,7 @@ float CCollisionTimeForecaster::GetCollisionBottomRemainTime()
     {
         DLOG(INFO) << "ai heightdata.back() <= 0, need emergency jump";
         bAlmostCollisionBottom = true;
-        return EMERGENCYJUMP;
+        return EMERGENCY_JUMP_TIME;
     }
 
     /// get is dropping
@@ -85,7 +85,7 @@ float CCollisionTimeForecaster::GetCollisionBottomRemainTime()
     if (heightdata.size() < MIN_HEIGHT_DATA_TO_JUMP)
     {
         DLOG(INFO) << "ai dots count: " << heightdata.size() << " < " << MIN_HEIGHT_DATA_TO_JUMP;
-        return 9999;
+        return WILL_NOT_CRASH_TIME;
     }
 
     /// fit parabola
@@ -100,13 +100,13 @@ float CCollisionTimeForecaster::GetCollisionBottomRemainTime()
 
     DLOG(INFO) << "ai a:" << a << " b:" << b << " c:" << c;
 
-    if (!m_bIsDroppingDown) return 9999;
+    if (!m_bIsDroppingDown) return WILL_NOT_CRASH_TIME;
 
 
     if (a>=0)
     {
         DLOG(INFO) << "ai a>=0 a=" << a;
-        return 9999;
+        return WILL_NOT_CRASH_TIME;
     }
     else
     {
@@ -118,16 +118,15 @@ float CCollisionTimeForecaster::GetCollisionBottomRemainTime()
         {
             DLOG(INFO) << "ai emergency jump, pipeheight changed, delta<=0 delta=" << delta;
             // when bird is near ground, and pipe appears, bird is under pipe
-            return EMERGENCYJUMP;
+            return EMERGENCY_JUMP_TIME;
         }
         else
         {
             double t = (-b - sqrt(delta)) /2/a;
 
-            double remaintime = t - m_pModel->GetTimeSinceFirstData() - timedata[0];
             DLOG(INFO) << "ai f(t):" << a*t*t+b*t+c;
 
-            return (float)remaintime;
+            return t;
         }
     }
 }

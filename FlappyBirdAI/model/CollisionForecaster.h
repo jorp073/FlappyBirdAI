@@ -23,7 +23,7 @@ class CCollisionTimeForecaster
 public:
     void SetModel(CHeightTimeModel* pModel);
 
-    float GetCollisionBottomRemainTime();
+    double GetCollisionBottomTime();
     
     bool IsWillCollisionPipeCorner(const CRASH_FORECAST_PARAM& data);
 

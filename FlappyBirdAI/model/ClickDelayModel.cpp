@@ -3,13 +3,14 @@
 #include "CollisionForecaster.h"
 #include "../util/MathUtil.h"
 
+#define INVALID_REMAIN_COLLISION_TIME -1
 
 #define MIN_DATA_COUNT 50
 #define MAX_DATA_COUNT 100
 
 
 CClickDelayModel::CClickDelayModel()
-    : m_fRemainCollisionTime(0)
+    : m_dRemainCollisionTime(INVALID_REMAIN_COLLISION_TIME)
     , m_fBestDelayTime(0)
     , m_fClickDelay(DEFAULT_CLICK_DELAYTIME)
 {
@@ -35,21 +36,28 @@ void CClickDelayModel::OnGetBottomData(float fBottomOffset)
 {
     DLOG(INFO) << "ai CClickDelayModel::OnGetBottomData " << fBottomOffset;
 
-    _PushData(m_fRemainCollisionTime, fBottomOffset);
+    _PushData(m_dRemainCollisionTime, fBottomOffset);
 }
 
 
-void CClickDelayModel::OnClick(float fRemainCollisionTime)
+void CClickDelayModel::OnClick(double dRemainCollisionTime, double bCollisionTime)
 {
-    DLOG(INFO) << "ai CClickDelayModel::OnClick " << fRemainCollisionTime;
-    m_fRemainCollisionTime = fRemainCollisionTime;
+    DLOG(INFO) << "ai CClickDelayModel::OnClick " << dRemainCollisionTime << "," << bCollisionTime;
+    if (EMERGENCY_JUMP_TIME == bCollisionTime || WILL_NOT_CRASH_TIME == bCollisionTime)
+    {
+        m_dRemainCollisionTime == INVALID_REMAIN_COLLISION_TIME;
+    }
+    else
+    {
+        m_dRemainCollisionTime = dRemainCollisionTime;
+    }
 }
 
 
 void CClickDelayModel::_PushData(double dRemainCollisionTime, float fBottomOffset)
 {
     // do not push data of emergency jump and first invalid data
-    if (EMERGENCYJUMP == dRemainCollisionTime) return;
+    if (INVALID_REMAIN_COLLISION_TIME == dRemainCollisionTime) return;
 
     m_lRemainCollisionTime.push_back(dRemainCollisionTime);
     m_lBottomOffset.push_back(fBottomOffset);

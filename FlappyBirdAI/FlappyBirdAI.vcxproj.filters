@@ -105,6 +105,9 @@
     <ClInclude Include="model\CollisionForecaster.h">
       <Filter>源文件\model</Filter>
     </ClInclude>
+    <ClInclude Include="util\TimeUtil.h">
+      <Filter>源文件\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="model\CollisionForecaster.cpp">
       <Filter>源文件\model</Filter>
+    </ClCompile>
+    <ClCompile Include="util\TimeUtil.cpp">
+      <Filter>源文件\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

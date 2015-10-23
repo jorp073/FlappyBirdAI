@@ -9,7 +9,7 @@ public:
 
     void OnGetBottomData(float fBottomOffset);
 
-    void OnClick(float fRemainCollisionTime);
+    void OnClick(double dRemainCollisionTime, double bCollisionTime);
 
     void ResetData();
 
@@ -29,7 +29,7 @@ private:
     // delete some data when sizeof m_lRemainCollisionTime is too large, to reduce memory usage.
     void _CompactData();
 
-    float m_fRemainCollisionTime;
+    double m_dRemainCollisionTime;
 
     float m_fBestDelayTime;
     size_t m_iTotalDataCount;

@@ -5,7 +5,8 @@
 
 #define CV_KEY_LEFT     2424832
 #define CV_KEY_RIGHT    2555904
-#define EMERGENCYJUMP   -9999
+#define EMERGENCY_JUMP_TIME   -1
+#define WILL_NOT_CRASH_TIME   0
 
 struct POS
 {

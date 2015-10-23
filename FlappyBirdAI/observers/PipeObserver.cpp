@@ -84,7 +84,7 @@ bool CPipeObserver::Update(const CV_CONTOURS& rectAllObjContours, int iBirdLeft,
                 // bird rect width changes every frame,
                 // passed pipe may become current pipe again,
                 // so current speed may be about 100 times of average time
-                DLOG(WARNING) << "current pipe speed is too large, because passed pipe becomes current again";
+                DLOG(INFO) << "current pipe speed is too large, because passed pipe becomes current again";
             }
             else
             {

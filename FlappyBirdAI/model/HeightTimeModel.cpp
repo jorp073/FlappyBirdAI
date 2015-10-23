@@ -5,7 +5,7 @@
 
 CHeightTimeModel::CHeightTimeModel()
     : m_fPipeHeight(0)
-    , m_dFirstDataTickCount(0)
+    , m_dFirstTickCount(0)
 {
 }
 
@@ -14,10 +14,10 @@ void CHeightTimeModel::Append(float fBirdHeightOnGround, float fPipeHeight, doub
 {
     if (0 == m_lTime.size())
     {
-        m_dFirstDataTickCount = dTickcount;
+        m_dFirstTickCount = dTickcount;
     }
 
-    double dCurTime = dTickcount - m_dFirstDataTickCount;
+    double dCurTime = dTickcount - m_dFirstTickCount;
 
     DLOG(INFO) << "ai CHeightTimeModel::Append " << fBirdHeightOnGround << "," << fPipeHeight << "," << dCurTime;
 
@@ -58,8 +58,3 @@ void CHeightTimeModel::PushBirdHeightOnPipe(float height)
     m_lBirdHeightOnPipe.push_back(height);
 }
 
-
-double CHeightTimeModel::GetTimeSinceFirstData()
-{
-    return GetPreciseTickCount() - m_dFirstDataTickCount;
-}
