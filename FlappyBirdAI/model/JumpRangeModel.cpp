@@ -11,6 +11,7 @@ CJumpRangeModel::CJumpRangeModel()
     : m_fPipeHeight(DEFAULT_PIPE_HEIGHT)
     , m_fAverageRange(0)
     , m_fBestBottomOffset(PIPE_VERTICAL_DISTANCE/2)
+    , m_bEmergencyJump(false)
 {
     ResetData();
 }
@@ -50,7 +51,7 @@ void CJumpRangeModel::OnBirdHeightChanged(float fBirdHeight)
 
 void CJumpRangeModel::TryPushData(float fNewPipeHeight)
 {
-    if (m_bDataValid)
+    if (m_bDataValid && !m_bEmergencyJump)
     {
         JUMP_RANGE data;
         data.fBottom = m_fBottom - m_fPipeHeight;
@@ -59,6 +60,8 @@ void CJumpRangeModel::TryPushData(float fNewPipeHeight)
 
         _PushData(data);
     }
+
+    m_bEmergencyJump = !m_bDataValid;
 
     ResetData();
     m_fPipeHeight = fNewPipeHeight;
@@ -79,7 +82,6 @@ void CJumpRangeModel::_PushData(const JUMP_RANGE& data)
     /// calculate new best bottom offset
     m_fBestBottomOffset = (PIPE_VERTICAL_DISTANCE - m_fAverageRange.GetAverageValue())/2;
     CCollisionTimeForecaster::GetInstance()->SetBestJumpOffsetY(m_fBestBottomOffset);
-
 
     DLOG(INFO) << "ai jump avr range:" << m_fAverageRange.GetAverageValue() <<  " range: " << data.fRange << " bottom: " << data.fBottom << " top: " << data.fTop;
 }

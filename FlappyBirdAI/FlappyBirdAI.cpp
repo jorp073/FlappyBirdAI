@@ -47,17 +47,34 @@ void OnPressKey(int key, /*OUT*/ bool& bExitMainLoop)
 }
 
 
-int _tmain(int argc, _TCHAR* argv[])
+void Init(_TCHAR* szModulePath)
 {
     FLAGS_log_dir = "logs/";
     ::_mkdir(FLAGS_log_dir.c_str());
-    google::InitGoogleLogging(argv[0]);
+    google::InitGoogleLogging(szModulePath);
 
     InitPreciseTickCount();
 
     COutputWindow::GetInstance()->Init();
     CGameStateObserver::GetInstance()->Init();
     CCanvasObserver::GetInstance()->Init();
+}
+
+
+void Release()
+{
+    CScreenCapturer::GetInstance()->Release();
+    CCanvasObserver::GetInstance()->Release();
+    COutputWindow::GetInstance()->Release();
+
+    google::ShutdownGoogleLogging();
+}
+
+
+// main function
+int _tmain(int argc, _TCHAR* argv[])
+{
+    Init(argv[0]);
 
     DLOG(INFO) << "Start main loop";
 
@@ -92,15 +109,11 @@ int _tmain(int argc, _TCHAR* argv[])
         }
         COutputWindow::GetInstance()->Update(dt);
         CRecorder::GetInstance()->PushRecord();
-    };
+    }; // while (true)
 
     DLOG(INFO) << "Exit main loop";
 
-    CScreenCapturer::GetInstance()->Release();
-    CCanvasObserver::GetInstance()->Release();
-    COutputWindow::GetInstance()->Release();
-
-    google::ShutdownGoogleLogging();
+    Release();
     return 0;
 }
 

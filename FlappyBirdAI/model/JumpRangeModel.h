@@ -46,6 +46,7 @@ private:
     int m_iId, m_iBottomId, m_iTopId;
 
     bool m_bDataValid;
+    bool m_bEmergencyJump;
 
     MathUtil::TAverageValue<float> m_fAverageRange;
 
